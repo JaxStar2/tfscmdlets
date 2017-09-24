@@ -863,6 +863,42 @@
         </TableRowEntries>
       </TableControl>
     </View>
+
+    <View>
+      <Name>Registry Entries</Name>
+      <ViewSelectedBy>
+        <TypeName>Microsoft.TeamFoundation.Framework.Client.RegistryEntry</TypeName>
+      </ViewSelectedBy>
+      <GroupBy>
+        <Label>Container</Label>
+        <PropertyName>Container</PropertyName>
+      </GroupBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Width>30</Width>
+            <Label>Name</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Value</Label>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <Wrap/>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Name</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Value</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+
   </ViewDefinitions>
 
   <Controls>

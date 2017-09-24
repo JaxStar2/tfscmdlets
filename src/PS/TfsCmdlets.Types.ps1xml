@@ -459,4 +459,15 @@
       </ScriptProperty>
     </Members>
   </Type>
+  <Type>
+    <Name>Microsoft.TeamFoundation.Framework.Client.RegistryEntry</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>Container</Name>
+        <GetScriptBlock>
+          return $this.Path.Substring(0, $this.Path.Length - $this.Name.Length)
+        </GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
 </Types>
