@@ -16,8 +16,8 @@ Function Get-TfsRegistryValue
         [switch]
         $Recurse,
 
-        [switch]
-        $IncludeContainers,
+        [object]
+        $Filter,
 
         [Parameter()]
         [object]
@@ -39,48 +39,64 @@ Function Get-TfsRegistryValue
                 $regsvc = $tpc.GetService([type]'Microsoft.TeamFoundation.Framework.Client.ITeamFoundationRegistry')
             }
             'Project' {
-
+                throw 'Not implemented.'
             }
         }
 
-        if ($Recurse -and (-not $Path.EndsWith('/*')))
+        if ($Recurse)
         {
-            Write-Verbose "Get-TfsRegistryValue: Changing starting path '$Path' to perform recursive searches"
-
-            $Path = ($Path + '/*') -replace '//', '/'
-
-            Write-Verbose "Get-TfsRegistryValue: New path is '$Path'"
-        }
-
-        $entries = $regsvc.ReadEntries($Path, $true)
-
-        if (($entries.Count -gt 1) -and (-not $Path.EndsWith('/*')))
-        {
-            Write-Verbose "Get-TfsRegistryValue: Changing starting path '$Path' to enumerate container"
-            
-            $Path = ($Path + '/*') -replace '//', '/'
-
-            Write-Verbose "Get-TfsRegistryValue: New path is '$Path'"
-
-            $entries = $regsvc.ReadEntries($Path, $true)
-        }
-        
-        Write-Verbose "Get-TfsRegistryValue: $($entries.count) entries found"
-        
-        $entries | Select-Object -Skip 1 | ForEach-Object { 
-
-            Write-Verbose "Get-TfsRegistryValue: Processing item '$($_.Path)'"
-
-            if (($_.Value -ne $null) -or $IncludeContainers)
+            if($Path -match '\*')
             {
-                Write-Verbose "Get-TfsRegistryValue: Outputting '$($_.Path)'"
-                Write-Output $_ 
+                throw 'Invalid usage. When doing recursive searches, wildcards are not supported in the Path argument. Use the Filter argument instead to limit the results to the desired pattern.'
             }
 
-            if ($Recurse)
+            Write-Verbose "Get-TfsRegistryValue: Adding '/*' to '$Path' to perform recursive searches"
+
+            $pathToTraverse = ($Path + '/*') -replace '/+', '/'
+        }
+        elseif ($Path -eq '/')
+        {
+            # Avoid using '/', otherwise it will traverse the whole registry tree
+            $pathToTraverse = '/*'
+        }
+        else
+        {
+            $pathToTraverse = $Path    
+        }
+
+        $entries = $regsvc.ReadEntries($pathToTraverse, $true)
+
+        if($entries.Count -eq 0)
+        {
+            Write-Verbose "No items found matching '$Path'. Exiting."
+            return
+        }
+
+        Write-Verbose "Get-TfsRegistryValue: $($entries.Count) entries found"
+        
+        foreach($e in $entries)
+        {
+            Write-Verbose "Get-TfsRegistryValue: Processing item '$($e.Path)', with filter '$Filter'"
+
+            if ($e.Value -ne $null)
             {
-                Write-Verbose "Get-TfsRegistryValue: Recursing path $($_.Path)/*"
-                Get-TfsRegistryValue -Path "$($_.Path)/*" -Scope $Scope -Target $Target -Recurse -IncludeContainers:$IncludeContainers
+                if ((($Filter -is [string]) -and ($e.Path -notlike $Filter)) -or 
+                    (($Filter -is [scriptblock]) -and (-not ($e.Path | ForEach-Object $Filter))))
+                {
+                    Write-Verbose "Get-TfsRegistryValue: '$($e.Path)' does not match filter '$Filter'. Skipping."
+                }
+                else
+                {
+                    Write-Verbose "Get-TfsRegistryValue: Outputting '$($e.Path)'"
+                    Write-Output $e
+                }
+                continue
+            }
+
+            if ($Recurse -and ($e.Path -ne $Path))
+            {
+                Write-Verbose "Get-TfsRegistryValue: Recursing path $($e.Path)/*"
+                Get-TfsRegistryValue -Path "$($e.Path)" -Scope $Scope -Target $Target -Filter $Filter -Recurse
             }
         }
     }
