@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27019.1
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsCmdlets.PSWindows", "TfsCmdlets.PSWindows\TfsCmdlets.PSWindows.csproj", "{BDC27DCC-EF3B-410F-9F1F-86110D3276D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsCmdlets.UnitTests", "TfsCmdlets.UnitTests\TfsCmdlets.UnitTests.csproj", "{068AD10D-CFDE-4944-AAA5-2DB4B4051FE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{BDC27DCC-EF3B-410F-9F1F-86110D3276D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDC27DCC-EF3B-410F-9F1F-86110D3276D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDC27DCC-EF3B-410F-9F1F-86110D3276D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{068AD10D-CFDE-4944-AAA5-2DB4B4051FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{068AD10D-CFDE-4944-AAA5-2DB4B4051FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{068AD10D-CFDE-4944-AAA5-2DB4B4051FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{068AD10D-CFDE-4944-AAA5-2DB4B4051FE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
