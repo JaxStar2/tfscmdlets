@@ -258,13 +258,17 @@
     <Compile Include="Cmdlets\WorkItem\GetWorkItem.cs" />
     <Compile Include="Cmdlets\Connection\CurrentConnections.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="Providers\Impl\ProjectProviderImpl.cs" />
+    <Compile Include="Providers\Impl\CollectionProviderImpl.cs" />
+    <Compile Include="Providers\IServerProvider.cs" />
+    <Compile Include="Providers\ICollectionProvider.cs" />
     <Compile Include="Providers\Impl\ProcessTemplateProviderImpl.cs" />
     <Compile Include="Providers\IProcessTemplateProvider.cs" />
     <Compile Include="Models\GlobalList.cs" />
     <Compile Include="Models\GlobalListCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\IContainerProvider.cs" />
-    <Compile Include="Providers\Impl\ContainerProviderImpl.cs" />
+    <Compile Include="Providers\IProjectProvider.cs" />
+    <Compile Include="Providers\Impl\ServerProviderImpl.cs" />
     <Compile Include="ServiceLocator.cs" />
     <Compile Include="StringExtensions.cs" />
   </ItemGroup>

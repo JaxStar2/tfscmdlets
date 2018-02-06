@@ -9,14 +9,6 @@ namespace TfsCmdlets.Providers.Impl
     [Export(typeof(IProcessTemplateProvider))]
     internal class ProcessTemplateProviderImpl: IProcessTemplateProvider
     {
-        [Import(typeof(IContainerProvider))]
-        private IContainerProvider ContainerProvider { get; set; }
-
-        public ProcessTemplateProviderImpl()
-        {
-            this.Compose();
-        }
-
         public TemplateHeader GetTemplate(object name, object collection, object server, object credential)
         {
             var templates = GetTemplates(name, collection, server, credential).ToList();
@@ -42,7 +34,7 @@ namespace TfsCmdlets.Providers.Impl
                 }
                 case string s:
                 {
-                    var tpc = ContainerProvider.GetCollection(collection, server, credential);
+                    var tpc = CollectionProvider.GetCollection(collection, server, credential);
                     var processTemplateSvc = tpc.GetService<IProcessTemplates>();
                     foreach (var t in processTemplateSvc.TemplateHeaders().Where(o => o.Name.IsLike(s)))
                     {
@@ -56,5 +48,8 @@ namespace TfsCmdlets.Providers.Impl
                 }
             }
         }
+
+        [Import(typeof(ICollectionProvider))]
+        private ICollectionProvider CollectionProvider { get; set; }
     }
 }

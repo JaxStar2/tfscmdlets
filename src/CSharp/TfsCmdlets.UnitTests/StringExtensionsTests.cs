@@ -12,6 +12,12 @@ namespace TfsCmdlets.UnitTests
         private const string PATH_DATA_BS = @"\foo\bar\baz\xyz";
 
         [TestMethod]
+        public void IsCaseInsensitive()
+        {
+            Assert.IsTrue(SIMPLE_DATA.IsLike("FOO*"));
+        }
+
+        [TestMethod]
         public void MatchesSimplePattern()
         {
             Assert.IsTrue(SIMPLE_DATA.IsLike("foo*"));

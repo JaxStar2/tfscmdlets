@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.Composition;
-using System.Management.Automation;
-using TfsCmdlets.Providers;
+﻿using System.Management.Automation;
 
 namespace TfsCmdlets.Cmdlets
 {
@@ -11,9 +9,5 @@ namespace TfsCmdlets.Cmdlets
             this.Compose();
             base.BeginProcessing();
         }
-
-        [Import(typeof(IContainerProvider))]
-        protected IContainerProvider Provider { get; set; }
-
     }
 }

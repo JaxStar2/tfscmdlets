@@ -3,7 +3,7 @@ using Microsoft.TeamFoundation.Server;
 
 namespace TfsCmdlets.Providers
 {
-    internal interface IProcessTemplateProvider
+    public interface IProcessTemplateProvider
     {
         TemplateHeader GetTemplate(object template, object collection, object server, object credential);
 

@@ -14,9 +14,13 @@ namespace TfsCmdlets
                    (_container = new CompositionContainer(new AssemblyCatalog(typeof(ServiceLocator).Assembly)));
             set => _container = value; }
 
-        public static void SetContainer(CompositionContainer container)
+        public static CompositionContainer SetContainer(CompositionContainer container)
         {
+            var oldContainer = Container;
+
             Container = container;
+
+            return oldContainer;
         }
 
         public static T GetInstance<T>()

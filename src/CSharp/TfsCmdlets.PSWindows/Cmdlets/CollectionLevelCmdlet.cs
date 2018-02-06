@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Management.Automation;
 using Microsoft.TeamFoundation.Client;
+using TfsCmdlets.Providers;
 
 namespace TfsCmdlets.Cmdlets
 {
@@ -18,12 +20,12 @@ namespace TfsCmdlets.Cmdlets
 
         protected TfsTeamProjectCollection GetCollection(object collection, object server, object credential)
         {
-            return Provider.GetCollection(collection, server, credential);
+            return CollectionProvider.GetCollection(collection, server, credential);
         }
 
         protected IEnumerable<TfsTeamProjectCollection> GetCollections(object collection, object server, object credential)
         {
-            return Provider.GetCollections(collection, server, credential);
+            return CollectionProvider.GetCollections(collection, server, credential);
         }
 
         public abstract object Collection { get; set; }
@@ -33,5 +35,8 @@ namespace TfsCmdlets.Cmdlets
 
         [Parameter]
         public override object Credential { get; set; }
+
+        [Import(typeof(ICollectionProvider))]
+        private ICollectionProvider CollectionProvider { get; set; }
     }
 }

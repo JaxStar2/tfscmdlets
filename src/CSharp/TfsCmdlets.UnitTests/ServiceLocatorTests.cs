@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Reflection;
-using Microsoft.TeamFoundation.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TfsCmdlets.Providers;
 
@@ -38,7 +36,7 @@ namespace TfsCmdlets.UnitTests
 
             var fi = obj.GetType().GetProperty("ProtectedContainer", BindingFlags.NonPublic | BindingFlags.Instance);
 
-            // ReSharper disable once PossibleNullReferenceException
+            //ReSharper disable once PossibleNullReferenceException
             Assert.IsNotNull(fi.GetValue(obj));
         }
 
@@ -50,7 +48,7 @@ namespace TfsCmdlets.UnitTests
 
             var fi = obj.GetType().GetProperty("PrivateContainer", BindingFlags.NonPublic | BindingFlags.Instance);
 
-            // ReSharper disable once PossibleNullReferenceException
+            //ReSharper disable once PossibleNullReferenceException
             Assert.IsNotNull(fi.GetValue(obj));
         }
 
@@ -58,28 +56,96 @@ namespace TfsCmdlets.UnitTests
         public void CanUseCustomContainer()
         {
             var customContainer = new CompositionContainer(new AssemblyCatalog(GetType().Assembly));
-            ServiceLocator.SetContainer(customContainer);
 
-            var svc = ServiceLocator.GetInstance<ICustomService>();
+            lock (this)
+            {
+                var oldContainer = ServiceLocator.SetContainer(customContainer);
 
-            Assert.IsNotNull(svc);
+                var svc = ServiceLocator.GetInstance<ICustomService>();
+
+                Assert.IsNotNull(svc);
+
+                ServiceLocator.SetContainer(oldContainer);
+            }
+        }
+
+        [TestMethod]
+        public void CanComposeServerProvider()
+        {
+            var obj = new ComposableObject();
+            obj.Compose();
+
+            Assert.IsNotNull(obj.ServerProvider);
+        }
+
+        [TestMethod]
+        public void CanComposeCollectionProvider()
+        {
+            var obj = new ComposableObject();
+            obj.Compose();
+
+            Assert.IsNotNull(obj.CollectionProvider);
+        }
+
+        [TestMethod]
+        public void CanComposeProjectProvider()
+        {
+            var obj = new ComposableObject();
+            obj.Compose();
+
+            Assert.IsNotNull(obj.ProjectProvider);
+        }
+
+        [TestMethod]
+        public void CanComposeProcessTemplateProvider()
+        {
+            var obj = new ComposableObject();
+            obj.Compose();
+
+            Assert.IsNotNull(obj.ProcessTemplateProvider);
+        }
+
+        [TestMethod]
+        public void CanComposeNestedComponent()
+        {
+            var obj = new ComposableObject();
+            obj.Compose();
+
+            var provider = obj.ProjectProvider;
+            var pi = provider.GetType().GetProperty("CollectionProvider", BindingFlags.Instance | BindingFlags.NonPublic);
+            var nestedProvider = pi?.GetValue(provider);
+
+            Assert.IsNotNull(nestedProvider);
         }
 
         #region Support types
 
         public class ComposableObject
         {
-            [Import(typeof(IContainerProvider))]
-            public IContainerProvider PublicContainer { get; set; }
+            [Import(typeof(IServerProvider))]
+            public IServerProvider PublicContainer { get; set; }
 
-            [Import(typeof(IContainerProvider))]
-            internal IContainerProvider InternalContainer { get; set; }
+            [Import(typeof(IServerProvider))]
+            internal IServerProvider InternalContainer { get; set; }
 
-            [Import(typeof(IContainerProvider))]
-            protected IContainerProvider ProtectedContainer { get; set; }
+            [Import(typeof(IServerProvider))]
+            protected IServerProvider ProtectedContainer { get; set; }
 
-            [Import(typeof(IContainerProvider))]
-            private IContainerProvider PrivateContainer { get; set; }
+            [Import(typeof(IServerProvider))]
+            private IServerProvider PrivateContainer { get; set; }
+
+            [Import(typeof(IServerProvider))]
+            public IServerProvider ServerProvider { get; set; }
+
+            [Import(typeof(ICollectionProvider))]
+            public ICollectionProvider CollectionProvider { get; set; }
+
+            [Import(typeof(IProjectProvider))]
+            public IProjectProvider ProjectProvider { get; set; }
+
+            [Import(typeof(IProcessTemplateProvider))]
+            public IProcessTemplateProvider ProcessTemplateProvider { get; set; }
+
         }
 
         public interface ICustomService
