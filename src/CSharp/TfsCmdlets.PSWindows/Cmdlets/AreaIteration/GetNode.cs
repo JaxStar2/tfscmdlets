@@ -1,12 +1,10 @@
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Server;
-using TfsCmdlets.Cmdlets.AreaIteration;
 
 namespace TfsCmdlets.Cmdlets.AreaIteration
 {
-    [Cmdlet(verbName: VerbsCommon.Get, nounName: "Area")]
+    [Cmdlet(VerbsCommon.Get, "Area")]
     [OutputType(typeof(Microsoft.TeamFoundation.Server.NodeInfo))]
-    public class GetArea : GetAreaIterationCmdletBase
+    public class GetArea : GetNodeCmdletBase
     {
         [Parameter(Position = 0)]
         [SupportsWildcards]
@@ -14,9 +12,9 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
         public override object Path { get; set; } = @"\**";
     }
 
-    [Cmdlet(verbName: VerbsCommon.Get, nounName: "Iteration")]
+    [Cmdlet(VerbsCommon.Get, "Iteration")]
     [OutputType(typeof(Microsoft.TeamFoundation.Server.NodeInfo))]
-    public class GetIteration : GetAreaIterationCmdletBase
+    public class GetIteration : GetNodeCmdletBase
     {
         [Parameter(Position = 0)]
         [SupportsWildcards]
@@ -24,7 +22,7 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
         public override object Path { get; set; } = @"\**";
     }
 
-    public abstract class GetAreaIterationCmdletBase : AreaIterationCmdletBase
+    public abstract class GetNodeCmdletBase : NodeCmdletBase
     {
         protected override void ProcessRecord()
         {
@@ -34,5 +32,16 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
             }
         }
 
+        [Parameter(ValueFromPipeline=true)]
+        public override object Project { get; set; }
+
+        [Parameter]
+        public override object Collection { get; set; }
+
+        [Parameter]
+        public override object Server { get; set; }
+
+        [Parameter]
+        public override object Credential { get; set; }
     }
 }

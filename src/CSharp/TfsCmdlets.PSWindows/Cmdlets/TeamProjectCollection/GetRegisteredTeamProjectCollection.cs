@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
@@ -18,8 +17,8 @@ namespace TfsCmdlets.Cmdlets.TeamProjectCollection
         System.String
     #>
     */
-    [Cmdlet(verbName: VerbsCommon.Get, nounName: "RegisteredTeamProjectCollection")]
-    [OutputType(typeof(Microsoft.TeamFoundation.Client.RegisteredProjectCollection))]
+    [Cmdlet(VerbsCommon.Get, "RegisteredTeamProjectCollection")]
+    [OutputType(typeof(RegisteredProjectCollection))]
     public class GetRegisteredTeamProjectCollection : Cmdlet
     {
         [Parameter(Position = 0, ValueFromPipeline = true)]

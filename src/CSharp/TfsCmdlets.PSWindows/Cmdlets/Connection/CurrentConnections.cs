@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.TeamFoundation.Client;
+﻿using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
 namespace TfsCmdlets.Cmdlets.Connection
@@ -21,7 +16,7 @@ namespace TfsCmdlets.Cmdlets.Connection
 
             set
             {
-                if (object.Equals(_configurationServer, value)) return;
+                if (Equals(_configurationServer, value)) return;
 
                 DisconnectAll();
                 if (value == null) return;
@@ -36,7 +31,7 @@ namespace TfsCmdlets.Cmdlets.Connection
 
             set
             {
-                if (object.Equals(_teamProjectCollection, value)) return;
+                if (Equals(_teamProjectCollection, value)) return;
 
                 DisconnectAll();
                 if (value == null) return;
@@ -52,7 +47,7 @@ namespace TfsCmdlets.Cmdlets.Connection
 
             set
             {
-                if (object.Equals(_teamProject, value)) return;
+                if (Equals(_teamProject, value)) return;
 
                 DisconnectAll();
                 if (value == null) return;
@@ -69,7 +64,7 @@ namespace TfsCmdlets.Cmdlets.Connection
             get => _team;
             set
             {
-                if (object.Equals(_team, value)) return;
+                if (Equals(_team, value)) return;
 
                 DisconnectAll();
                 if (value == null) return;

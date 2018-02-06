@@ -1,33 +1,43 @@
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Server;
-using TfsCmdlets.Cmdlets.AreaIteration;
 
 namespace TfsCmdlets.Cmdlets.AreaIteration
 {
-    [Cmdlet(verbName: VerbsCommon.Rename, nounName: "Area", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
+    [Cmdlet(VerbsCommon.Rename, "Area", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
     [OutputType(typeof(Microsoft.TeamFoundation.Server.NodeInfo))]
-    public class RenameArea : RenameAreaIterationCmdletBase
+    public class RenameArea : RenameNodeCmdletBase
     {
-        [Parameter(Position = 0)]
+        [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]
         [Alias("Area")]
         public override object Path { get; set; } 
     }
 
-    [Cmdlet(verbName: VerbsCommon.Rename, nounName: "Iteration", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
+    [Cmdlet(VerbsCommon.Rename, "Iteration", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
     [OutputType(typeof(Microsoft.TeamFoundation.Server.NodeInfo))]
-    public class RenameIteration : RenameAreaIterationCmdletBase
+    public class RenameIteration : RenameNodeCmdletBase
     {
-        [Parameter(Position = 0)]
+        [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]
         [Alias("Iteration")]
         public override object Path { get; set; }
     }
 
-    public abstract class RenameAreaIterationCmdletBase : SetAreaIterationCmdletBase
+    public abstract class RenameNodeCmdletBase : SetNodeCmdletBase
     {
-        [Parameter()]
-        public SwitchParameter Passthru { get; set; }
-
+        [Parameter]
         public override int MoveBy { get; set; }
 
+        [Parameter]
+        public SwitchParameter Passthru { get; set; }
+
+        [Parameter]
+        public override object Project { get; set; }
+
+        [Parameter]
+        public override object Collection { get; set; }
+
+        [Parameter]
+        public override object Server { get; set; }
+
+        [Parameter]
+        public override object Credential { get; set; }
     }
 }

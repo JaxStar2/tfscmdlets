@@ -1,7 +1,6 @@
-﻿using System;
-using System.Management.Automation;
+﻿using System.Management.Automation;
 
-namespace TfsCmdlets.Cmdlets
+namespace TfsCmdlets.Cmdlets.WorkItem
 {
     [Cmdlet(VerbsCommon.Get, "WorkItem")]
     public class GetWorkItem : PSCmdlet

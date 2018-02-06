@@ -1,19 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Management.Automation;
 using System.Threading;
 using System.Xml;
-using System.Xml.Linq;
 using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.Client.Channels;
 using Microsoft.TeamFoundation.Core.WebApi;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TfsCmdlets.Cmdlets.ProcessTemplate;
+using TfsCmdlets.Providers;
 
 namespace TfsCmdlets.Cmdlets.TeamProject
 {
-
-    [Cmdlet(verbName: VerbsCommon.New, nounName: "TeamProject", ConfirmImpact = ConfirmImpact.Medium,
+    [Cmdlet(VerbsCommon.New, "TeamProject", ConfirmImpact = ConfirmImpact.Medium,
         SupportsShouldProcess = true)]
     [OutputType(typeof(Microsoft.TeamFoundation.WorkItemTracking.Client.Project))]
     public class NewTeamProject : ProjectLevelCmdlet
@@ -24,18 +21,20 @@ namespace TfsCmdlets.Cmdlets.TeamProject
         [Alias("Name")]
         public override object Project { get; set; }
 
-        [Parameter()]
+        [Parameter]
         public string Description { get; set; }
 
-        [Parameter()]
+        [Parameter]
         public TeamFoundationSourceControlType SourceControl { get; set; }
 
-        [Parameter()]
+        [Parameter]
         public object ProcessTemplate { get; set; }
 
-        [Parameter()]
+        [Parameter]
         public SwitchParameter Passthru { get; set; }
 
+        [Import(typeof(IProcessTemplateProvider))]
+        private IProcessTemplateProvider ProcessTemplateProvider { get; set; }
 
         protected override void ProcessRecord()
         {
@@ -52,25 +51,26 @@ namespace TfsCmdlets.Cmdlets.TeamProject
             }
 
             var tpc = GetCollection();
-            var template = GetProcessTemplate.GetTemplate(ProcessTemplate, tpc);
-            var xml = new XmlDocument(); xml.LoadXml(template.Metadata);
+            var template = ProcessTemplateProvider.GetTemplate(ProcessTemplate, tpc, Server, Credential);
+            var xml = new XmlDocument();
+            xml.LoadXml(template.Metadata);
             var templateTypeId = xml.SelectSingleNode("//version/@type")?.Value;
             var client = tpc.GetClient<ProjectHttpClient>();
 
-            var tpInfo = new Microsoft.TeamFoundation.Core.WebApi.TeamProject()
+            var tpInfo = new Microsoft.TeamFoundation.Core.WebApi.TeamProject
             {
                 Name = project,
                 Description = Description,
-                Capabilities = new Dictionary<string, Dictionary<string, string>>()
+                Capabilities = new Dictionary<string, Dictionary<string, string>>
                 {
                     {
-                        "versioncontrol", new Dictionary<string, string>()
+                        "versioncontrol", new Dictionary<string, string>
                         {
                             {"sourceControlType", SourceControl.ToString()}
                         }
                     },
                     {
-                        "processTemplate", new Dictionary<string, string>()
+                        "processTemplate", new Dictionary<string, string>
                         {
                             {"templateTypeId", templateTypeId}
                         }
@@ -90,9 +90,9 @@ namespace TfsCmdlets.Cmdlets.TeamProject
             var opsToken = operationsClient.GetOperation(token.Id).Result;
 
             while (
-                (opsToken.Status != Microsoft.VisualStudio.Services.Operations.OperationStatus.Succeeded) &&
-                (opsToken.Status != Microsoft.VisualStudio.Services.Operations.OperationStatus.Failed) &&
-                (opsToken.Status != Microsoft.VisualStudio.Services.Operations.OperationStatus.Cancelled))
+                opsToken.Status != Microsoft.VisualStudio.Services.Operations.OperationStatus.Succeeded &&
+                opsToken.Status != Microsoft.VisualStudio.Services.Operations.OperationStatus.Failed &&
+                opsToken.Status != Microsoft.VisualStudio.Services.Operations.OperationStatus.Cancelled)
             {
                 Thread.Sleep(DELAY_MS);
                 opsToken = operationsClient.GetOperation(token.Id).Result;

@@ -1,5 +1,4 @@
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Client;
 
 namespace TfsCmdlets.Cmdlets.Connection
 {
@@ -17,7 +16,7 @@ namespace TfsCmdlets.Cmdlets.Connection
 
     #>
     */
-    [Cmdlet(verbName: VerbsCommunications.Disconnect, nounName: "ConfigurationServer")]
+    [Cmdlet(VerbsCommunications.Disconnect, "ConfigurationServer")]
     public class DisconnectConfigurationServer : Cmdlet
     {
         protected override void ProcessRecord()

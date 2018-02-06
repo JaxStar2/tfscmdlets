@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Schema;
 using System.Xml.Serialization;
-using Microsoft.ServiceBus.Messaging;
 
 namespace TfsCmdlets.Models
 {
-    [XmlRoot(elementName: "gl:GLOBALLISTS", Namespace = "http://schemas.microsoft.com/VisualStudio/2005/workitemtracking/globallists")]
+    [XmlRoot("gl:GLOBALLISTS", Namespace = "http://schemas.microsoft.com/VisualStudio/2005/workitemtracking/globallists")]
     public class GlobalListCollection : List<GlobalList>
     {
         public static GlobalListCollection Parse(string xml)

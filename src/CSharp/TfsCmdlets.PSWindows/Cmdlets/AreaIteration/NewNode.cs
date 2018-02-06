@@ -1,47 +1,37 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Management.Automation;
 using Microsoft.TeamFoundation.Server;
-using TfsCmdlets.Cmdlets.TeamProject;
 
 namespace TfsCmdlets.Cmdlets.AreaIteration
 {
-    [Cmdlet(verbName: VerbsCommon.New, nounName: "Area", SupportsShouldProcess = true)]
-    public class NewArea : NewAreaIterationCmdletBase
+    [Cmdlet(VerbsCommon.New, "Area", SupportsShouldProcess = true)]
+    public class NewArea : NewNodeCmdletBase
     {
-        [Parameter(Position = 0)]
+        [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
         [Alias("Area")]
         public override object Path { get; set; }
     }
 
-    [Cmdlet(verbName: VerbsCommon.New, nounName: "Iteration", SupportsShouldProcess = true)]
-    public class NewIteration : NewAreaIterationCmdletBase
+    [Cmdlet(VerbsCommon.New, "Iteration", SupportsShouldProcess = true)]
+    public class NewIteration : NewNodeCmdletBase
     {
-        [Parameter(Position = 0)]
+        [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
         [Alias("Iteration")]
         public override object Path { get; set; }
     }
 
-    public abstract class NewAreaIterationCmdletBase : AreaIterationCmdletBase
+    public abstract class NewNodeCmdletBase : NodeCmdletBase
     {
-        [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
-        public override object Path { get; set; }
-
-        [Parameter()]
-        public SwitchParameter Passthru { get; set; }
-
         protected override void ProcessRecord()
         {
-            var node = CreateNewNode($"{Path}", Scope, Project, Collection);
+            var node = CreateNewNode($"{Path}", Scope);
 
             if (!Passthru) return;
 
             WriteObject(node);
         }
 
-        private NodeInfo CreateNewNode(string path, NodeScope scope, object project, object collection,
-            DateTime? startDate = null, DateTime? finishDate = null)
+        private NodeInfo CreateNewNode(string path, NodeScope scope, DateTime? startDate = null, DateTime? finishDate = null)
         {
             var tp = GetProject();
             var tpc = tp.Store.TeamProjectCollection;
@@ -59,7 +49,7 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
             }
             catch
             {
-                parentNode = CreateNewNode(parentPath, scope, project, collection);
+                parentNode = CreateNewNode(parentPath, scope);
             }
 
             string nodeUri;
@@ -78,5 +68,20 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
 
             return cssService.GetNode(nodeUri);
         }
+
+        [Parameter]
+        public SwitchParameter Passthru { get; set; }
+
+        [Parameter]
+        public override object Project { get; set; }
+
+        [Parameter]
+        public override object Collection { get; set; }
+
+        [Parameter]
+        public override object Server { get; set; }
+
+        [Parameter]
+        public override object Credential { get; set; }
     }
 }

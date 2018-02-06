@@ -1,11 +1,5 @@
-using System;
-using System.Linq;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.Core.WebApi;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TfsCmdlets.Cmdlets.ConfigurationServer;
-using TfsCmdlets.Cmdlets.TeamProject;
 
 namespace TfsCmdlets.Cmdlets.Connection
 {
@@ -47,25 +41,9 @@ Connects to a project called FabrikamFiber in the team project collection specif
 #>
 */
     [Cmdlet(VerbsCommunications.Connect, "TeamProject", DefaultParameterSetName = "Explicit credentials")]
-    [OutputType((typeof(Project)))]
+    [OutputType(typeof(Project))]
     public class ConnectTeamProject : ProjectLevelCmdlet
     {
-        [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
-        [ValidateNotNullOrEmpty]
-        public override object Project { get; set; }
-
-        [Parameter]
-        public override object Collection { get; set; }
-
-        [Parameter(ParameterSetName = "Explicit credentials")]
-        public override object Credential { get; set; }
-
-        [Parameter(ParameterSetName = "Prompt for credentials", Mandatory = true)]
-        public SwitchParameter Interactive { get; set; }
-
-		[Parameter]
-        public SwitchParameter Passthru { get; set; }
-
         protected override void ProcessRecord()
         {
             if (Interactive.IsPresent)
@@ -81,5 +59,24 @@ Connects to a project called FabrikamFiber in the team project collection specif
                 WriteObject(project);
             }
         }
+        [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
+        [ValidateNotNullOrEmpty]
+        public override object Project { get; set; }
+
+        [Parameter]
+        public override object Collection { get; set; }
+
+        [Parameter]
+        public override object Server { get; set; }
+
+        [Parameter(ParameterSetName = "Explicit credentials")]
+        public override object Credential { get; set; }
+
+        [Parameter(ParameterSetName = "Prompt for credentials", Mandatory = true)]
+        public SwitchParameter Interactive { get; set; }
+
+        [Parameter]
+        public SwitchParameter Passthru { get; set; }
+
     }
 }

@@ -1,32 +1,35 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Management.Automation;
 using System.Xml;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
 namespace TfsCmdlets.Cmdlets.GlobalList
 {
-    public class GlobalListCmdletBase: CollectionLevelCmdlet
+    public abstract class GlobalListCmdletBase: CollectionLevelCmdlet
     {
-        [Parameter(Position = 0)]
-        [SupportsWildcards()]
-        [Alias("Name")]
-        public virtual string GlobalList { get; set; } = "*";
+        public abstract string GlobalList { get; set; }
 
         protected IEnumerable<Models.GlobalList> GetLists()
         {
-            return GetLists(GlobalList, Collection);
+            return GetLists(GlobalList, Collection, Server, Credential);
         }
 
-        protected static IEnumerable<Models.GlobalList> GetLists(string name, object collection)
+        protected IEnumerable<Models.GlobalList> GetLists(string name, object collection, object server, object credential)
         {
-            var tpc = GetCollection(collection);
+            var tpc = GetCollection(collection, server, credential);
             var store = tpc.GetService<WorkItemStore>();
             var xml = store.ExportGlobalLists();
+            var listElements = xml.SelectNodes("//GLOBALLIST");
 
-            foreach (var elem in xml.SelectNodes("//GLOBALLIST").OfType<XmlElement>().Where(e => e.GetAttribute("name").IsLike(name)))
+            if (listElements == null)
             {
-                yield return new Models.GlobalList()
+                throw new InvalidOperationException("Error retrieving global lists from TFS. XML is empty or invalid.");
+            }
+
+            foreach (var elem in listElements.OfType<XmlElement>().Where(e => e.GetAttribute("name").IsLike(name)))
+            {
+                yield return new Models.GlobalList
                 {
                     Name = elem.GetAttribute("name"),
                     Items = new List<string>(elem.ChildNodes.OfType<XmlElement>().Select(e => e.GetAttribute("value")))

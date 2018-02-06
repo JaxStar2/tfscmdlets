@@ -5,15 +5,14 @@ using System.Management.Automation;
 using System.Text.RegularExpressions;
 using System.Xml;
 using Microsoft.TeamFoundation.Server;
-using TfsCmdlets.Cmdlets.TeamProject;
 
 namespace TfsCmdlets.Cmdlets.AreaIteration
 {
-    public abstract class AreaIterationCmdletBase : ProjectLevelCmdlet
+    public abstract class NodeCmdletBase : ProjectLevelCmdlet
     {
-        protected AreaIterationCmdletBase()
+        protected NodeCmdletBase()
         {
-            var name = this.GetType().GetCustomAttributes(true).OfType<CmdletAttribute>().Select(attr => attr.NounName).First();
+            var name = GetType().GetCustomAttributes(true).OfType<CmdletAttribute>().Select(attr => attr.NounName).First();
             Scope = (NodeScope) Enum.Parse(typeof(NodeScope), name);
         }
 
@@ -84,11 +83,6 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
 
         public abstract object Path { get; set; }
 
-        protected NodeScope Scope { get; private set; }
-    }
-    public enum NodeScope
-    {
-        Area,
-        Iteration
+        protected NodeScope Scope { get; }
     }
 }

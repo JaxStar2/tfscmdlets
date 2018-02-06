@@ -1,25 +1,14 @@
-using System;
-using System.Linq;
 using System.Management.Automation;
 using Microsoft.TeamFoundation.Core.WebApi;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TfsCmdlets.Cmdlets.TeamProject;
 
 namespace TfsCmdlets.Cmdlets.Git
 {
-    [Cmdlet(verbName: VerbsCommon.New, nounName: "GitRepository", ConfirmImpact = ConfirmImpact.Medium,
+    [Cmdlet(VerbsCommon.New, "GitRepository", ConfirmImpact = ConfirmImpact.Medium,
         SupportsShouldProcess = true)]
-    [OutputType(typeof(Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository))]
+    [OutputType(typeof(GitRepository))]
     public class NewGitRepository : ProjectLevelCmdlet
     {
-        [Parameter(Mandatory = true)]
-        [Alias("Name")]
-        public string Repository { get; set; }
-
-        [Parameter()]
-        public SwitchParameter Passthru { get; set; }
-
         protected override void ProcessRecord()
         {
             if (!ShouldProcess(Repository, "Create Git repository")) return;
@@ -28,13 +17,13 @@ namespace TfsCmdlets.Cmdlets.Git
             var tpc = tp.Store.TeamProjectCollection;
             var gitClient = tpc.GetClient<GitHttpClient>();
 
-            var tpRef = new TeamProjectReference()
+            var tpRef = new TeamProjectReference
             {
                 Id = tp.Guid,
                 Name = tp.Name
             };
 
-            var repoToCreate = new GitRepository()
+            var repoToCreate = new GitRepository
             {
                 Name = Repository,
                 ProjectReference = tpRef
@@ -47,5 +36,24 @@ namespace TfsCmdlets.Cmdlets.Git
                 WriteObject(result);
             }
         }
+
+        [Parameter(Mandatory = true, Position = 0)]
+        [Alias("Name")]
+        public string Repository { get; set; }
+
+        [Parameter]
+        public SwitchParameter Passthru { get; set; }
+
+        [Parameter(ValueFromPipeline = true)]
+        public override object Project { get; set; }
+
+        [Parameter]
+        public override object Collection { get; set; }
+
+        [Parameter]
+        public override object Server { get; set; }
+
+        [Parameter]
+        public override object Credential { get; set; }
     }
 }

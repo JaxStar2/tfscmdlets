@@ -1,29 +1,12 @@
-using System;
-using System.Linq;
 using System.Management.Automation;
-using System.Reflection;
-using Microsoft.TeamFoundation.Client.Channels;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TfsCmdlets.Cmdlets.TeamProject;
 
 namespace TfsCmdlets.Cmdlets.Git
 {
-    [Cmdlet(verbName: VerbsCommon.Rename, nounName: "GitRepository", ConfirmImpact = ConfirmImpact.Medium,SupportsShouldProcess = true)]
-    [OutputType(typeof(Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository))]
+    [Cmdlet(VerbsCommon.Rename, "GitRepository", ConfirmImpact = ConfirmImpact.Medium,SupportsShouldProcess = true)]
+    [OutputType(typeof(GitRepository))]
     public class RenameGitRepository : GitCmdletBase
     {
-        [Parameter()]
-        [SupportsWildcards()]
-        [Alias("Name")]
-        public object Repository { get; set; } = "*";
-
-        [Parameter()]
-        public string NewName { get; set; }
-
-        [Parameter()]
-        public SwitchParameter Passthru { get; set; }
-
         protected override void ProcessRecord()
         {
             var reposToRename = GetRepositories(Repository);
@@ -44,5 +27,21 @@ namespace TfsCmdlets.Cmdlets.Git
                 WriteObject(result);
             }
         }
+
+        [Parameter(Mandatory = true, ValueFromPipeline = true)]
+        [Alias("Name")]
+        public object Repository { get; set; }
+
+        [Parameter(Mandatory = true, Position = 1)]
+        public string NewName { get; set; }
+
+        [Parameter]
+        public SwitchParameter Passthru { get; set; }
+
+        [Parameter]
+        public override object Project { get; set; }
+
+        [Parameter]
+        public override object Collection { get; set; }
     }
 }

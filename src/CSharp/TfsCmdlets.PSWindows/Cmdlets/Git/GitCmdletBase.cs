@@ -1,33 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 
 namespace TfsCmdlets.Cmdlets.Git
 {
-    public class GitCmdletBase : ProjectLevelCmdlet
+    public abstract class GitCmdletBase : ProjectLevelCmdlet
     {
         protected IEnumerable<GitRepository> GetRepositories(object repository)
         {
-            switch (repository)
+            while (true)
             {
-                case PSObject pso:
+                switch (repository)
+                {
+                    case PSObject pso:
                     {
-                        foreach (var r in GetRepositories(pso.BaseObject))
-                        {
-                            yield return r;
-                        }
-                        break;
+                        repository = pso.BaseObject;
+                        continue;
                     }
-                case GitRepository r:
+                    case GitRepository r:
                     {
                         yield return r;
                         break;
                     }
-                case string s:
+                    case string s:
                     {
                         var tp = GetProject();
                         var tpc = tp.Store.TeamProjectCollection;
@@ -39,10 +35,12 @@ namespace TfsCmdlets.Cmdlets.Git
                         }
                         break;
                     }
-                default:
+                    default:
                     {
                         throw new PSArgumentException($"Invalid git repository name {repository}");
                     }
+                }
+                break;
             }
         }
     }

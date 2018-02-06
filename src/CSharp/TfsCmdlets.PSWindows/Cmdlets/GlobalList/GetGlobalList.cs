@@ -1,13 +1,8 @@
-using System.Collections.Generic;
-using System.ComponentModel.Composition.Primitives;
-using System.Linq;
 using System.Management.Automation;
-using System.Xml;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
 namespace TfsCmdlets.Cmdlets.GlobalList
 {
-    [Cmdlet(verbName: VerbsCommon.Get, nounName: "GlobalList")]
+    [Cmdlet(VerbsCommon.Get, "GlobalList")]
     [OutputType(typeof(Models.GlobalList))]
     public class GetGlobalList : GlobalListCmdletBase
     {
@@ -17,5 +12,13 @@ namespace TfsCmdlets.Cmdlets.GlobalList
 
             WriteObject(lists, true);
         }
+
+        [Parameter(Position = 0)]
+        [SupportsWildcards]
+        [Alias("Name")]
+        public override string GlobalList { get; set; } = "*";
+
+        [Parameter(ValueFromPipeline = true)]
+        public override object Collection { get; set; }
     }
 }

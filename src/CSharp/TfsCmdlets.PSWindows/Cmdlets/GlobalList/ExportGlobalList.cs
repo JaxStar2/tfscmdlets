@@ -1,27 +1,36 @@
-using System.Collections.Generic;
-using System.ComponentModel.Composition.Primitives;
+using System;
 using System.Linq;
 using System.Management.Automation;
 using System.Xml;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
 namespace TfsCmdlets.Cmdlets.GlobalList
 {
-    [Cmdlet(verbName: VerbsData.Export, nounName: "GlobalList")]
+    [Cmdlet(VerbsData.Export, "GlobalList")]
     [OutputType(typeof(string))]
     public class ExportGlobalList : GlobalListCmdletBase
     {
         protected override void ProcessRecord()
         {
             var xml = GetListsAsXml();
+            var listElements = xml.SelectNodes("//GLOBALLIST")?.OfType<XmlElement>();
 
-            foreach (var elem in xml.SelectNodes("//GLOBALLIST").OfType<XmlElement>()
-                .Where(e => !e.GetAttribute("name").IsLike(GlobalList)))
+            if (listElements == null)
+                throw new InvalidOperationException("Error parsing XML contents.");
+
+            foreach (var elem in listElements.Where(e => !e.GetAttribute("name").IsLike(GlobalList)))
             {
-                xml.DocumentElement.RemoveChild(elem);
+                xml.DocumentElement?.RemoveChild(elem);
             }
 
             WriteObject(xml.OuterXml);
         }
+
+        [Parameter(Position = 0)]
+        [SupportsWildcards]
+        [Alias("Name")]
+        public override string GlobalList { get; set; } = "*";
+
+        [Parameter(ValueFromPipeline = true)]
+        public override object Collection { get; set; }
     }
 }

@@ -1,17 +1,13 @@
-using System;
-using System.Linq;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TfsCmdlets.Cmdlets.TeamProject;
 
 namespace TfsCmdlets.Cmdlets.Git
 {
-    [Cmdlet(verbName: VerbsCommon.Get, nounName: "GitRepository")]
+    [Cmdlet(VerbsCommon.Get, "GitRepository")]
     [OutputType(typeof(Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository))]
     public class GetGitRepository : GitCmdletBase
     {
-        [Parameter()]
-        [SupportsWildcards()]
+        [Parameter(Position = 0)]
+        [SupportsWildcards]
         [Alias("Name")]
         public string Repository { get; set; } = "*";
 
@@ -19,5 +15,18 @@ namespace TfsCmdlets.Cmdlets.Git
         {
             WriteObject(GetRepositories(Repository), true);
         }
+
+        [Parameter(ValueFromPipeline = true)]
+        public override object Project { get; set; }
+
+        [Parameter]
+        public override object Collection { get; set; }
+
+        [Parameter]
+        public override object Server { get; set; }
+
+        [Parameter]
+        public override object Credential { get; set; }
+
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.Services.Common;
-using System;
 using System.Management.Automation;
 using System.Net;
 using System.Security;

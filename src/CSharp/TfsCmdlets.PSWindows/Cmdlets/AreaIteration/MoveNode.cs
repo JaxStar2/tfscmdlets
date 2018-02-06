@@ -5,32 +5,26 @@ using Microsoft.TeamFoundation.Server;
 
 namespace TfsCmdlets.Cmdlets.AreaIteration
 {
-    [Cmdlet(verbName: VerbsCommon.Move, nounName: "Area", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    public class MoveArea : MoveAreaIterationCmdletBase
+    [Cmdlet(VerbsCommon.Move, "Area", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
+    public class MoveArea : MoveNodeCmdletBase
     {
-        [Parameter(Position = 0)]
+        [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]
         [SupportsWildcards]
         [Alias("Area")]
         public override object Path { get; set; }
     }
 
-    [Cmdlet(verbName: VerbsCommon.Move, nounName: "Iteration", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    public class MoveIteration : MoveAreaIterationCmdletBase
+    [Cmdlet(VerbsCommon.Move, "Iteration", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
+    public class MoveIteration : MoveNodeCmdletBase
     {
-        [Parameter(Position = 0)]
+        [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]
         [SupportsWildcards]
         [Alias("Iteration")]
         public override object Path { get; set; }
     }
 
-    public abstract class MoveAreaIterationCmdletBase : AreaIterationCmdletBase
+    public abstract class MoveNodeCmdletBase : NodeCmdletBase
     {
-        [Parameter(Position = 1)]
-        public object Destination { get; set; }
-
-        [Parameter()]
-        public SwitchParameter Passthru { get; set; }
-
         protected override void ProcessRecord()
         {
             var originalNodes = GetNodes(Path).ToList();
@@ -65,5 +59,23 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
                 WriteObject(node);
             }
         }
+
+        [Parameter(Position = 1)]
+        public object Destination { get; set; }
+
+        [Parameter]
+        public SwitchParameter Passthru { get; set; }
+
+        [Parameter]
+        public override object Project { get; set; }
+
+        [Parameter]
+        public override object Collection { get; set; }
+
+        [Parameter]
+        public override object Server { get; set; }
+
+        [Parameter]
+        public override object Credential { get; set; }
     }
 }
