@@ -3,7 +3,7 @@ using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
 namespace TfsCmdlets.Cmdlets.Connection
 {
-    internal static class CurrentConnections
+    public static class CurrentConnections
     {
         private static TfsConfigurationServer _configurationServer;
         private static TfsTeamProjectCollection _teamProjectCollection;

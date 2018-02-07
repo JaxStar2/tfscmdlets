@@ -29,16 +29,6 @@ namespace TfsCmdlets.Cmdlets.ConfigurationServer
     [OutputType(typeof(Microsoft.TeamFoundation.Client.TfsConfigurationServer))]
     public class GetConfigurationServer : ServerLevelCmdlet
     {
-        [Parameter(Position = 0, ParameterSetName = "Get by server", ValueFromPipeline = true)]
-        [AllowNull]
-        public override object Server { get; set; } = "*";
-
-        [Parameter(Position = 0, ParameterSetName = "Get current")]
-        public SwitchParameter Current { get; set; }
-
-        [Parameter(Position = 1, ParameterSetName = "Get by server")]
-        public override object Credential { get; set; }
-
         protected override void ProcessRecord()
         {
             if (Current.IsPresent)
@@ -49,5 +39,15 @@ namespace TfsCmdlets.Cmdlets.ConfigurationServer
 
             WriteObject(GetServers(Server, Credential), true);
         }
+
+        [Parameter(Position = 0, ParameterSetName = "Get by server", ValueFromPipeline = true)]
+        [AllowNull]
+        public override object Server { get; set; } = "*";
+
+        [Parameter(Position = 0, ParameterSetName = "Get current")]
+        public SwitchParameter Current { get; set; }
+
+        [Parameter(Position = 1, ParameterSetName = "Get by server")]
+        public override object Credential { get; set; }
     }
 }

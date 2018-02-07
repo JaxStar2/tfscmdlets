@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using Microsoft.TeamFoundation.Client;
 using TfsCmdlets.Providers;
 
@@ -30,6 +31,7 @@ namespace TfsCmdlets.Cmdlets
 
         public abstract object Credential { get; set; }
 
+        [Import(typeof(IServerProvider))]
         private IServerProvider ServerProvider { get; set; }
 
     }

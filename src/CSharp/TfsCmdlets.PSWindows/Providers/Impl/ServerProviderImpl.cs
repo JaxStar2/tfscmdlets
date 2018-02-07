@@ -62,9 +62,9 @@ namespace TfsCmdlets.Providers.Impl
                     }
                     case string s when !string.IsNullOrWhiteSpace(s):
                     {
-                        var serverNames = GetRegisteredConfigurationServer.Get(s);
+                        var servers = RegisteredConnectionsProvider.GetRegisteredConfigurationServers(s);
 
-                        foreach (var svr in serverNames)
+                        foreach (var svr in servers)
                         {
                             yield return new TfsConfigurationServer(svr.Uri, cred);
                         }
@@ -77,7 +77,7 @@ namespace TfsCmdlets.Providers.Impl
                     }
                     default:
                     {
-                        throw new PSArgumentException("No connection information available. " +
+                        throw new Exception("No connection information available. " +
                             "Either supply a valid -Server argument or use Connect-TfsConfigurationServer " +
                             "prior to invoking this cmdlet.");
                     }
@@ -85,5 +85,8 @@ namespace TfsCmdlets.Providers.Impl
                 break;
             }
         }
+
+        [Import(typeof(IRegisteredConnectionsProvider))]
+        private IRegisteredConnectionsProvider RegisteredConnectionsProvider { get; set; }
     }
 }
