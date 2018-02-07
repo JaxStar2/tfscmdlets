@@ -1,36 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.TeamFoundation.Client;
+using TfsCmdlets.Providers;
 
 namespace TfsCmdlets.Cmdlets.ConfigurationServer
 {
     [Cmdlet(VerbsCommon.Get, "RegisteredConfigurationServer")]
     [OutputType(typeof(RegisteredConfigurationServer))]
-    public class GetRegisteredConfigurationServer: Cmdlet
+    public class GetRegisteredConfigurationServer : BaseCmdlet
     {
-        [Parameter(Position = 0, ValueFromPipeline = true)]
-        public string Name { get; set; } = "*";
-
         protected override void ProcessRecord()
         {
-            foreach (var registeredServer in Get(Name))
-            {
-                WriteObject(registeredServer);
-            }
+            WriteObject(RegisteredConnectionsProvider.GetRegisteredConfigurationServers(Name), true);
         }
 
-        public static IEnumerable<RegisteredConfigurationServer> Get(string serverName)
-        {
-            var pattern = serverName.Equals("localhost", StringComparison.OrdinalIgnoreCase) || serverName.Equals(".")
-                ? Environment.MachineName
-                : serverName;
+        [Parameter(Position = 0, ValueFromPipeline = true)]
+        [ValidateNotNullOrEmpty]
+        public string Name { get; set; } = "*";
 
-            foreach (var s in RegisteredTfsConnections.GetConfigurationServers().Where(o => o.Name.IsLike(pattern)))
-            {
-                yield return s;
-            }
-        }
+        [Import(typeof(IRegisteredConnectionsProvider))]
+        private IRegisteredConnectionsProvider RegisteredConnectionsProvider { get; set; }
     }
 }

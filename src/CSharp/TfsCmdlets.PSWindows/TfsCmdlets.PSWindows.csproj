@@ -260,6 +260,8 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Providers\Impl\ProjectProviderImpl.cs" />
     <Compile Include="Providers\Impl\CollectionProviderImpl.cs" />
+    <Compile Include="Providers\Impl\RegisteredConnectionsProviderImpl.cs" />
+    <Compile Include="Providers\IRegisteredConnectionsProvider.cs" />
     <Compile Include="Providers\IServerProvider.cs" />
     <Compile Include="Providers\ICollectionProvider.cs" />
     <Compile Include="Providers\Impl\ProcessTemplateProviderImpl.cs" />
