@@ -1,5 +1,7 @@
-﻿using Microsoft.VisualStudio.Services.WebApi;
+﻿using System.ComponentModel.Composition;
+using Microsoft.VisualStudio.Services.WebApi;
 using System.Management.Automation;
+using TfsCmdlets.Services;
 
 namespace TfsCmdlets.Cmdlets.Connection
 {
@@ -7,6 +9,24 @@ namespace TfsCmdlets.Cmdlets.Connection
     [OutputType(typeof(VssConnection))]
     public class ConnectTeamProjectCollection : CollectionLevelCmdlet
     {
+        protected override void ProcessRecord()
+        {
+            if (Interactive.IsPresent)
+            {
+                Credential = GetCredential.Get(true);
+            }
+
+            var tpc = GetCollection();
+            tpc.EnsureAuthenticated();
+
+            CurrentConnectionService.TeamProjectCollection = tpc;
+
+            if (Passthru)
+            {
+                WriteObject(tpc);
+            }
+        }
+
         [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
         [ValidateNotNull]
         public override object Collection { get; set; }
@@ -20,25 +40,10 @@ namespace TfsCmdlets.Cmdlets.Connection
         [Parameter(ParameterSetName = "Prompt for credentials", Mandatory = true)]
         public SwitchParameter Interactive { get; set; }
 
-		[Parameter]
+        [Parameter]
         public SwitchParameter Passthru { get; set; }
 
-        protected override void ProcessRecord()
-        {
-            if (Interactive.IsPresent)
-            {
-                Credential = GetCredential.Get(true);
-            }
-
-            var tpc = GetCollection();
-            tpc.EnsureAuthenticated();
-
-            CurrentConnections.TeamProjectCollection = tpc;
-
-            if (Passthru)
-            {
-                WriteObject(tpc);
-            }
-        }
+        [Import(typeof(ICurrentConnectionService))]
+        private ICurrentConnectionService CurrentConnectionService { get; set; }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
-namespace TfsCmdlets.Providers
+namespace TfsCmdlets.Services
 {
-    public interface IServerProvider
+    public interface IConfigurationServerService
     {
         TfsConfigurationServer GetServer(object server, object credential);
 

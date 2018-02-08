@@ -4,21 +4,16 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.Core.WebApi;
 using Microsoft.TeamFoundation.Framework.Common;
-using Microsoft.TeamFoundation.Server;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TfsCmdlets.Cmdlets.ConfigurationServer;
 using TfsCmdlets.Cmdlets.Connection;
-using TfsCmdlets.Cmdlets.TeamProjectCollection;
 
-namespace TfsCmdlets.Providers.Impl
+namespace TfsCmdlets.Services.Impl
 {
-    [Export(typeof(ICollectionProvider))]
-    internal sealed class CollectionProviderImpl : ICollectionProvider
+    [Export(typeof(ITeamProjectCollectionService))]
+    internal sealed class TeamProjectCollectionServiceImpl : ITeamProjectCollectionService
     {
-        [Import(typeof(IServerProvider))]
-        private IServerProvider ServerProvider { get; set; }
+        [Import(typeof(IConfigurationServerService))]
+        private IConfigurationServerService ConfigurationServerService { get; set; }
 
         public TfsTeamProjectCollection GetCollection(object collection, object server, object credential)
         {
@@ -62,9 +57,9 @@ namespace TfsCmdlets.Providers.Impl
                             yield return new TfsTeamProjectCollection(new Uri(s), cred);
                             break;
                         }
-                    case string s when CurrentConnections.ConfigurationServer != null && !string.IsNullOrWhiteSpace(s):
+                    case string s when CurrentConnectionService.ConfigurationServer != null && !string.IsNullOrWhiteSpace(s):
                         {
-                            var configServer = CurrentConnections.ConfigurationServer;
+                            var configServer = CurrentConnectionService.ConfigurationServer;
                             var filter = new[] { CatalogResourceTypes.ProjectCollection };
                             var collections = configServer.CatalogNode.QueryChildren(filter, false, CatalogQueryOptions.None);
                             var result = collections.Select(o => o.Resource).Where(o => o.DisplayName.IsLike(s)).ToList();
@@ -83,7 +78,7 @@ namespace TfsCmdlets.Providers.Impl
                         }
                     case string s when !string.IsNullOrWhiteSpace(s):
                         {
-                            var registeredCollection = GetRegisteredTeamProjectCollection.Get(s);
+                            var registeredCollection = RegisteredConnectionService.GetRegisteredProjectCollections(s);
 
                             foreach (var tpc in registeredCollection)
                             {
@@ -92,9 +87,9 @@ namespace TfsCmdlets.Providers.Impl
 
                             break;
                         }
-                    case null when CurrentConnections.TeamProjectCollection != null:
+                    case null when CurrentConnectionService.TeamProjectCollection != null:
                         {
-                            yield return CurrentConnections.TeamProjectCollection;
+                            yield return CurrentConnectionService.TeamProjectCollection;
                             break;
                         }
                     default:
@@ -105,5 +100,11 @@ namespace TfsCmdlets.Providers.Impl
                 break;
             }
         }
+
+        [Import(typeof(IRegisteredConnectionService))]
+        private IRegisteredConnectionService RegisteredConnectionService { get; set; }
+
+        [Import(typeof(ICurrentConnectionService))]
+        private ICurrentConnectionService CurrentConnectionService { get; set; }
     }
 }

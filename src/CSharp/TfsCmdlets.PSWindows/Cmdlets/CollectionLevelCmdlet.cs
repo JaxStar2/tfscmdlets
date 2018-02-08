@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Management.Automation;
 using Microsoft.TeamFoundation.Client;
-using TfsCmdlets.Providers;
+using TfsCmdlets.Services;
 
 namespace TfsCmdlets.Cmdlets
 {
@@ -20,12 +20,12 @@ namespace TfsCmdlets.Cmdlets
 
         protected TfsTeamProjectCollection GetCollection(object collection, object server, object credential)
         {
-            return CollectionProvider.GetCollection(collection, server, credential);
+            return TeamProjectCollectionService.GetCollection(collection, server, credential);
         }
 
         protected IEnumerable<TfsTeamProjectCollection> GetCollections(object collection, object server, object credential)
         {
-            return CollectionProvider.GetCollections(collection, server, credential);
+            return TeamProjectCollectionService.GetCollections(collection, server, credential);
         }
 
         public abstract object Collection { get; set; }
@@ -36,7 +36,7 @@ namespace TfsCmdlets.Cmdlets
         [Parameter]
         public override object Credential { get; set; }
 
-        [Import(typeof(ICollectionProvider))]
-        private ICollectionProvider CollectionProvider { get; set; }
+        [Import(typeof(ITeamProjectCollectionService))]
+        private ITeamProjectCollectionService TeamProjectCollectionService { get; set; }
     }
 }

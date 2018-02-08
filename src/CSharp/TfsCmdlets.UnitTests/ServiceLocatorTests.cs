@@ -3,7 +3,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TfsCmdlets.Providers;
+using TfsCmdlets.Services;
 
 namespace TfsCmdlets.UnitTests
 {
@@ -56,17 +56,12 @@ namespace TfsCmdlets.UnitTests
         public void CanUseCustomContainer()
         {
             var customContainer = new CompositionContainer(new AssemblyCatalog(GetType().Assembly));
+            var oldContainer = ServiceLocator.SetContainer(customContainer);
+            var svc = ServiceLocator.GetInstance<ICustomService>();
 
-            lock (this)
-            {
-                var oldContainer = ServiceLocator.SetContainer(customContainer);
+            Assert.IsNotNull(svc);
 
-                var svc = ServiceLocator.GetInstance<ICustomService>();
-
-                Assert.IsNotNull(svc);
-
-                ServiceLocator.SetContainer(oldContainer);
-            }
+            ServiceLocator.SetContainer(oldContainer);
         }
 
         [TestMethod]
@@ -75,7 +70,7 @@ namespace TfsCmdlets.UnitTests
             var obj = new ComposableObject();
             obj.Compose();
 
-            Assert.IsNotNull(obj.ServerProvider);
+            Assert.IsNotNull(obj.ConfigurationServerService);
         }
 
         [TestMethod]
@@ -84,7 +79,7 @@ namespace TfsCmdlets.UnitTests
             var obj = new ComposableObject();
             obj.Compose();
 
-            Assert.IsNotNull(obj.CollectionProvider);
+            Assert.IsNotNull(obj.TeamProjectCollectionService);
         }
 
         [TestMethod]
@@ -93,7 +88,7 @@ namespace TfsCmdlets.UnitTests
             var obj = new ComposableObject();
             obj.Compose();
 
-            Assert.IsNotNull(obj.ProjectProvider);
+            Assert.IsNotNull(obj.ProjectService);
         }
 
         [TestMethod]
@@ -102,7 +97,7 @@ namespace TfsCmdlets.UnitTests
             var obj = new ComposableObject();
             obj.Compose();
 
-            Assert.IsNotNull(obj.ProcessTemplateProvider);
+            Assert.IsNotNull(obj.ProcessTemplateService);
         }
 
         [TestMethod]
@@ -111,8 +106,8 @@ namespace TfsCmdlets.UnitTests
             var obj = new ComposableObject();
             obj.Compose();
 
-            var provider = obj.ProjectProvider;
-            var pi = provider.GetType().GetProperty("CollectionProvider", BindingFlags.Instance | BindingFlags.NonPublic);
+            var provider = obj.ProjectService;
+            var pi = provider.GetType().GetProperty("TeamProjectCollectionService", BindingFlags.Instance | BindingFlags.NonPublic);
             var nestedProvider = pi?.GetValue(provider);
 
             Assert.IsNotNull(nestedProvider);
@@ -122,29 +117,29 @@ namespace TfsCmdlets.UnitTests
 
         public class ComposableObject
         {
-            [Import(typeof(IServerProvider))]
-            public IServerProvider PublicContainer { get; set; }
+            [Import(typeof(IConfigurationServerService))]
+            public IConfigurationServerService PublicContainer { get; set; }
 
-            [Import(typeof(IServerProvider))]
-            internal IServerProvider InternalContainer { get; set; }
+            [Import(typeof(IConfigurationServerService))]
+            internal IConfigurationServerService InternalContainer { get; set; }
 
-            [Import(typeof(IServerProvider))]
-            protected IServerProvider ProtectedContainer { get; set; }
+            [Import(typeof(IConfigurationServerService))]
+            protected IConfigurationServerService ProtectedContainer { get; set; }
 
-            [Import(typeof(IServerProvider))]
-            private IServerProvider PrivateContainer { get; set; }
+            [Import(typeof(IConfigurationServerService))]
+            private IConfigurationServerService PrivateContainer { get; set; }
 
-            [Import(typeof(IServerProvider))]
-            public IServerProvider ServerProvider { get; set; }
+            [Import(typeof(IConfigurationServerService))]
+            public IConfigurationServerService ConfigurationServerService { get; set; }
 
-            [Import(typeof(ICollectionProvider))]
-            public ICollectionProvider CollectionProvider { get; set; }
+            [Import(typeof(ITeamProjectCollectionService))]
+            public ITeamProjectCollectionService TeamProjectCollectionService { get; set; }
 
-            [Import(typeof(IProjectProvider))]
-            public IProjectProvider ProjectProvider { get; set; }
+            [Import(typeof(IProjectService))]
+            public IProjectService ProjectService { get; set; }
 
-            [Import(typeof(IProcessTemplateProvider))]
-            public IProcessTemplateProvider ProcessTemplateProvider { get; set; }
+            [Import(typeof(IProcessTemplateService))]
+            public IProcessTemplateService ProcessTemplateService { get; set; }
 
         }
 

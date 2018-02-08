@@ -155,6 +155,9 @@
     <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.WorkItemTracking.Client.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Client.15.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\Microsoft.TeamFoundation.WorkItemTracking.Client.15.0.0.0.Fakes.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Client.DataStoreLoader, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.WorkItemTracking.Client.DataStoreLoader.dll</HintPath>
     </Reference>
@@ -224,10 +227,18 @@
     <Compile Include="SampleData.cs" />
     <Compile Include="StringExtensionsTests.cs" />
     <Compile Include="ServiceLocatorTests.cs" />
+    <Compile Include="Stubs\Services\ConfigurationServerServiceStub.cs" />
+    <Compile Include="Stubs\Services\CurrentConnectionServiceStub.cs" />
+    <Compile Include="Stubs\Services\ProcessTemplateServiceStub.cs" />
+    <Compile Include="Stubs\Services\ProjectProviderStub.cs" />
+    <Compile Include="Stubs\Services\RegisteredConnectionServiceStub.cs" />
+    <Compile Include="Stubs\Services\TeamProjectCollectionServiceStub.cs" />
+    <Compile Include="TestSetup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <Fakes Include="Fakes\Microsoft.TeamFoundation.Client.fakes" />
+    <Fakes Include="Fakes\Microsoft.TeamFoundation.WorkItemTracking.Client.fakes" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

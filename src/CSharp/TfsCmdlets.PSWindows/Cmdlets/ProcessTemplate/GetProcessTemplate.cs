@@ -4,7 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.TeamFoundation.Server;
-using TfsCmdlets.Providers;
+using TfsCmdlets.Services;
 
 namespace TfsCmdlets.Cmdlets.ProcessTemplate
 {
@@ -15,7 +15,7 @@ namespace TfsCmdlets.Cmdlets.ProcessTemplate
     {
         protected override void ProcessRecord()
         {
-            WriteObject(ProcessTemplateProvider.GetTemplates(Name, Collection, Server, Credential), true);
+            WriteObject(ProcessTemplateService.GetTemplates(Name, Collection, Server, Credential), true);
         }
 
         [Parameter(Position = 0)]
@@ -25,8 +25,8 @@ namespace TfsCmdlets.Cmdlets.ProcessTemplate
         [Parameter(ValueFromPipeline = true)]
         public override object Collection { get; set; }
 
-        [Import(typeof(IProcessTemplateProvider))]
-        private IProcessTemplateProvider ProcessTemplateProvider { get; set; }
+        [Import(typeof(IProcessTemplateService))]
+        private IProcessTemplateService ProcessTemplateService { get; set; }
 
     }
 }

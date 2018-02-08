@@ -1,5 +1,6 @@
-﻿using System.Management.Automation;
-using TfsCmdlets.Cmdlets.Connection;
+﻿using System.ComponentModel.Composition;
+using System.Management.Automation;
+using TfsCmdlets.Services;
 
 namespace TfsCmdlets.Cmdlets.ConfigurationServer
 {
@@ -31,9 +32,9 @@ namespace TfsCmdlets.Cmdlets.ConfigurationServer
     {
         protected override void ProcessRecord()
         {
-            if (Current.IsPresent)
+            if (Current)
             {
-                WriteObject(CurrentConnections.ConfigurationServer);
+                WriteObject(CurrentConnectionService.ConfigurationServer);
                 return;
             }
 
@@ -41,7 +42,7 @@ namespace TfsCmdlets.Cmdlets.ConfigurationServer
         }
 
         [Parameter(Position = 0, ParameterSetName = "Get by server", ValueFromPipeline = true)]
-        [AllowNull]
+        [ValidateNotNull]
         public override object Server { get; set; } = "*";
 
         [Parameter(Position = 0, ParameterSetName = "Get current")]
@@ -49,5 +50,8 @@ namespace TfsCmdlets.Cmdlets.ConfigurationServer
 
         [Parameter(Position = 1, ParameterSetName = "Get by server")]
         public override object Credential { get; set; }
+
+        [Import(typeof(ICurrentConnectionService))]
+        private ICurrentConnectionService CurrentConnectionService { get; set; }
     }
 }

@@ -1,4 +1,6 @@
+using System.ComponentModel.Composition;
 using System.Management.Automation;
+using TfsCmdlets.Services;
 
 namespace TfsCmdlets.Cmdlets.Connection
 {
@@ -21,7 +23,10 @@ namespace TfsCmdlets.Cmdlets.Connection
     {
         protected override void ProcessRecord()
         {
-            CurrentConnections.TeamProjectCollection = null;
+            CurrentConnectionService.TeamProjectCollection = null;
         }
+
+        [Import(typeof(ICurrentConnectionService))]
+        private ICurrentConnectionService CurrentConnectionService { get; set; }
     }
 }

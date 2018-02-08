@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.TeamFoundation.Server;
 
-namespace TfsCmdlets.Providers
+namespace TfsCmdlets.Services
 {
-    public interface IProcessTemplateProvider
+    public interface IProcessTemplateService
     {
         TemplateHeader GetTemplate(object template, object collection, object server, object credential);
 

@@ -4,7 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.TeamFoundation.Client;
-using TfsCmdlets.Providers;
+using TfsCmdlets.Services;
 
 namespace TfsCmdlets.Cmdlets.ConfigurationServer
 {
@@ -14,14 +14,14 @@ namespace TfsCmdlets.Cmdlets.ConfigurationServer
     {
         protected override void ProcessRecord()
         {
-            WriteObject(RegisteredConnectionsProvider.GetRegisteredConfigurationServers(Name), true);
+            WriteObject(RegisteredConnectionService.GetRegisteredConfigurationServers(Name), true);
         }
 
         [Parameter(Position = 0, ValueFromPipeline = true)]
         [ValidateNotNullOrEmpty]
         public string Name { get; set; } = "*";
 
-        [Import(typeof(IRegisteredConnectionsProvider))]
-        private IRegisteredConnectionsProvider RegisteredConnectionsProvider { get; set; }
+        [Import(typeof(IRegisteredConnectionService))]
+        private IRegisteredConnectionService RegisteredConnectionService { get; set; }
     }
 }

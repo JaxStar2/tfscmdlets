@@ -1,16 +1,19 @@
-﻿using Microsoft.TeamFoundation.Client;
+﻿using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Primitives;
+using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
-namespace TfsCmdlets.Cmdlets.Connection
+namespace TfsCmdlets.Services.Impl
 {
-    public static class CurrentConnections
+    [Export(typeof(ICurrentConnectionService))]
+    public class CurrentConnectionServiceImpl: ICurrentConnectionService
     {
-        private static TfsConfigurationServer _configurationServer;
-        private static TfsTeamProjectCollection _teamProjectCollection;
-        private static Project _teamProject;
-        private static TeamFoundationTeam _team;
+        private TfsConfigurationServer _configurationServer;
+        private TfsTeamProjectCollection _teamProjectCollection;
+        private Project _teamProject;
+        private TeamFoundationTeam _team;
 
-        public static TfsConfigurationServer ConfigurationServer
+        public TfsConfigurationServer ConfigurationServer
         {
             get => _configurationServer;
 
@@ -25,7 +28,7 @@ namespace TfsCmdlets.Cmdlets.Connection
             }
         }
 
-        public static TfsTeamProjectCollection TeamProjectCollection
+        public TfsTeamProjectCollection TeamProjectCollection
         {
             get => _teamProjectCollection;
 
@@ -41,7 +44,7 @@ namespace TfsCmdlets.Cmdlets.Connection
             }
         }
 
-        public static Project TeamProject
+        public Project TeamProject
         {
             get => _teamProject;
 
@@ -59,7 +62,7 @@ namespace TfsCmdlets.Cmdlets.Connection
             }
         }
 
-        public static TeamFoundationTeam Team
+        public TeamFoundationTeam Team
         {
             get => _team;
             set
@@ -73,7 +76,7 @@ namespace TfsCmdlets.Cmdlets.Connection
             }
         }
 
-        public static void DisconnectAll()
+        public void DisconnectAll()
         {
             _configurationServer = null;
             _teamProjectCollection = null;

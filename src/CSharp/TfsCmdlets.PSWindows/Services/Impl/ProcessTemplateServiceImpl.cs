@@ -4,10 +4,10 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using Microsoft.TeamFoundation.Server;
 
-namespace TfsCmdlets.Providers.Impl
+namespace TfsCmdlets.Services.Impl
 {
-    [Export(typeof(IProcessTemplateProvider))]
-    internal class ProcessTemplateProviderImpl: IProcessTemplateProvider
+    [Export(typeof(IProcessTemplateService))]
+    internal class ProcessTemplateServiceImpl: IProcessTemplateService
     {
         public TemplateHeader GetTemplate(object name, object collection, object server, object credential)
         {
@@ -34,7 +34,7 @@ namespace TfsCmdlets.Providers.Impl
                 }
                 case string s:
                 {
-                    var tpc = CollectionProvider.GetCollection(collection, server, credential);
+                    var tpc = TeamProjectCollectionService.GetCollection(collection, server, credential);
                     var processTemplateSvc = tpc.GetService<IProcessTemplates>();
                     foreach (var t in processTemplateSvc.TemplateHeaders().Where(o => o.Name.IsLike(s)))
                     {
@@ -49,7 +49,7 @@ namespace TfsCmdlets.Providers.Impl
             }
         }
 
-        [Import(typeof(ICollectionProvider))]
-        private ICollectionProvider CollectionProvider { get; set; }
+        [Import(typeof(ITeamProjectCollectionService))]
+        private ITeamProjectCollectionService TeamProjectCollectionService { get; set; }
     }
 }

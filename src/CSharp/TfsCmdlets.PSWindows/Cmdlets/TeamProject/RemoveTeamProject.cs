@@ -1,5 +1,8 @@
+using System;
+using System.ComponentModel.Composition;
 using System.Management.Automation;
 using TfsCmdlets.Cmdlets.Connection;
+using TfsCmdlets.Services;
 
 namespace TfsCmdlets.Cmdlets.TeamProject
 {
@@ -18,16 +21,10 @@ namespace TfsCmdlets.Cmdlets.TeamProject
 
         protected override void ProcessRecord()
         {
-            if (Current.IsPresent)
-            {
-                WriteObject(CurrentConnections.TeamProject);
-                return;
-            }
-
-            foreach (var p in GetProjects(Project, Collection, Server, Credential))
-            {
-               WriteObject(p);
-            }
+            throw new NotImplementedException();
         }
+
+        [Import(typeof(ICurrentConnectionService))]
+        private ICurrentConnectionService CurrentConnectionService { get; set; }
     }
 }

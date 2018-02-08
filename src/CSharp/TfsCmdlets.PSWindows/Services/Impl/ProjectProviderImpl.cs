@@ -6,12 +6,11 @@ using System.Management.Automation;
 using Microsoft.TeamFoundation.Core.WebApi;
 using Microsoft.TeamFoundation.Server;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TfsCmdlets.Cmdlets.Connection;
 
-namespace TfsCmdlets.Providers.Impl
+namespace TfsCmdlets.Services.Impl
 {
-    [Export(typeof(IProjectProvider))]
-    internal sealed class ContainerProviderImpl : IProjectProvider
+    [Export(typeof(IProjectService))]
+    internal sealed class ProjectServiceImpl : IProjectService
     {
         public Project GetProject(object project, object collection, object server, object credential)
         {
@@ -67,9 +66,9 @@ namespace TfsCmdlets.Providers.Impl
                             }
                             break;
                         }
-                    case null when CurrentConnections.TeamProject != null:
+                    case null when CurrentConnectionService.TeamProject != null:
                         {
-                            yield return CurrentConnections.TeamProject;
+                            yield return CurrentConnectionService.TeamProject;
                             break;
                         }
                     default:
@@ -83,7 +82,7 @@ namespace TfsCmdlets.Providers.Impl
 
         private IEnumerable<Project> GetProjectByUrl(Uri uri, object collection, object server, object credential)
         {
-            var tpc = CollectionProvider.GetCollection(collection, server, credential);
+            var tpc = TeamProjectCollectionService.GetCollection(collection, server, credential);
             var css = tpc.GetService<ICommonStructureService>();
             var projInfo = css.GetProject(uri.AbsoluteUri);
             var projectName = projInfo.Name;
@@ -93,10 +92,9 @@ namespace TfsCmdlets.Providers.Impl
 
         private IEnumerable<Project> GetProjectByName(string name, object collection, object server, object credential)
         {
-            var tpc = CollectionProvider.GetCollection(collection, server, credential);
+            var tpc = TeamProjectCollectionService.GetCollection(collection, server, credential);
             var css = tpc.GetService<ICommonStructureService>();
-            var pattern = new WildcardPattern(name);
-            var projectInfos = css.ListAllProjects().Where(o => o.Status == ProjectState.WellFormed && pattern.IsMatch(o.Name));
+            var projectInfos = css.ListAllProjects().Where(o => o.Status == ProjectState.WellFormed && o.Name.IsLike(name));
             var store = tpc.GetService<WorkItemStore>();
 
             foreach (var pi in projectInfos)
@@ -105,8 +103,10 @@ namespace TfsCmdlets.Providers.Impl
             }
         }
 
-        [Import(typeof(ICollectionProvider))]
-        private ICollectionProvider CollectionProvider { get; set; }
+        [Import(typeof(ITeamProjectCollectionService))]
+        private ITeamProjectCollectionService TeamProjectCollectionService { get; set; }
 
+        [Import(typeof(ICurrentConnectionService))]
+        private ICurrentConnectionService CurrentConnectionService { get; set; }
     }
 }

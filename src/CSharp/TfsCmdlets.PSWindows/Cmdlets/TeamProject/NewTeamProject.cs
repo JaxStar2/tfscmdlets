@@ -6,7 +6,7 @@ using System.Threading;
 using System.Xml;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.Core.WebApi;
-using TfsCmdlets.Providers;
+using TfsCmdlets.Services;
 
 namespace TfsCmdlets.Cmdlets.TeamProject
 {
@@ -33,8 +33,8 @@ namespace TfsCmdlets.Cmdlets.TeamProject
         [Parameter]
         public SwitchParameter Passthru { get; set; }
 
-        [Import(typeof(IProcessTemplateProvider))]
-        private IProcessTemplateProvider ProcessTemplateProvider { get; set; }
+        [Import(typeof(IProcessTemplateService))]
+        private IProcessTemplateService ProcessTemplateService { get; set; }
 
         protected override void ProcessRecord()
         {
@@ -51,7 +51,7 @@ namespace TfsCmdlets.Cmdlets.TeamProject
             }
 
             var tpc = GetCollection();
-            var template = ProcessTemplateProvider.GetTemplate(ProcessTemplate, tpc, Server, Credential);
+            var template = ProcessTemplateService.GetTemplate(ProcessTemplate, tpc, Server, Credential);
             var xml = new XmlDocument();
             xml.LoadXml(template.Metadata);
             var templateTypeId = xml.SelectSingleNode("//version/@type")?.Value;

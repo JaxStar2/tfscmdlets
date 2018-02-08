@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using Microsoft.TeamFoundation.Client;
-using TfsCmdlets.Providers;
+using TfsCmdlets.Services;
 
 namespace TfsCmdlets.Cmdlets
 {
@@ -19,20 +19,20 @@ namespace TfsCmdlets.Cmdlets
 
         protected TfsConfigurationServer GetServer(object server, object credential)
         {
-            return ServerProvider.GetServer(server, credential);
+            return ConfigurationServerService.GetServer(server, credential);
         }
 
         protected IEnumerable<TfsConfigurationServer> GetServers(object server, object credential)
         {
-            return ServerProvider.GetServers(server, credential);
+            return ConfigurationServerService.GetServers(server, credential);
         }
 
         public abstract object Server { get; set; }
 
         public abstract object Credential { get; set; }
 
-        [Import(typeof(IServerProvider))]
-        private IServerProvider ServerProvider { get; set; }
+        [Import(typeof(IConfigurationServerService))]
+        private IConfigurationServerService ConfigurationServerService { get; set; }
 
     }
 }

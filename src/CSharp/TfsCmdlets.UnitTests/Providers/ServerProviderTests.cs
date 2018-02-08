@@ -1,10 +1,11 @@
 ﻿using System;
+using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TfsCmdlets.Cmdlets.ConfigurationServer;
-using TfsCmdlets.Providers.Impl;
+using TfsCmdlets.Services.Impl;
 
 namespace TfsCmdlets.UnitTests.Providers
 {
@@ -15,23 +16,47 @@ namespace TfsCmdlets.UnitTests.Providers
         [ExpectedException(typeof(Exception))]
         public void GetServerThrowsForNullArguments()
         {
-            var provider = new ServerProviderImpl();
-            provider.GetServer(null, null);
+            var newContainer = new CompositionContainer(new AssemblyCatalog(typeof(ServiceLocator).Assembly));
+            var oldContainer = ServiceLocator.SetContainer(newContainer);
+
+            try
+            {
+                var provider = new ConfigurationServerServiceImpl();
+                provider.Compose();
+
+                provider.GetServer(null, null);
+            }
+            finally
+            {
+                ServiceLocator.SetContainer(oldContainer);
+            }
         }
 
         [TestMethod]
         [ExpectedException(typeof(Exception))]
         public void GetServersThrowsForNullArguments()
         {
-            var provider = new ServerProviderImpl();
-            provider.GetServers(null, null).ToList();
+            var newContainer = new CompositionContainer(new AssemblyCatalog(typeof(ServiceLocator).Assembly));
+            var oldContainer = ServiceLocator.SetContainer(newContainer);
+
+            try
+            {
+                var provider = new ConfigurationServerServiceImpl();
+                provider.Compose();
+
+                provider.GetServers(null, null).ToList();
+            }
+            finally
+            {
+                ServiceLocator.SetContainer(oldContainer);
+            }
         }
 
         [TestMethodAttribute]
         public void GetFromTfsConfigServerObject()
         {
             var configServer = new TfsConfigurationServer(new Uri("http://foo:8080/tfs"));
-            var provider = new ServerProviderImpl();
+            var provider = new ConfigurationServerServiceImpl();
 
             var result = provider.GetServer(configServer, null);
 
@@ -42,7 +67,7 @@ namespace TfsCmdlets.UnitTests.Providers
         public void GetFromUri()
         {
             var configServerUrl = new Uri("http://foo:8080/tfs");
-            var provider = new ServerProviderImpl();
+            var provider = new ConfigurationServerServiceImpl();
 
             var result = provider.GetServer(configServerUrl, null);
 
@@ -53,7 +78,7 @@ namespace TfsCmdlets.UnitTests.Providers
         public void GetFromStringUri()
         {
             const string configServerUrl = "http://foo:8080/tfs";
-            var provider = new ServerProviderImpl();
+            var provider = new ConfigurationServerServiceImpl();
 
             var result = provider.GetServer(configServerUrl, null);
 

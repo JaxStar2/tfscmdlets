@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Management.Automation;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TfsCmdlets.Providers;
+using TfsCmdlets.Services;
 
 namespace TfsCmdlets.Cmdlets
 {
@@ -20,12 +20,12 @@ namespace TfsCmdlets.Cmdlets
 
         protected Project GetProject(object project, object collection, object server, object credential)
         {
-            return ProjectProvider.GetProject(project, collection, server, credential);
+            return ProjectService.GetProject(project, collection, server, credential);
         }
 
         protected IEnumerable<Project> GetProjects(object project, object collection, object server, object credential)
         {
-            return ProjectProvider.GetProjects(project, collection, server, credential);
+            return ProjectService.GetProjects(project, collection, server, credential);
         }
 
         public abstract object Project { get; set; }
@@ -33,7 +33,7 @@ namespace TfsCmdlets.Cmdlets
         [Parameter]
         public override object Collection { get; set; }
 
-        [Import(typeof(IProjectProvider))]
-        private IProjectProvider ProjectProvider { get; set; }
+        [Import(typeof(IProjectService))]
+        private IProjectService ProjectService { get; set; }
     }
 }

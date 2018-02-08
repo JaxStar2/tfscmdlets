@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.TeamFoundation.Client;
+using TfsCmdlets.Services;
 
 namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 {
@@ -28,24 +30,10 @@ namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 
         protected override void ProcessRecord()
         {
-            var pattern = new WildcardPattern(Name);
-
-            foreach (var tpc in RegisteredTfsConnections.GetProjectCollections()
-                .Where(o => pattern.IsMatch(o.DisplayName)))
-            {
-                WriteObject(tpc);
-            }
+            WriteObject(RegisteredConnectionService.GetRegisteredProjectCollections(Name), true);
         }
 
-        internal static IEnumerable<RegisteredProjectCollection> Get(string name)
-        {
-            var pattern = new WildcardPattern(name);
-
-            foreach (var tpc in RegisteredTfsConnections.GetProjectCollections()
-                .Where(o => pattern.IsMatch(o.DisplayName)))
-            {
-                yield return tpc;
-            }
-        }
+        [Import(typeof(IRegisteredConnectionService))]
+        private IRegisteredConnectionService RegisteredConnectionService { get; set; }
     }
 }

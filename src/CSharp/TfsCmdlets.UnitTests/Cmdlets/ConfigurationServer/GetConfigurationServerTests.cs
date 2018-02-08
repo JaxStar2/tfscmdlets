@@ -9,6 +9,7 @@ using Microsoft.TeamFoundation.TestManagement.WebApi;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TfsCmdlets.Cmdlets.ConfigurationServer;
 using TfsCmdlets.Cmdlets.Connection;
+using TfsCmdlets.Services;
 
 namespace TfsCmdlets.UnitTests.Cmdlets.ConfigurationServer
 {
@@ -18,27 +19,20 @@ namespace TfsCmdlets.UnitTests.Cmdlets.ConfigurationServer
         [TestMethod]
         public void ReturnsCurrentConnection()
         {
-            try
+            var currentConnections = ServiceLocator.GetInstance<ICurrentConnectionService>();
+            var configServer = new TfsConfigurationServer(new Uri("http://foo:8080/tfs"));
+
+            currentConnections.ConfigurationServer = configServer;
+
+            var cmdlet = new GetConfigurationServer
             {
-                var configServer = new TfsConfigurationServer(new Uri("http://foo:8080/tfs"));
-                CurrentConnections.ConfigurationServer = configServer;
+                Current = true
+            };
 
-                var cmdlet = new GetConfigurationServer
-                {
-                    Current = true
-                };
+            var result = cmdlet.Invoke<TfsConfigurationServer>().ToList();
 
-                var result = cmdlet.Invoke<TfsConfigurationServer>().ToList();
-
-                Assert.AreEqual(result.Count, 1);
-                Assert.AreEqual(result[0], configServer);
-
-            }
-            finally
-            {
-                CurrentConnections.ConfigurationServer = null;
-            }
+            Assert.AreEqual(result.Count, 1);
+            Assert.AreSame(result[0], configServer);
         }
-
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.Client.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TfsCmdlets.Providers.Impl;
+using TfsCmdlets.Services.Impl;
 
 namespace TfsCmdlets.UnitTests.Providers
 {
@@ -20,7 +20,7 @@ namespace TfsCmdlets.UnitTests.Providers
 
                 ShimRegisteredTfsConnections.GetConfigurationServers = () => registeredServers;
 
-                var provider = new RegisteredConnectionsProviderImpl();
+                var provider = new RegisteredConnectionServiceImpl();
 
                 CollectionAssert.AreEqual(provider.GetRegisteredConfigurationServers().ToArray(), registeredServers);
             }
@@ -35,7 +35,7 @@ namespace TfsCmdlets.UnitTests.Providers
 
                 ShimRegisteredTfsConnections.GetConfigurationServers = () => registeredServers;
 
-                var provider = new RegisteredConnectionsProviderImpl();
+                var provider = new RegisteredConnectionServiceImpl();
 
                 var actual = provider.GetRegisteredConfigurationServers("BarServer1").ToList();
 

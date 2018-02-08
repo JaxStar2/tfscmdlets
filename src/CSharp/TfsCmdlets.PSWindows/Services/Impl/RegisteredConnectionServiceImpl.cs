@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.TeamFoundation.Client;
 
-namespace TfsCmdlets.Providers.Impl
+namespace TfsCmdlets.Services.Impl
 {
-    [Export(typeof(IRegisteredConnectionsProvider))]
-    internal sealed class RegisteredConnectionsProviderImpl: IRegisteredConnectionsProvider
+    [Export(typeof(IRegisteredConnectionService))]
+    internal sealed class RegisteredConnectionServiceImpl: IRegisteredConnectionService
     {
         public IEnumerable<RegisteredConfigurationServer> GetRegisteredConfigurationServers(string serverName = "*")
         {
@@ -22,11 +20,7 @@ namespace TfsCmdlets.Providers.Impl
 
         public IEnumerable<RegisteredProjectCollection> GetRegisteredProjectCollections(string collectionName)
         {
-            var pattern = collectionName.Equals("localhost", StringComparison.OrdinalIgnoreCase) || collectionName.Equals(".")
-                ? Environment.MachineName
-                : collectionName;
-
-            return RegisteredTfsConnections.GetProjectCollections().Where(o => o.Name.IsLike(pattern));
+            return RegisteredTfsConnections.GetProjectCollections().Where(o => o.Name.IsLike(collectionName));
         }
     }
 }
