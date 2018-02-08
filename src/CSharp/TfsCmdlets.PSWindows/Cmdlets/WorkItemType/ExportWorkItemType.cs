@@ -6,7 +6,7 @@ namespace TfsCmdlets.Cmdlets.WorkItemType
 {
     [Cmdlet(VerbsData.Export, "WorkItemType", ConfirmImpact = ConfirmImpact.High, SupportsShouldProcess = true)]
     [OutputType(typeof(XmlDocument))]
-    public class ExportWorkItemType : WorkItemTypeBaseCmdlet
+    public class ExportWorkItemType : WorkItemTypeCmdletBase
     {
         protected override void ProcessRecord()
         {

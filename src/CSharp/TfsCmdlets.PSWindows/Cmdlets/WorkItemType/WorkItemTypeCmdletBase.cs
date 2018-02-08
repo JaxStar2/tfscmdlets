@@ -5,7 +5,7 @@ using TfsWorkItemType = Microsoft.TeamFoundation.WorkItemTracking.Client.WorkIte
 
 namespace TfsCmdlets.Cmdlets.WorkItemType
 {
-    public abstract class WorkItemTypeBaseCmdlet : ProjectLevelCmdlet
+    public abstract class WorkItemTypeCmdletBase : ProjectLevelCmdlet
     {
         public abstract object Type { get; set; }
 
