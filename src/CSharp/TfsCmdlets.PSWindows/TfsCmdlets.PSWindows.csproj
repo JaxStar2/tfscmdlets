@@ -253,6 +253,8 @@
     <Compile Include="Cmdlets\Team\RemoveTeam.cs" />
     <Compile Include="Cmdlets\Team\RenameTeam.cs" />
     <Compile Include="Cmdlets\TeamLevelCmdlet.cs" />
+    <Compile Include="Cmdlets\WorkItemQuery\GetWorkItemQueryFolder.cs" />
+    <Compile Include="Cmdlets\WorkItemQuery\WorkItemQueryCmdletBase.cs" />
     <Compile Include="Cmdlets\WorkItemType\ImportWorkItemType.cs" />
     <Compile Include="Cmdlets\WorkItemType\WorkItemTypeBaseCmdlet.cs" />
     <Compile Include="Cmdlets\WorkItem\GetWorkItem.cs" />
@@ -262,6 +264,7 @@
     <Compile Include="Services\Impl\ProjectProviderImpl.cs" />
     <Compile Include="Services\Impl\TeamProjectCollectionServiceImpl.cs" />
     <Compile Include="Services\Impl\RegisteredConnectionServiceImpl.cs" />
+    <Compile Include="Services\Impl\WorkItemQueryServiceImpl.cs" />
     <Compile Include="Services\IRegisteredConnectionService.cs" />
     <Compile Include="Services\IConfigurationServerService.cs" />
     <Compile Include="Services\ITeamProjectCollectionService.cs" />
@@ -273,6 +276,7 @@
     <Compile Include="Services\IProjectService.cs" />
     <Compile Include="Services\Impl\ConfigurationServerServiceImpl.cs" />
     <Compile Include="ServiceLocator.cs" />
+    <Compile Include="Services\IWorkItemQueryService.cs" />
     <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

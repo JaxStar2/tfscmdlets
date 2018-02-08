@@ -3,20 +3,20 @@ using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
 namespace TfsCmdlets.Cmdlets.WorkItemQuery
 {
-    [Cmdlet(VerbsCommon.Get, "WorkItemQuery")]
-    [OutputType(typeof(QueryDefinition2))]
-    public class GetWorkItemQuery : WorkItemQueryCmdletBase
+    [Cmdlet(VerbsCommon.Get, "WorkItemQueryFolder")]
+    [OutputType(typeof(QueryFolder2))]
+    public class GetWorkItemQueryFolder : WorkItemQueryCmdletBase
     {
         protected override void ProcessRecord()
         {
-            WriteObject(WorkItemQueryService.GetItems<QueryDefinition2>(Query, Scope, Project, Collection, Server, Credential), true);
+            WriteObject(WorkItemQueryService.GetItems<QueryFolder2>(Folder, Scope, Project, Collection, Server, Credential), true);
         }
 
         [Parameter(Position = 0)]
         [ValidateNotNull]
         [SupportsWildcards]
         [Alias("Path")]
-        public object Query { get; set; } = "**";
+        public object Folder { get; set; } = "**";
 
         [Parameter]
         public WorkItemQueryScope Scope { get; set; } = WorkItemQueryScope.Both;
