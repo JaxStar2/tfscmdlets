@@ -253,11 +253,14 @@
     <Compile Include="Cmdlets\Team\RemoveTeam.cs" />
     <Compile Include="Cmdlets\Team\RenameTeam.cs" />
     <Compile Include="Cmdlets\TeamLevelCmdlet.cs" />
+    <Compile Include="Cmdlets\WorkItemLink\GetWorkItemLink.cs" />
     <Compile Include="Cmdlets\WorkItemQuery\GetWorkItemQueryFolder.cs" />
     <Compile Include="Cmdlets\WorkItemQuery\WorkItemQueryCmdletBase.cs" />
     <Compile Include="Cmdlets\WorkItemType\ImportWorkItemType.cs" />
-    <Compile Include="Cmdlets\WorkItemType\WorkItemTypeBaseCmdlet.cs" />
+    <Compile Include="Cmdlets\WorkItemType\WorkItemTypeCmdletBase.cs" />
+    <Compile Include="Cmdlets\WorkItem\CopyWorkItem.cs" />
     <Compile Include="Cmdlets\WorkItem\GetWorkItem.cs" />
+    <Compile Include="Cmdlets\WorkItem\WorkItemCmdletBase.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Services\ICurrentConnectionService.cs" />
     <Compile Include="Services\Impl\CurrentConnectionServiceImpl.cs" />
@@ -265,6 +268,7 @@
     <Compile Include="Services\Impl\TeamProjectCollectionServiceImpl.cs" />
     <Compile Include="Services\Impl\RegisteredConnectionServiceImpl.cs" />
     <Compile Include="Services\Impl\WorkItemQueryServiceImpl.cs" />
+    <Compile Include="Services\Impl\WorkItemServiceImpl.cs" />
     <Compile Include="Services\IRegisteredConnectionService.cs" />
     <Compile Include="Services\IConfigurationServerService.cs" />
     <Compile Include="Services\ITeamProjectCollectionService.cs" />
@@ -277,6 +281,7 @@
     <Compile Include="Services\Impl\ConfigurationServerServiceImpl.cs" />
     <Compile Include="ServiceLocator.cs" />
     <Compile Include="Services\IWorkItemQueryService.cs" />
+    <Compile Include="Services\IWorkItemService.cs" />
     <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -321,7 +326,6 @@
     <None Include="Cmdlets\Team\Set-TfsTeam.ps1" />
     <None Include="Cmdlets\WorkItemQuery\Export-TfsWorkItemQuery.ps1" />
     <Compile Include="Cmdlets\WorkItemQuery\GetWorkItemQuery.cs" />
-    <None Include="Cmdlets\WorkItemQuery\Get-TfsWorkItemQueryFolder.ps1" />
     <None Include="Cmdlets\WorkItemQuery\New-TfsWorkItemQuery.ps1" />
     <None Include="Cmdlets\WorkItemQuery\New-TfsWorkItemQueryFolder.ps1" />
     <None Include="Cmdlets\WorkItemQuery\Remove-TfsWorkItemQuery.ps1" />
@@ -329,14 +333,11 @@
     <None Include="Cmdlets\WorkItemQuery\Rename-TfsWorkItemQuery.ps1" />
     <None Include="Cmdlets\WorkItemQuery\Set-TfsWorkItemQuery.ps1" />
     <None Include="Cmdlets\WorkItemQuery\WorkItemQuery.psd1" />
-    <None Include="Cmdlets\WorkItemQuery\_Helpers.ps1" />
-    <None Include="Cmdlets\WorkItem\Add-TfsWorkItemLink.ps1" />
-    <None Include="Cmdlets\WorkItem\Copy-TfsWorkItem.ps1" />
+    <None Include="Cmdlets\WorkItemLink\Add-TfsWorkItemLink.ps1" />
     <Compile Include="Cmdlets\WorkItemType\ExportWorkItemType.cs" />
-    <None Include="Cmdlets\WorkItem\Get-TfsWorkItem.ps1" />
     <None Include="Cmdlets\WorkItem\Get-TfsWorkItemHistory.ps1" />
-    <None Include="Cmdlets\WorkItem\Get-TfsWorkItemLink.ps1" />
-    <None Include="Cmdlets\WorkItem\Get-TfsWorkItemLinkEndType.ps1" />
+    <None Include="Cmdlets\WorkItemLink\Get-TfsWorkItemLink.ps1" />
+    <None Include="Cmdlets\WorkItemLink\Get-TfsWorkItemLinkEndType.ps1" />
     <Compile Include="Cmdlets\WorkItemType\GetWorkItemType.cs" />
     <None Include="Cmdlets\WorkItem\Import-TfsWorkItemType.ps1" />
     <None Include="Cmdlets\WorkItem\New-TfsWorkItem.ps1" />

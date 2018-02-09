@@ -15,4 +15,11 @@ namespace TfsCmdlets
         Shared = 2,
         Both = 4
     }
+
+    public enum CopyWorkItemPassthruOptions
+    {
+        Original,
+        Copy,
+        None
+    }
 }

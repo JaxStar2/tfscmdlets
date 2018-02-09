@@ -9,6 +9,22 @@ namespace TfsCmdlets.Services.Impl
     [Export(typeof(IWorkItemQueryService))]
     internal class WorkItemQueryServiceImpl : IWorkItemQueryService
     {
+        public T GetItem<T>(object item, WorkItemQueryScope scope, object project, object collection,
+            object server, object credential)
+            where T : QueryItem2
+        {
+            var items = GetItems<T>(item, scope, project, collection, server, credential).ToList();
+
+            if (items.Count == 0)
+                throw new Exception($"Invalid work item query item '{item}'");
+
+            if (items.Count == 1)
+                return items[0];
+
+            var names = string.Join(", ", items.Select(o => o.Name).ToArray());
+            throw new Exception($"Ambiguous work item query item '{item}' matches {items.Count} items: {names}. Please choose a more specific value and try again");
+        }
+
         public IEnumerable<T> GetItems<T>(object query, WorkItemQueryScope scope, object project, object collection, object server, object credential)
             where T : QueryItem2
         {
