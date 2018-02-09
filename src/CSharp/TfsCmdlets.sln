@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsCmdlets.PSWindows", "Tfs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsCmdlets.UnitTests", "TfsCmdlets.UnitTests\TfsCmdlets.UnitTests.csproj", "{068AD10D-CFDE-4944-AAA5-2DB4B4051FE0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsCmdlets.CorrectnessTests", "TfsCmdlets.CorrectnessTests\TfsCmdlets.CorrectnessTests.csproj", "{F0CF3F1B-3671-4A11-9DCE-921E5928195C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C31F7FE3-5C8C-4D8A-BB35-4F8AF79D19E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +25,17 @@ Global
 		{068AD10D-CFDE-4944-AAA5-2DB4B4051FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{068AD10D-CFDE-4944-AAA5-2DB4B4051FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{068AD10D-CFDE-4944-AAA5-2DB4B4051FE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0CF3F1B-3671-4A11-9DCE-921E5928195C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0CF3F1B-3671-4A11-9DCE-921E5928195C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0CF3F1B-3671-4A11-9DCE-921E5928195C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0CF3F1B-3671-4A11-9DCE-921E5928195C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{068AD10D-CFDE-4944-AAA5-2DB4B4051FE0} = {C31F7FE3-5C8C-4D8A-BB35-4F8AF79D19E2}
+		{F0CF3F1B-3671-4A11-9DCE-921E5928195C} = {C31F7FE3-5C8C-4D8A-BB35-4F8AF79D19E2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5A972BF8-A4EF-41BB-854B-C4765DFC13FF}

@@ -6,7 +6,7 @@ using TfsCmdlets.Services;
 
 namespace TfsCmdlets.Cmdlets.TeamProject
 {
-    [Cmdlet(VerbsCommon.Remove, "TeamProject", DefaultParameterSetName = "Get by project")]
+    [Cmdlet(VerbsCommon.Remove, "TeamProject", DefaultParameterSetName = "Get by project", ConfirmImpact = ConfirmImpact.High, SupportsShouldProcess = true)]
     [OutputType(typeof(Microsoft.TeamFoundation.WorkItemTracking.Client.Project))]
     public class RemoveTeamProject : ProjectLevelCmdlet
     {

@@ -5,6 +5,7 @@ using Microsoft.TeamFoundation.Server;
 namespace TfsCmdlets.Cmdlets.AreaIteration
 {
     [Cmdlet(VerbsCommon.New, "Area", SupportsShouldProcess = true)]
+    [OutputType(typeof(NodeInfo))]
     public class NewArea : NewNodeCmdletBase
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
@@ -13,6 +14,7 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
     }
 
     [Cmdlet(VerbsCommon.New, "Iteration", SupportsShouldProcess = true)]
+    [OutputType(typeof(NodeInfo))]
     public class NewIteration : NewNodeCmdletBase
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]

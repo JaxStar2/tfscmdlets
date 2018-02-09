@@ -2,7 +2,7 @@
 
 namespace TfsCmdlets.Cmdlets
 {
-    public class BaseCmdlet: Cmdlet
+    public abstract class BaseCmdlet: Cmdlet
     {
         protected override void BeginProcessing()
         {
