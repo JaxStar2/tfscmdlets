@@ -765,6 +765,61 @@
         </TableRowEntries>
       </TableControl>
     </View>
+    <View>
+      <Name>Work Item History</Name>
+      <ViewSelectedBy>
+        <TypeName>TfsCmdlets.Models.WorkItemHistoryRevision</TypeName>
+      </ViewSelectedBy>
+      <GroupBy>
+        <Label>Work Item</Label>
+        <PropertyName>FriendlyDescription</PropertyName>
+      </GroupBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Width>4</Width>
+            <Label>Rev.</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>20</Width>
+            <Label>Changed Date</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>20</Width>
+            <Label>Changed By</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>6</Width>
+            <Label># Chgs</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Change Details</Label>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <Wrap/>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Revision</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>ChangedDate</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>ChangedBy</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>ChangeCount</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Changes</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
   </ViewDefinitions>
 
   <Controls>

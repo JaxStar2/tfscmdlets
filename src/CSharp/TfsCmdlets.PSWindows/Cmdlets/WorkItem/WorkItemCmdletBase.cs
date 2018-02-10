@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Text.RegularExpressions;
+using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using TfsCmdlets.Services;
 
 namespace TfsCmdlets.Cmdlets.WorkItem
@@ -31,6 +33,25 @@ namespace TfsCmdlets.Cmdlets.WorkItem
             return WorkItemService.GetWorkItems(WorkItem, revision, asof, query, filter, text, macros, Project, Collection,
                 Server, Credential);
         }
+
+        protected void FixAreaIterationValues(Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem wi)
+        {
+            var projectName = wi.Type.Project.Name;
+            var regexPattern = $@"^{projectName}\\.+";
+            var areaPath = (string) wi.Fields["System.AreaPath"].Value;
+            var iterationPath = (string) wi.Fields["System.iterationPath"].Value;
+
+            if(!Regex.IsMatch(areaPath, regexPattern))
+            {
+                wi.Fields["System.AreaPath"].Value = $@"{projectName}\{areaPath}".Replace(@"\\", @"\");
+            }
+
+            if(!Regex.IsMatch(iterationPath, regexPattern))
+            {
+                wi.Fields["System.IterationPath"].Value = $@"{projectName}\{iterationPath}".Replace(@"\\", @"\");
+            }
+        }
+
 
         public abstract object WorkItem { get; set; }
 

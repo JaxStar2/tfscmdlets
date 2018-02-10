@@ -193,7 +193,7 @@ namespace TfsCmdlets.Services.Impl
 
         protected virtual IEnumerable<WorkItem> GetByFilter(string filter, Dictionary<string, object> macros, object project, object collection, object server, object credential)
         {
-            return GetByWiql("SELECT * FROM WorkItems WHERE {filter}", macros, project, collection, server, credential);
+            return GetByWiql($"SELECT * FROM WorkItems WHERE {filter}", macros, project, collection, server, credential);
         }
 
         protected virtual IEnumerable<WorkItem> GetByWiql(string queryText, Dictionary<string, object> macros, object project, object collection, object server, object credential)

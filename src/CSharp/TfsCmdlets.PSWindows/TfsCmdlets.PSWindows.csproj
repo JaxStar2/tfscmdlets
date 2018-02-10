@@ -262,6 +262,7 @@
     <Compile Include="Cmdlets\WorkItem\GetWorkItem.cs" />
     <Compile Include="Cmdlets\WorkItem\WorkItemCmdletBase.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="Models\WorkItemHistoryRevision.cs" />
     <Compile Include="Services\ICurrentConnectionService.cs" />
     <Compile Include="Services\Impl\CurrentConnectionServiceImpl.cs" />
     <Compile Include="Services\Impl\ProjectProviderImpl.cs" />
@@ -269,6 +270,7 @@
     <Compile Include="Services\Impl\RegisteredConnectionServiceImpl.cs" />
     <Compile Include="Services\Impl\WorkItemQueryServiceImpl.cs" />
     <Compile Include="Services\Impl\WorkItemServiceImpl.cs" />
+    <Compile Include="Services\Impl\WorkItemTypeServiceImpl.cs" />
     <Compile Include="Services\IRegisteredConnectionService.cs" />
     <Compile Include="Services\IConfigurationServerService.cs" />
     <Compile Include="Services\ITeamProjectCollectionService.cs" />
@@ -282,6 +284,7 @@
     <Compile Include="ServiceLocator.cs" />
     <Compile Include="Services\IWorkItemQueryService.cs" />
     <Compile Include="Services\IWorkItemService.cs" />
+    <Compile Include="Services\IWorkItemTypeService.cs" />
     <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -335,16 +338,14 @@
     <None Include="Cmdlets\WorkItemQuery\WorkItemQuery.psd1" />
     <None Include="Cmdlets\WorkItemLink\Add-TfsWorkItemLink.ps1" />
     <Compile Include="Cmdlets\WorkItemType\ExportWorkItemType.cs" />
-    <None Include="Cmdlets\WorkItem\Get-TfsWorkItemHistory.ps1" />
+    <Compile Include="Cmdlets\WorkItem\GetWorkItemHistory.cs" />
     <None Include="Cmdlets\WorkItemLink\Get-TfsWorkItemLink.ps1" />
     <None Include="Cmdlets\WorkItemLink\Get-TfsWorkItemLinkEndType.ps1" />
     <Compile Include="Cmdlets\WorkItemType\GetWorkItemType.cs" />
-    <None Include="Cmdlets\WorkItem\Import-TfsWorkItemType.ps1" />
-    <None Include="Cmdlets\WorkItem\New-TfsWorkItem.ps1" />
-    <None Include="Cmdlets\WorkItem\Remove-TfsWorkItem.ps1" />
-    <None Include="Cmdlets\WorkItem\Set-TfsWorkItem.ps1" />
-    <None Include="Cmdlets\WorkItem\WorkItem.psd1" />
-    <None Include="Cmdlets\WorkItem\_Helpers.ps1" />
+    <None Include="Cmdlets\WorkItemType\Import-TfsWorkItemType.ps1" />
+    <Compile Include="Cmdlets\WorkItem\NewWorkItem.cs" />
+    <Compile Include="Cmdlets\WorkItem\RemoveWorkItem.cs" />
+    <Compile Include="Cmdlets\WorkItem\SetWorkItem.cs" />
     <None Include="packages.config" />
     <None Include="Startup.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
