@@ -263,6 +263,8 @@
     <Compile Include="Cmdlets\WorkItem\WorkItemCmdletBase.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Models\WorkItemHistoryRevision.cs" />
+    <Compile Include="Models\WorkItemHistoryRevisionEntry.cs" />
+    <Compile Include="Models\WorkItemHistoryRevisionEntryCollection.cs" />
     <Compile Include="Services\ICurrentConnectionService.cs" />
     <Compile Include="Services\Impl\CurrentConnectionServiceImpl.cs" />
     <Compile Include="Services\Impl\ProjectProviderImpl.cs" />
