@@ -184,6 +184,7 @@
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.2.0\lib\net451\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.PowerShell.5.ReferenceAssemblies.1.1.0\lib\net4\System.Management.Automation.dll</HintPath>
       <Private>True</Private>
@@ -242,6 +243,8 @@
     <Compile Include="Cmdlets\Git\GitCmdletBase.cs" />
     <Compile Include="Cmdlets\GlobalList\GlobalListCmdletBase.cs" />
     <Compile Include="Cmdlets\ProcessTemplate\ExportProcessTemplate.cs" />
+    <Compile Include="Cmdlets\ProcessTemplate\ProcessTemplateCmdletBase.cs" />
+    <Compile Include="Cmdlets\ProcessTemplate\RemoveProcessTemplate.cs" />
     <Compile Include="Cmdlets\ProjectLevelCmdlet.cs" />
     <Compile Include="Cmdlets\ServerLevelCmdlet.cs" />
     <Compile Include="Cmdlets\TeamProjectCollection\GetTeamProjectCollection.cs" />
@@ -317,8 +320,7 @@
     <Compile Include="Cmdlets\GlobalList\RemoveGlobalList.cs" />
     <None Include="Cmdlets\GlobalList\Set-TfsGlobalList.ps1" />
     <Compile Include="Cmdlets\ProcessTemplate\GetProcessTemplate.cs" />
-    <None Include="Cmdlets\ProcessTemplate\Import-TfsProcessTemplate.ps1" />
-    <None Include="Cmdlets\ProcessTemplate\ProcessTemplate.psd1" />
+    <Compile Include="Cmdlets\ProcessTemplate\ImportProcessTemplate.cs" />
     <Compile Include="Cmdlets\TeamProjectCollection\DismountTeamProjectCollection.cs" />
     <Compile Include="Cmdlets\TeamProjectCollection\GetRegisteredTeamProjectCollection.cs" />
     <Compile Include="Cmdlets\TeamProjectCollection\MountTeamProjectCollection.cs" />

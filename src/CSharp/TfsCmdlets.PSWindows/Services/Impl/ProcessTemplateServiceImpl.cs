@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Management.Automation;
+using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.Server;
 
 namespace TfsCmdlets.Services.Impl
 {
     [Export(typeof(IProcessTemplateService))]
-    internal class ProcessTemplateServiceImpl: IProcessTemplateService
+    internal class ProcessTemplateServiceImpl : IProcessTemplateService
     {
         public TemplateHeader GetTemplate(object name, object collection, object server, object credential)
         {
@@ -25,28 +27,47 @@ namespace TfsCmdlets.Services.Impl
 
         public IEnumerable<TemplateHeader> GetTemplates(object template, object collection, object server, object credential)
         {
-            switch (template)
+            while (true)
             {
-                case TemplateHeader h:
+                switch (template)
                 {
-                    yield return h;
-                    break;
+                    case PSObject pso:
+                        {
+                            template = pso.BaseObject;
+                            continue;
+                        }
+                    case TemplateHeader h:
+                        {
+                            yield return h;
+                            break;
+                        }
+                    case string s:
+                        {
+                            var tpc = TeamProjectCollectionService.GetCollection(collection, server, credential);
+                            var svc = tpc.GetService<IProcessTemplates>();
+                            foreach (var t in svc.TemplateHeaders().Where(o => o.Name.IsLike(s)))
+                            {
+                                yield return t;
+                            }
+
+                            break;
+                        }
+                    default:
+                        {
+                            throw new Exception($"Invalid process template name {template}");
+                        }
                 }
-                case string s:
-                {
-                    var tpc = TeamProjectCollectionService.GetCollection(collection, server, credential);
-                    var processTemplateSvc = tpc.GetService<IProcessTemplates>();
-                    foreach (var t in processTemplateSvc.TemplateHeaders().Where(o => o.Name.IsLike(s)))
-                    {
-                        yield return t;
-                    }
-                    break;
-                }
-                default:
-                {
-                    throw new Exception($"Invalid process template name {template}");
-                }
+
+                break;
             }
+        }
+
+        public string GetTemplateData(TemplateHeader processTemplate, object collection, object server, object credential)
+        {
+            var tpc = TeamProjectCollectionService.GetCollection(collection, server, credential);
+            var svc = tpc.GetService<IProcessTemplates>();
+
+            return svc.GetTemplateData(processTemplate.TemplateId);
         }
 
         [Import(typeof(ITeamProjectCollectionService))]

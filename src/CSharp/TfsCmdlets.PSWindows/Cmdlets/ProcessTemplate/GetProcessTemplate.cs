@@ -1,32 +1,25 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.TeamFoundation.Server;
-using TfsCmdlets.Services;
 
 namespace TfsCmdlets.Cmdlets.ProcessTemplate
 {
-
     [Cmdlet(VerbsCommon.Get, "ProcessTemplate")]
     [OutputType(typeof(TemplateHeader))]
-    public class GetProcessTemplate : CollectionLevelCmdlet
+    public class GetProcessTemplate : ProcessTemplateCmdletBase
     {
         protected override void ProcessRecord()
         {
-            WriteObject(ProcessTemplateService.GetTemplates(Name, Collection, Server, Credential), true);
+            WriteObject(GetProcessTemplates(), true);
         }
 
         [Parameter(Position = 0)]
+        [Alias("Name")]
         [SupportsWildcards]
-        public string Name { get; set; } = "*";
+        public override object ProcessTemplate { get; set; } = "*";
 
         [Parameter(ValueFromPipeline = true)]
         public override object Collection { get; set; }
-
-        [Import(typeof(IProcessTemplateService))]
-        private IProcessTemplateService ProcessTemplateService { get; set; }
-
     }
 }

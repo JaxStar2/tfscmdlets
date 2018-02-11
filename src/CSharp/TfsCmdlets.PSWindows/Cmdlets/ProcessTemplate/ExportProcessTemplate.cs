@@ -1,126 +1,84 @@
-//<#
-//.SYNOPSIS
-//Exports a process template definition to disk.
+using System;
+using System.ComponentModel.Composition;
+using System.IO;
+using System.IO.Compression;
+using System.Management.Automation;
+using System.Xml;
+using TfsCmdlets.Services;
 
-//.DESCRIPTION
-//This cmdlet offers a functional replacement to the "Export Process Template" feature found in Team Explorer. All files pertaining to the specified process template (work item defininitons, reports, saved queries, process configuration and so on) are downloaded from the given Team Project Collection and saved in a local directory, preserving the directory structure required to later re-import it. This is specially handy to do small changes to a process template or to create a new process template based on an existing one.
+namespace TfsCmdlets.Cmdlets.ProcessTemplate
+{
+    [Cmdlet(VerbsData.Export, "ProcessTemplate", ConfirmImpact = ConfirmImpact.Medium)]
+    public class ExportProcessTemplate : CollectionLevelCmdlet
+    {
+        protected override void ProcessRecord()
+        {
+            var template = ProcessTemplateService.GetTemplate(ProcessTemplate, Collection, Server, Credential);
+            var templateName = !string.IsNullOrEmpty(NewName) ? NewName : template.Name;
+            var description = !string.IsNullOrEmpty(NewDescription) ? NewDescription : template.Description;
 
-//.PARAMETER Process
-//Name of the process template to be exported. Wildcards supported.
+            var tempFile = ProcessTemplateService.GetTemplateData(template, Collection, Server, Credential);
+            var zipFile = $"{tempFile}.zip";
 
-//.PARAMETER DestinationPath
-//Path to the target directory where the exported process template (and related files) will be saved.
+            File.Move(tempFile, zipFile);
 
-//.PARAMETER NewName
-//Saves the exported process template with a new name. Useful when exporting a base template which will be used as a basis for a new process template.
+            var outDir = Path.Combine(DestinationPath, templateName);
 
-//.PARAMETER NewDescription
-//Saves the exported process template with a new description. Useful when exporting a base template which will be used as a basis for a new process template.
+            if (Directory.Exists(outDir))
+            {
+                if (!Force)
+                    throw new Exception(
+                        $"Output directory '{outDir}' already exists. To overwrite an existing directory, use the Force switch");
 
-//.PARAMETER Collection
-//${HelpParam_Collection}
+                Directory.Delete(outDir, true);
+            }
 
-//.EXAMPLE
-//Export-TfsProcessTemplate -Process 'Scrum' -DestinationPath C:\PT -Collection http://vsalm:8080/tfs/DefaultCollection
-//Exports the Scrum process template from the DefaultCollection project collection in the VSALM server, saving the template files to the C:\PT\Scrum directory in the local computer.
+            Directory.CreateDirectory(outDir);
 
-//.EXAMPLE
-//Export-TfsProcessTemplate -Process 'Scrum' -DestinationPath C:\PT -Collection http://vsalm:8080/tfs/DefaultCollection -NewName 'MyScrum' -NewDescription 'A customized version of the Scrum process template'
-//Exports the Scrum process template from the DefaultCollection project collection in the VSALM server, saving the template files to the C:\PT\MyScrum directory in the local computer. Notice that the process template is being renamed from Scrum to MyScrum, so that it can be later reimported as a new process template instead of overwriting the original one.
+            ZipFile.ExtractToDirectory(zipFile, outDir);
 
+            if (!string.IsNullOrEmpty(NewName) || !string.IsNullOrEmpty(NewDescription))
+            {
+                var xmlFileName = Path.Combine(outDir, "ProcessTemplate.xml");
+                var doc = new XmlDocument(); doc.Load(xmlFileName);
+                var metadataElem = ((XmlElement)doc.DocumentElement.SelectSingleNode("//ProcessTemplate/metadata"));
 
-//.INPUTS
-//Microsoft.TeamFoundation.Client.TfsTeamProjectCollection
-//System.String
-//System.Uri
-//#>
-//Function Export-TfsProcessTemplate
-//{
-//    [CmdletBinding()]
-//    Param
-//    (
-//        [Parameter(Position=0)]
-//        [SupportsWildcards()]
-//        [object]
-//        $Process = "*",
+                metadataElem["name"].InnerText = templateName;
+                metadataElem["description"].InnerText = description;
+                metadataElem["version"].SetAttribute("type", Guid.NewGuid().ToString());
+                metadataElem["version"].SetAttribute("major", "1");
+                metadataElem["version"].SetAttribute("minor", "0");
 
-//        [Parameter(Mandatory=$true)]
-//        [string]
-//        $DestinationPath,
+                doc.Save(xmlFileName);
+            }
 
-//        [Parameter()]
-//        [ValidateNotNullOrEmpty()]
-//        [string]
-//        $NewName,
+            File.Delete(zipFile);
+        }
 
-//        [Parameter()]
-//        [ValidateNotNullOrEmpty()]
-//        [string]
-//        $NewDescription,
+        [Parameter(Position = 0)]
+        [Alias("Name", "Process")]
+        [SupportsWildcards]
+        public object ProcessTemplate { get; set; } = "*";
 
-//        [Parameter(ValueFromPipeline=$true)]
-//        [object]
-//        $Collection
-//    )
+        [Parameter(Position = 1, Mandatory = true)]
+        public string DestinationPath { get; set; }
 
-//    Process
-//    {
-//        $tpc = Get-TfsTeamProjectCollection $Collection
-//        $processTemplateSvc = $tpc.GetService([type]"Microsoft.TeamFoundation.Server.IProcessTemplates")
+        [Parameter]
+        [ValidateNotNullOrEmpty]
+        public string NewName { get; set; }
 
-//        if ($Process -is [Microsoft.TeamFoundation.Server.TemplateHeader])
-//        {
-//            $templates = @($Process)
-//        }
-//        else
-//        {
-//            $templates = Get-TfsProcessTemplate $Process -Collection $Collection
-//        }
+        [Parameter]
+        [ValidateNotNullOrEmpty]
+        public string NewDescription { get; set; }
 
-//        if ($NewName -or $NewDescription)
-//        {
-//            $templates = $templates | Select-Object -First 1
-//        }
+        [Parameter]
+        public SwitchParameter Force { get; set; }
 
-//        foreach($template in $templates)
-//        {
-//            if ($NewName)
-//            {
-//                $templateName = $NewName
-//            }
-//            else
-//            {
-//                $templateName = $template.Name
-//            }
+        [Parameter(ValueFromPipeline = true)]
+        public override object Collection { get; set; }
 
-//            $tempFile = $processTemplateSvc.GetTemplateData($template.TemplateId)
-//            $zipFile = "$tempFile.zip"
-//            Rename-Item -Path $tempFile -NewName (Split-Path $zipFile -Leaf)
+        [Import(typeof(IProcessTemplateService))]
+        private IProcessTemplateService ProcessTemplateService { get; set; }
 
-//            $outDir = Join-Path $DestinationPath $templateName
-//            New-Item $outDir -ItemType Directory -Force | Out-Null
-
-//            Expand-Archive -Path $zipFile -DestinationPath $outDir
-
-//            if ($NewName -or $NewDescription)
-//            {
-//                $ptFile = (Join-Path $outDir "ProcessTemplate.xml")
-//                $ptXml = [xml] (Get-Content $ptFile)
-
-//                if ($NewName)
-//                {
-//                    $ptXml.ProcessTemplate.metadata.name = $NewName
-//                }
-
-//                if ($NewDescription)
-//                {
-//                    $ptXml.ProcessTemplate.metadata.description = $NewDescription
-//                }
-
-//                $ptXml.Save($ptFile)
-//            }
-
-//            Remove-Item $zipFile
-//        }
-//    }
-//}
+    }
+}
