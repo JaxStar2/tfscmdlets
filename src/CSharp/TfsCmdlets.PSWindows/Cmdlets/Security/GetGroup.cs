@@ -11,6 +11,7 @@ using TfsCmdlets.Core.Services;
 namespace TfsCmdlets.Cmdlets.Security
 {
     [Cmdlet(VerbsCommon.Get, "Group")]
+    [OutputType("Microsoft.TeamFoundation.Framework.Client.TeamFoundationIdentity")]
     public class GetGroup: ProjectLevelCmdlet
     {
         protected override void ProcessRecord()

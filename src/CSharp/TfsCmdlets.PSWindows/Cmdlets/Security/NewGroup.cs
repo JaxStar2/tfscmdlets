@@ -11,11 +11,15 @@ using TfsCmdlets.Core.Services;
 namespace TfsCmdlets.Cmdlets.Security
 {
     [Cmdlet(VerbsCommon.New, "Group", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
+    [OutputType("Microsoft.TeamFoundation.Framework.Client.TeamFoundationIdentity")]
     public class NewGroup: ProjectLevelCmdlet
     {
         protected override void ProcessRecord()
         {
-            IdentityManagementService.CreateGroup(Group, Description, Scope, Project, Collection, Server, Credential);
+            var group = IdentityManagementService.CreateGroup(Group, Description, Scope, Project, Collection, Server, Credential);
+
+            if (Passthru)
+                WriteObject(group);
         }
 
         [Parameter(Position = 0, Mandatory = true)]
@@ -26,6 +30,9 @@ namespace TfsCmdlets.Cmdlets.Security
 
         [Parameter(Mandatory = true)]
         public GroupScope Scope { get; set; }
+
+        [Parameter]
+        public SwitchParameter Passthru { get; set; }
 
         [Parameter]
         public override object Project { get; set; }

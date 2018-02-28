@@ -68,7 +68,7 @@ namespace TfsCmdlets.PSWindows.TfsApi.Services
             }
         }
 
-        public void CreateGroup(string name, string description, GroupScope scope, object project, object collection,
+        public ITeamFoundationIdentityAdapter CreateGroup(string name, string description, GroupScope scope, object project, object collection,
             object server, object credential)
         {
             string scopeId = null;
@@ -101,6 +101,8 @@ namespace TfsCmdlets.PSWindows.TfsApi.Services
             var svc = tpc.GetService<IIdentityManagementService2>();
 
             var group = svc.CreateApplicationGroup(scopeId, name, description);
+
+            return new TeamFoundationIdentityAdapter(svc.ReadIdentity(group, MembershipQuery.None, ReadIdentityOptions.None));
         }
 
         public void DeleteGroup(object identityDescriptor, object collection, object server, object credential)
