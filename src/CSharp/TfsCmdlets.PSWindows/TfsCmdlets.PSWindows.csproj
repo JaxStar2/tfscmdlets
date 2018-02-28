@@ -105,6 +105,7 @@
     <Compile Include="Cmdlets\WorkItemLink\GetWorkItemLink.cs" />
     <Compile Include="Cmdlets\WorkItemQuery\GetWorkItemQueryFolder.cs" />
     <Compile Include="Cmdlets\WorkItemQuery\WorkItemQueryCmdletBase.cs" />
+    <Compile Include="Cmdlets\WorkItemTag\GetWorkItemTag.cs" />
     <Compile Include="Cmdlets\WorkItemType\ImportWorkItemType.cs" />
     <Compile Include="Cmdlets\WorkItemType\WorkItemTypeCmdletBase.cs" />
     <Compile Include="Cmdlets\WorkItem\CopyWorkItem.cs" />
@@ -182,7 +183,6 @@
   <ItemGroup>
     <Folder Include="Cmdlets\ReleaseManagement\" />
     <Folder Include="Cmdlets\ServiceHook\" />
-    <Folder Include="Cmdlets\WorkItemTag\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TfsCmdlets.Core\TfsCmdlets.Core.csproj">
