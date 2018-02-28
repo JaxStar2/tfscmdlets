@@ -509,6 +509,55 @@
     </View>
 
     <View>
+      <Name>Build Definitions</Name>
+      <ViewSelectedBy>
+        <TypeName>Microsoft.TeamFoundation.Build.WebApi.BuildDefinition</TypeName>
+      </ViewSelectedBy>
+      <GroupBy>
+        <Label>Build Folder</Label>
+        <PropertyName>Path</PropertyName>
+      </GroupBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Width>30</Width>
+            <Label>Name</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>30</Width>
+            <Label>Description</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>12</Width>
+            <Label>Status</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Latest Build</Label>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <Wrap/>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Name</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Description</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>QueueStatus</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>LatestBuild</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+
+    <View>
       <Name>Team Foundation Identity</Name>
       <ViewSelectedBy>
         <TypeName>Microsoft.TeamFoundation.Framework.Client.TeamFoundationIdentity</TypeName>

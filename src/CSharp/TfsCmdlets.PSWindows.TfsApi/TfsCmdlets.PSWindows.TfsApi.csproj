@@ -234,6 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adapters\AdapterBase.cs" />
+    <Compile Include="Adapters\BuildDefinitionAdapter.cs" />
     <Compile Include="Adapters\CredentialAdapter.cs" />
     <Compile Include="Adapters\GitRepositoryAdapter.cs" />
     <Compile Include="Adapters\NodeInfoAdapter.cs" />
@@ -247,8 +248,11 @@
     <Compile Include="Adapters\TfsConfigurationServerAdapter.cs" />
     <Compile Include="Adapters\TfsTeamProjectCollectionAdapter.cs" />
     <Compile Include="Adapters\WorkItemAdapter.cs" />
+    <Compile Include="Adapters\WorkItemQueryDefinitionAdapter.cs" />
+    <Compile Include="Adapters\WorkItemQueryFolderAdapter.cs" />
     <Compile Include="Adapters\WorkItemTypeAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\BuildService.cs" />
     <Compile Include="Services\CommonStructureService.cs" />
     <Compile Include="Services\ConfigurationServerService.cs" />
     <Compile Include="Services\CredentialService.cs" />

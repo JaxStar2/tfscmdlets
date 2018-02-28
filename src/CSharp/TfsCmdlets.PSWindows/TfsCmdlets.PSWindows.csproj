@@ -71,6 +71,8 @@
     <Compile Include="AssemblyResolver.cs" />
     <Compile Include="Cmdlets\AreaIteration\NodeCmdletBase.cs" />
     <Compile Include="Cmdlets\BaseCmdlet.cs" />
+    <Compile Include="Cmdlets\Build\BuildCmdletBase.cs" />
+    <Compile Include="Cmdlets\Build\GetBuildDefinition.cs" />
     <Compile Include="Cmdlets\CollectionLevelCmdlet.cs" />
     <Compile Include="Cmdlets\ConfigurationServer\GetConfigurationServer.cs" />
     <Compile Include="Cmdlets\ConfigurationServer\GetRegisteredConfigurationServer.cs" />
@@ -178,8 +180,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Cmdlets\Build\" />
-    <Folder Include="Cmdlets\Release\" />
+    <Folder Include="Cmdlets\ReleaseManagement\" />
     <Folder Include="Cmdlets\ServiceHook\" />
     <Folder Include="Cmdlets\WorkItemTag\" />
   </ItemGroup>
