@@ -35,22 +35,26 @@ namespace TfsCmdlets.PSWindows.TfsApi.Services
 
         public void RegisterConfigurationServer(ITfsConfigurationServerAdapter server)
         {
-            throw new NotImplementedException();
+            var configServer = (TfsConfigurationServer) server.Instance;
+
+            RegisteredTfsConnections.RegisterConfigurationServer(configServer);
         }
 
         public void RegisterProjectCollection(ITfsTeamProjectCollectionAdapter collection)
         {
-            throw new NotImplementedException();
+            var tpc = (TfsTeamProjectCollection)collection.Instance;
+
+            RegisteredTfsConnections.RegisterProjectCollection(tpc);
         }
 
         public void UnregisterConfigurationServer(string name)
         {
-            throw new NotImplementedException();
+            RegisteredTfsConnections.UnregisterConfigurationServer(name);
         }
 
         public void UnregisterProjectCollection(string name)
         {
-            throw new NotImplementedException();
+            RegisteredTfsConnections.UnregisterProjectCollection(name);
         }
     }
 }
