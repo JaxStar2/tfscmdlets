@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.IO;
 using System.Reflection;
 
 namespace TfsCmdlets
@@ -8,11 +10,26 @@ namespace TfsCmdlets
     {
         private static CompositionContainer _container;
 
+        static ServiceLocator()
+        {
+            AssemblyResolver.Register();
+        }
+
         private static CompositionContainer Container
         {
-            get => _container ??
-                   (_container = new CompositionContainer(new AssemblyCatalog(typeof(ServiceLocator).Assembly)));
-            set => _container = value; }
+            get => _container ?? (_container = CreateContainer());
+            set => _container = value;
+        }
+
+        private static CompositionContainer CreateContainer()
+        {
+            var baseDir = Path.GetDirectoryName(typeof(ServiceLocator).Assembly.Location);
+
+            if (baseDir == null)
+                throw new InvalidOperationException();
+
+            return new CompositionContainer(new DirectoryCatalog(baseDir, "TfsCmdlets.*.dll"));
+        }
 
         public static CompositionContainer SetContainer(CompositionContainer container)
         {
