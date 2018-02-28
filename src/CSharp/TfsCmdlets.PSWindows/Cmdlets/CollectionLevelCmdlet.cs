@@ -21,12 +21,12 @@ namespace TfsCmdlets.Cmdlets
         protected ITfsTeamProjectCollectionAdapter GetCollection(object collection, object server, object credential,
             bool ensureAuthenticated = false)
         {
-            return TeamProjectCollectionService.GetCollection(collection, server, credential, ensureAuthenticated);
+            return CollectionService.GetCollection(collection, server, credential, ensureAuthenticated);
         }
 
         protected IEnumerable<ITfsTeamProjectCollectionAdapter> GetCollections(object collection, object server, object credential)
         {
-            return TeamProjectCollectionService.GetCollections(collection, server, credential);
+            return CollectionService.GetCollections(collection, server, credential);
         }
 
         public abstract object Collection { get; set; }
@@ -38,6 +38,6 @@ namespace TfsCmdlets.Cmdlets
         public override object Credential { get; set; }
 
         [Import(typeof(ITeamProjectCollectionService))]
-        private ITeamProjectCollectionService TeamProjectCollectionService { get; set; }
+        protected ITeamProjectCollectionService CollectionService { get; set; }
     }
 }

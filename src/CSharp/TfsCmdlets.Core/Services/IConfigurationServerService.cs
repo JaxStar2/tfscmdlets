@@ -5,7 +5,7 @@ namespace TfsCmdlets.Core.Services
 {
     public interface IConfigurationServerService
     {
-        ITfsConfigurationServerAdapter GetServer(object server, object credential, bool ensureAuthenticated);
+        ITfsConfigurationServerAdapter GetServer(object server, object credential, bool ensureAuthenticated = false);
 
         IEnumerable<ITfsConfigurationServerAdapter> GetServers(object servers, object credential);
     }

@@ -1,38 +1,34 @@
 using System;
 using System.Collections.Generic;
 using System.Management.Automation;
+using TfsCmdlets.PSWindows.TfsApi.Services;
 
 namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 {
-    [Cmdlet(VerbsData.Mount, "TeamProjectCollection", ConfirmImpact = ConfirmImpact.Medium)]
-    public class MountTeamProjectCollection : ServerLevelCmdlet
+    [Cmdlet(VerbsData.Mount, "TeamProjectCollection", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
+    public class MountTeamProjectCollection : CollectionLevelCmdlet
     {
         protected override void ProcessRecord()
         {
-            var configServer = GetServer();
+            if (!(Collection is string name))
+            {
+                throw new Exception($"Invalid team project collection name {Collection}");
+            }
 
-            throw new NotImplementedException();
+            if (!ShouldProcess(name, "Attach team project collection")) return;
 
-            //configServer.StartCollection();
+            if (string.IsNullOrWhiteSpace(ConnectionString))
+            {
+                ConnectionString = $"Data source={DatabaseServer}; Integrated Security=true; " +
+                                   "Initial Catalog={DatabaseName}";
+            }
 
-            //var tpcService = configServer.GetService<ITeamProjectCollectionService>();
-            //var servicingTokens = new Dictionary<string, string>();
-
-            //if (!string.IsNullOrWhiteSpace(DatabaseName))
-            //    servicingTokens["CollectionDatabaseName"] = DatabaseName;
-
-            //if (string.IsNullOrWhiteSpace(ConnectionString))
-            //    ConnectionString =
-            //        $"Data source={DatabaseServer}; Integrated Security=true; Initial Catalog={DatabaseName}";
-
-            //var tpcJob = tpcService.QueueAttachCollection(ConnectionString, servicingTokens, Clone.IsPresent, Name, Description, $"~/{Name}/");
-            //var result = tpcService.WaitForCollectionServicingToComplete(tpcJob, Timeout);
-
-            //WriteObject(GetServer().GetTeamProjectCollection(result.Id));
+            WriteObject(CollectionService.AttachCollection(name, Description, ConnectionString, Clone, Timeout, Server, Credential));
         }
 
         [Parameter(Mandatory = true, Position = 0)]
-        public string Name { get; set; }
+        [Alias("Name")]
+        public override object Collection { get; set; }
 
         [Parameter]
         public string Description { get; set; }

@@ -11,21 +11,10 @@ namespace TfsCmdlets.Cmdlets.TeamProjectCollection
         {
             var tpc = GetCollection();
 
-            if (!ShouldProcess(tpc.Name, "Detach Project Collection")) return;
+            if (!ShouldProcess(tpc.Name, "Detach team project collection")) return;
 
-            throw new NotImplementedException();
+            WriteObject(CollectionService.DetachCollection(Collection, Reason, Timeout, Server, Credential));
 
-            //tpc.Stop();
-
-            //var configServer = tpc.ConfigurationServer;
-            //var tpcService = configServer.GetService<ITeamProjectCollectionService>();
-            //var collectionInfo = tpcService.GetCollection(tpc.InstanceId);
-            //var tpcJob = tpcService.QueueDetachCollection(collectionInfo.Id, null, Reason, out var connectionString);
-
-            //collectionInfo = tpcService.WaitForCollectionServicingToComplete(tpcJob, Timeout);
-            //collectionInfo.Refresh();
-
-            //WriteObject(connectionString);
         }
 
         [Parameter(Mandatory = true, Position = 0)]

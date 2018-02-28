@@ -9,19 +9,18 @@ namespace TfsCmdlets.Cmdlets.TeamProjectCollection
     {
         protected override void ProcessRecord()
         {
-            var tpc = GetCollection();
+            var collections = GetCollections();
 
-            if (!ShouldProcess(tpc.Name, "Delete Team Project Collection")) return;
+            foreach (var tpc in collections)
+            {
+                if (!ShouldProcess(tpc.Name, "Delete team project collection")) continue;
 
-            throw new NotImplementedException();
-
-            //var configServer = tpc.ConfigurationServer;
-            //var tpcService = configServer.GetService<ITeamProjectCollectionService>();
-            //var collectionInfo = tpcService.GetCollection(tpc.InstanceId);
-            //collectionInfo.Delete();
+                CollectionService.DeleteCollection(Collection, Server, Credential);
+            }
         }
 
-        [Parameter(Position =0, Mandatory = true, ValueFromPipeline = true)]
+        [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]
+        [SupportsWildcards]
         public override object Collection { get; set; }
     }
 }

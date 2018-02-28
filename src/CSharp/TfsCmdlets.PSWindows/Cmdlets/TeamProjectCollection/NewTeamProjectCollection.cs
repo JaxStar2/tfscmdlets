@@ -8,47 +8,30 @@ namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 {
     [Cmdlet(VerbsCommon.New, "TeamProjectCollection", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
     [OutputType(typeof(TfsTeamProjectCollection))]
-    public class NewTeamProjectCollection : ServerLevelCmdlet
+    public class NewTeamProjectCollection : CollectionLevelCmdlet
     {
         protected override void ProcessRecord()
         {
-            if (!ShouldProcess(Name, "Create team project collection")) return;
+            if (!(Collection is string name))
+            {
+                throw new Exception($"Invalid team project collection name {Collection}");
+            }
 
-            var configServer = GetServer();
+            if (!ShouldProcess(name, "Create team project collection")) return;
 
-            throw new NotImplementedException();
-            
-            //var tpcService = configServer.GetService<ITeamProjectCollectionService>();
-            //var servicingTokens = new Dictionary<string, string>
-            //{
-            //    ["SharePointAction"] = "None",
-            //    ["ReportingAction"] = "None"
-            //};
+            if (string.IsNullOrWhiteSpace(ConnectionString))
+            {
+                ConnectionString = $"Data source={DatabaseServer}; Integrated Security=true; " +
+                                   "Initial Catalog={DatabaseName}";
+            }
 
-            //if (!string.IsNullOrWhiteSpace(DatabaseName))
-            //    servicingTokens["CollectionDatabaseName"] = DatabaseName;
-
-            //if (UseExistingDatabase.IsPresent)
-            //    servicingTokens["UseExistingDatabase"] = UseExistingDatabase.IsPresent.ToString();
-
-            //if (string.IsNullOrWhiteSpace(ConnectionString))
-            //    ConnectionString = $"Data source={DatabaseServer}; Integrated Security=true";
-
-            //var tpcJob = tpcService.QueueCreateCollection(Name, Description, Default.IsPresent, $"~/{Name}/",
-            //    InitialState, servicingTokens, ConnectionString,
-            //    null,   // Default connection string
-            //    null);  // Default category connection strings
-
-            //var result = tpcService.WaitForCollectionServicingToComplete(tpcJob, Timeout);
-
-            //if (Passthru)
-            //{
-            //    WriteObject(GetServer().GetTeamProjectCollection(result.Id));
-            //}
+            WriteObject(CollectionService.CreateCollection(name, Description, ConnectionString, Default, 
+                UseExistingDatabase, InitialState, Timeout, Server, Credential));
         }
 
         [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
-        public string Name { get; set; }
+        [Alias("Name")]
+        public override object Collection { get; set; }
 
         [Parameter]
         public string Description { get; set; }
@@ -70,7 +53,7 @@ namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 
         [Parameter]
         [ValidateSet("Started", "Stopped")]
-        public ServiceHostStatus InitialState { get; set; }
+        public ServiceHostStatus InitialState { get; set; } = ServiceHostStatus.Started;
 
         [Parameter]
         public int PollingInterval { get; set; } = 5;
