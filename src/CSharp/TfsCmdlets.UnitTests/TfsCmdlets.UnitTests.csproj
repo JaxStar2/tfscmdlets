@@ -217,33 +217,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cmdlets\ConfigurationServer\GetConfigurationServerTests.cs" />
-    <Compile Include="Cmdlets\ConfigurationServer\GetRegisteredConfigurationServerTests.cs" />
-    <Compile Include="Comparers.cs" />
-    <Compile Include="MockHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\ServerProviderTests.cs" />
-    <Compile Include="Providers\RegisteredConnectionsProviderTests.cs" />
-    <Compile Include="SampleData.cs" />
     <Compile Include="StringExtensionsTests.cs" />
-    <Compile Include="ServiceLocatorTests.cs" />
-    <Compile Include="Stubs\Services\ConfigurationServerServiceStub.cs" />
-    <Compile Include="Stubs\Services\CurrentConnectionServiceStub.cs" />
-    <Compile Include="Stubs\Services\ProcessTemplateServiceStub.cs" />
-    <Compile Include="Stubs\Services\ProjectProviderStub.cs" />
-    <Compile Include="Stubs\Services\RegisteredConnectionServiceStub.cs" />
-    <Compile Include="Stubs\Services\TeamProjectCollectionServiceStub.cs" />
     <Compile Include="TestSetup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Fakes Include="Fakes\Microsoft.TeamFoundation.Client.fakes" />
-    <Fakes Include="Fakes\Microsoft.TeamFoundation.WorkItemTracking.Client.fakes" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\TfsCmdlets.PSWindows\TfsCmdlets.PSWindows.csproj">
       <Project>{bdc27dcc-ef3b-410f-9f1f-86110d3276d7}</Project>
