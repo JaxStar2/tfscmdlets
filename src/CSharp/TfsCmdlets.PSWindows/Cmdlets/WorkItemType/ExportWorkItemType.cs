@@ -12,7 +12,7 @@ namespace TfsCmdlets.Cmdlets.WorkItemType
         {
             foreach (var wit in GetWits())
             {
-                var doc = wit.Export(IncludeGlobalLists.IsPresent);
+                var doc = WorkItemTypeService.Export(IncludeGlobalLists.IsPresent);
 
                 if (!string.IsNullOrWhiteSpace(Destination))
                 {

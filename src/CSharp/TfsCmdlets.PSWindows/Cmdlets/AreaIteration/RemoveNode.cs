@@ -4,7 +4,7 @@ using System.Management.Automation;
 namespace TfsCmdlets.Cmdlets.AreaIteration
 {
     [Cmdlet(VerbsCommon.Remove, "Area", ConfirmImpact = ConfirmImpact.High, SupportsShouldProcess = true)]
-    [OutputType(typeof(Microsoft.TeamFoundation.Server.NodeInfo))]
+    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo")]
     public class RemoveArea : RemoveNodeCmdletBase
     {
         [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]
@@ -14,7 +14,7 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
     }
 
     [Cmdlet(VerbsCommon.Remove, "Iteration", ConfirmImpact = ConfirmImpact.High, SupportsShouldProcess = true)]
-    [OutputType(typeof(Microsoft.TeamFoundation.Server.NodeInfo))]
+    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo")]
     public class RemoveIteration : RemoveNodeCmdletBase
     {
         [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]
@@ -29,13 +29,12 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
         {
             var nodes = GetNodes(Path).OrderByDescending(o => o.Path);
             var newNode = GetNodes(MoveTo).First();
-            var cssService = GetCssService();
 
             foreach (var node in nodes)
             {
                 if (!ShouldProcess(node.Path, "Delete Area")) continue;
 
-                cssService.DeleteBranches(new[] { node.Uri }, newNode.Uri);
+                CommonStructureService.DeleteBranches(new[] { node.Uri }, newNode.Uri, Collection, Server, Credential);
             }
         }
 

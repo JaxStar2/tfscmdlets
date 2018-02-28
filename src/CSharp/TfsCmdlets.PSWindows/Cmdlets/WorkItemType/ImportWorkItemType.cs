@@ -43,9 +43,9 @@ namespace TfsCmdlets.Cmdlets.WorkItemType
             if (string.IsNullOrWhiteSpace(typeName))
                 throw new Exception("Invalid work item type definition XML");
 
-            if (!tp.WorkItemTypes.Contains(typeName) || ShouldProcess(typeName, "Overwrite existing work item type"))
+            if (!WorkItemTypeService.Exists(typeName, tp) || ShouldProcess(typeName, "Overwrite existing work item type"))
             {
-                tp.WorkItemTypes.Import(doc.DocumentElement);
+                WorkItemTypeService.Import(tp, doc.DocumentElement);
             }
 
             WriteObject(GetWit(typeName, Project, Collection, Server, Credential));

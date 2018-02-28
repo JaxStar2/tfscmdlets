@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.Framework.Client;
-using Microsoft.TeamFoundation.Framework.Common;
+using TfsCmdlets.Core;
+using TfsCmdlets.DscResources;
 
 namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 {
@@ -16,33 +15,36 @@ namespace TfsCmdlets.Cmdlets.TeamProjectCollection
             if (!ShouldProcess(Name, "Create team project collection")) return;
 
             var configServer = GetServer();
-            var tpcService = configServer.GetService<ITeamProjectCollectionService>();
-            var servicingTokens = new Dictionary<string, string>
-            {
-                ["SharePointAction"] = "None",
-                ["ReportingAction"] = "None"
-            };
 
-            if (!string.IsNullOrWhiteSpace(DatabaseName))
-                servicingTokens["CollectionDatabaseName"] = DatabaseName;
+            throw new NotImplementedException();
+            
+            //var tpcService = configServer.GetService<ITeamProjectCollectionService>();
+            //var servicingTokens = new Dictionary<string, string>
+            //{
+            //    ["SharePointAction"] = "None",
+            //    ["ReportingAction"] = "None"
+            //};
 
-            if (UseExistingDatabase.IsPresent)
-                servicingTokens["UseExistingDatabase"] = UseExistingDatabase.IsPresent.ToString();
+            //if (!string.IsNullOrWhiteSpace(DatabaseName))
+            //    servicingTokens["CollectionDatabaseName"] = DatabaseName;
 
-            if (string.IsNullOrWhiteSpace(ConnectionString))
-                ConnectionString = $"Data source={DatabaseServer}; Integrated Security=true";
+            //if (UseExistingDatabase.IsPresent)
+            //    servicingTokens["UseExistingDatabase"] = UseExistingDatabase.IsPresent.ToString();
 
-            var tpcJob = tpcService.QueueCreateCollection(Name, Description, Default.IsPresent, $"~/{Name}/",
-                InitialState, servicingTokens, ConnectionString,
-                null,   // Default connection string
-                null);  // Default category connection strings
+            //if (string.IsNullOrWhiteSpace(ConnectionString))
+            //    ConnectionString = $"Data source={DatabaseServer}; Integrated Security=true";
 
-            var result = tpcService.WaitForCollectionServicingToComplete(tpcJob, Timeout);
+            //var tpcJob = tpcService.QueueCreateCollection(Name, Description, Default.IsPresent, $"~/{Name}/",
+            //    InitialState, servicingTokens, ConnectionString,
+            //    null,   // Default connection string
+            //    null);  // Default category connection strings
 
-            if (Passthru)
-            {
-                WriteObject(GetServer().GetTeamProjectCollection(result.Id));
-            }
+            //var result = tpcService.WaitForCollectionServicingToComplete(tpcJob, Timeout);
+
+            //if (Passthru)
+            //{
+            //    WriteObject(GetServer().GetTeamProjectCollection(result.Id));
+            //}
         }
 
         [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
@@ -68,7 +70,7 @@ namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 
         [Parameter]
         [ValidateSet("Started", "Stopped")]
-        public TeamFoundationServiceHostStatus InitialState { get; set; }
+        public ServiceHostStatus InitialState { get; set; }
 
         [Parameter]
         public int PollingInterval { get; set; } = 5;

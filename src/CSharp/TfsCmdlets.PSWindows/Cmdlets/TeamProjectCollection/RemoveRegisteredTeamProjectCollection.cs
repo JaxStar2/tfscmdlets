@@ -1,5 +1,6 @@
-﻿using System.Management.Automation;
-using Microsoft.TeamFoundation.Client;
+﻿using System.ComponentModel.Composition;
+using System.Management.Automation;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 {
@@ -14,7 +15,10 @@ namespace TfsCmdlets.Cmdlets.TeamProjectCollection
             if (!ShouldProcess(Name, "Remove registered collection"))
                 return;
 
-            RegisteredTfsConnections.UnregisterProjectCollection(Name);
+            RegisteredConnectionService.UnregisterProjectCollection(Name);
         }
+
+        [Import(typeof(IRegisteredConnectionService))]
+        private IRegisteredConnectionService RegisteredConnectionService { get; set; }
     }
 }

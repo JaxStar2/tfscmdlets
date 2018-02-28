@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Framework.Client;
 
 namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 {
@@ -11,20 +10,25 @@ namespace TfsCmdlets.Cmdlets.TeamProjectCollection
         protected override void ProcessRecord()
         {
             var configServer = GetServer();
-            var tpcService = configServer.GetService<ITeamProjectCollectionService>();
-            var servicingTokens = new Dictionary<string, string>();
 
-            if (!string.IsNullOrWhiteSpace(DatabaseName))
-                servicingTokens["CollectionDatabaseName"] = DatabaseName;
+            throw new NotImplementedException();
 
-            if (string.IsNullOrWhiteSpace(ConnectionString))
-                ConnectionString =
-                    $"Data source={DatabaseServer}; Integrated Security=true; Initial Catalog={DatabaseName}";
+            //configServer.StartCollection();
 
-            var tpcJob = tpcService.QueueAttachCollection(ConnectionString, servicingTokens, Clone.IsPresent, Name, Description, $"~/{Name}/");
-            var result = tpcService.WaitForCollectionServicingToComplete(tpcJob, Timeout);
+            //var tpcService = configServer.GetService<ITeamProjectCollectionService>();
+            //var servicingTokens = new Dictionary<string, string>();
 
-            WriteObject(GetServer().GetTeamProjectCollection(result.Id));
+            //if (!string.IsNullOrWhiteSpace(DatabaseName))
+            //    servicingTokens["CollectionDatabaseName"] = DatabaseName;
+
+            //if (string.IsNullOrWhiteSpace(ConnectionString))
+            //    ConnectionString =
+            //        $"Data source={DatabaseServer}; Integrated Security=true; Initial Catalog={DatabaseName}";
+
+            //var tpcJob = tpcService.QueueAttachCollection(ConnectionString, servicingTokens, Clone.IsPresent, Name, Description, $"~/{Name}/");
+            //var result = tpcService.WaitForCollectionServicingToComplete(tpcJob, Timeout);
+
+            //WriteObject(GetServer().GetTeamProjectCollection(result.Id));
         }
 
         [Parameter(Mandatory = true, Position = 0)]

@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.WorkItem
 {
     [Cmdlet(VerbsCommon.New, "WorkItem", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType(typeof(Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem))]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem")]
     public class NewWorkItem : WorkItemCmdletBase
     {
         protected override void ProcessRecord()
@@ -18,16 +17,16 @@ namespace TfsCmdlets.Cmdlets.WorkItem
 
             if (!ShouldProcess(wit.Name, "Create work item of specified type")) return;
 
-            if (BypassRules)
-            {
-                var tp = GetProject();
-                var tpc = tp.Store.TeamProjectCollection;
-                var store = new WorkItemStore(tpc, WorkItemStoreFlags.BypassRules);
+            //if (BypassRules)
+            //{
+            //    var tp = GetProject();
+            //    var tpc = tp.Store.TeamProjectCollection;
+            //    var store = new WorkItemStore(tpc, WorkItemStoreFlags.BypassRules);
 
-                wit = store.Projects[tp.Guid].WorkItemTypes[wit.Name];
-            }
+            //    wit = store.Projects[tp.Guid].WorkItemTypes[wit.Name];
+            //}
 
-            var wi = wit.NewWorkItem();
+            var wi = WorkItemService.NewWorkItem(wit, BypassRules);
 
             if (!string.IsNullOrEmpty(Title)) wi.Title = Title;
             if (!string.IsNullOrEmpty(AssignedTo)) wi.Fields["System.AssignedTo"].Value = AssignedTo;
@@ -50,12 +49,12 @@ namespace TfsCmdlets.Cmdlets.WorkItem
             {
                 try
                 {
-                    wi.Save();
+                    WorkItemService.Save(wi);
                 }
-                catch (ValidationException ex)
+                catch (Exception ex) when (ex.GetType().Name.Equals("Microsoft.TeamFoundation.WorkItemTracking.Client.ValidationException"))
                 {
-                    var errors = wi.Validate();
-                    var invalidFields = string.Join(", ", errors.Cast<Field>().Select(f => f.ReferenceName));
+                    var errors = WorkItemService.Validate(wi);
+                    var invalidFields = string.Join(", ", errors.Select(f => f.ReferenceName));
 
                     throw new Exception($"Unable to save work item. The following fields have invalid values: {invalidFields}. Check the supplied values and try again", ex);
                 }

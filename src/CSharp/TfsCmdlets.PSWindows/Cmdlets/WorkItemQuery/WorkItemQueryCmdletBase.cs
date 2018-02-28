@@ -1,5 +1,5 @@
 using System.ComponentModel.Composition;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.WorkItemQuery
 {

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.ComponentModel.Composition;
 using System.Management.Automation;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.TeamFoundation.Server;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.ProcessTemplate
 {
@@ -18,9 +14,8 @@ namespace TfsCmdlets.Cmdlets.ProcessTemplate
             if (!ShouldProcess(template.Name, "Delete process template from server")) return;
 
             var tpc = GetCollection();
-            var svc = tpc.GetService<IProcessTemplates>();
 
-            svc.DeleteTemplate(template.TemplateId);
+            ProcessTemplateService.DeleteTemplate(template.TemplateId);
         }
 
         [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]

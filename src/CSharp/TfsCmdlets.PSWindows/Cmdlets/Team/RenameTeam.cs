@@ -1,21 +1,22 @@
 using System;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Client;
 
 namespace TfsCmdlets.Cmdlets.Team
 {
     [Cmdlet(VerbsCommon.Rename, "Team", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType(typeof(TeamFoundationTeam))]
+    [OutputType("Microsoft.TeamFoundation.Client.TeamFoundationTeam")]
     public class RenameTeam : TeamLevelCmdlet
     {
         protected override void ProcessRecord()
         {
-            throw new NotImplementedException();
-            //var result = SetTeam(Team, NewName);
+            var teams = GetTeams(Team);
 
-            //if (!Passthru) return;
+            foreach (var team in teams)
+            {
+                if (!ShouldProcess(team.Name, $"Rename team to {NewName}")) continue;
 
-            //WriteObject(result);
+                TeamService.RenameTeam(team, NewName, Project, Collection, Server, Credential);
+            }
         }
 
         [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]

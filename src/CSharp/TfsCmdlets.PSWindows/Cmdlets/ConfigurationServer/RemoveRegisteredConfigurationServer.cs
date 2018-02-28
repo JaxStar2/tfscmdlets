@@ -1,10 +1,11 @@
-﻿using System.Management.Automation;
-using Microsoft.TeamFoundation.Client;
+﻿using System.ComponentModel.Composition;
+using System.Management.Automation;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.ConfigurationServer
 {
     [Cmdlet(VerbsCommon.Remove, "RegisteredConfigurationServer", ConfirmImpact = ConfirmImpact.High, SupportsShouldProcess=true)]
-    public class RemoveRegisteredConfigurationServer: Cmdlet
+    public class RemoveRegisteredConfigurationServer: BaseCmdlet
     {
         [Parameter(Position = 0, Mandatory = true, ValueFromPipelineByPropertyName = true)]
         public string Name { get; set; }
@@ -14,7 +15,10 @@ namespace TfsCmdlets.Cmdlets.ConfigurationServer
             if (!ShouldProcess(Name, "Remove registered server"))
                 return;
 
-            RegisteredTfsConnections.UnregisterConfigurationServer(Name);
+            RegisteredConnectionService.UnregisterConfigurationServer(Name);
         }
+
+        [Import(typeof(IRegisteredConnectionService))]
+        private IRegisteredConnectionService RegisteredConnectionService { get; set; }
     }
 }

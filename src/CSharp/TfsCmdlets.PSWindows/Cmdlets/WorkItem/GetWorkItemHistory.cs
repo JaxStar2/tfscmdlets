@@ -1,6 +1,5 @@
 using System.Management.Automation;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TfsCmdlets.Models;
+using TfsCmdlets.Core.Models;
 
 namespace TfsCmdlets.Cmdlets.WorkItem
 {
@@ -12,9 +11,7 @@ namespace TfsCmdlets.Cmdlets.WorkItem
         {
             var wi = GetWorkItem();
 
-            var latestRev = wi.Revisions.Count - 1;
-
-            foreach (Revision r in wi.Revisions)
+            foreach (var r in wi.Revisions)
             {
                 WriteObject(new WorkItemHistoryRevision(r));
             }

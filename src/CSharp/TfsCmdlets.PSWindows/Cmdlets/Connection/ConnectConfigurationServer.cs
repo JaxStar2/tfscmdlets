@@ -1,24 +1,21 @@
 ﻿using System.ComponentModel.Composition;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Client;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.Connection
 {
     [Cmdlet(VerbsCommunications.Connect, "ConfigurationServer", DefaultParameterSetName = "Explicit credentials")]
-    [OutputType(typeof(TfsConfigurationServer))]
+    [OutputType("Microsoft.TeamFoundation.Client.TfsConfigurationServer")]
     public class ConnectConfigurationServer : ServerLevelCmdlet
     {
         protected override void ProcessRecord()
         {
             if (Interactive.IsPresent)
             {
-                Credential = GetCredential.Get(true);
+                Credential = CredentialService.GetCredential(true);
             }
 
-            var configServer = GetServer();
-            configServer.EnsureAuthenticated();
-
+            var configServer = GetServer(true);
             CurrentConnectionService.ConfigurationServer = configServer;
 
             if (Passthru)

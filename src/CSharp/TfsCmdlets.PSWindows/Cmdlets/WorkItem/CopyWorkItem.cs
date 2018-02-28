@@ -1,73 +1,78 @@
-﻿using System.Management.Automation;
+﻿using System;
+using System.Management.Automation;
+using TfsCmdlets.Core;
+using TfsCmdlets.Core.Adapters;
 
 namespace TfsCmdlets.Cmdlets.WorkItem
 {
     [Cmdlet(VerbsCommon.Copy, "WorkItem")]
-    [OutputType(typeof(Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem))]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem")]
     public class CopyWorkItem : WorkItemCmdletBase
     {
         protected override void ProcessRecord()
         {
-            var wi = GetWorkItem();
-            var tp = wi.Project;
-            Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItemType targetType;
+            throw new NotImplementedException();
 
-            while (true)
-            {
-                switch (Type)
-                {
-                    case string s:
-                        {
-                            targetType = tp.WorkItemTypes[s];
-                            break;
-                        }
-                    case Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItemType wit:
-                        {
-                            Type = wit.Name;
-                            continue;
-                        }
-                    default:
-                        {
-                            Type = wi.Type.Name;
-                            continue;
-                        }
-                }
-                break;
-            }
+            //var wi = GetWorkItem();
+            //var tp = wi.Project;
+            //IWorkItemTypeAdapter targetType;
 
-            var flags = Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItemCopyFlags.None;
+            //while (true)
+            //{
+            //    switch (Type)
+            //    {
+            //        case string s:
+            //            {
+            //                targetType = tp.WorkItemTypes[s];
+            //                break;
+            //            }
+            //        case Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItemType wit:
+            //            {
+            //                Type = wit.Name;
+            //                continue;
+            //            }
+            //        default:
+            //            {
+            //                Type = wi.Type.Name;
+            //                continue;
+            //            }
+            //    }
+            //    break;
+            //}
 
-            if (IncludeAttachments)
-            {
-                flags = flags | Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItemCopyFlags.CopyFiles;
-            }
+            //var flags = WorkItemCopyFlags.None;
 
-            if (IncludeLinks)
-            {
-                flags = flags | Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItemCopyFlags.CopyLinks;
-            }
+            //if (IncludeAttachments)
+            //{
+            //    flags = flags | WorkItemCopyFlags.CopyFiles;
+            //}
 
-            var newWi = wi.Copy(targetType, flags);
+            //if (IncludeLinks)
+            //{
+            //    flags = flags | WorkItemCopyFlags.CopyLinks;
+            //}
 
-            if (!SkipSave)
-            {
-                newWi.Save();
+            //var newWi = wi.Copy(targetType, flags);
 
-            }
+            //if (!SkipSave)
+            //{
+            //    newWi.Save();
 
-            switch (Passthru)
-            {
-                case CopyWorkItemPassthruOptions.Original:
-                    {
-                        WriteObject(wi);
-                        break;
-                    }
-                case CopyWorkItemPassthruOptions.Copy:
-                    {
-                        WriteObject(newWi);
-                        break;
-                    }
-            }
+            //}
+
+            //switch (Passthru)
+            //{
+            //    case CopyWorkItemPassthruOptions.Original:
+            //        {
+            //            WriteObject(wi);
+            //            break;
+            //        }
+            //    case CopyWorkItemPassthruOptions.Copy:
+            //        {
+            //            WriteObject(newWi);
+            //            break;
+            //        }
+            //}
         }
 
         [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]

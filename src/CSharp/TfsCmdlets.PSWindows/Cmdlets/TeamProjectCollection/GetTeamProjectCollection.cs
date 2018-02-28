@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel.Composition;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Client;
 using TfsCmdlets.Cmdlets.Connection;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 {
     [Cmdlet(VerbsCommon.Get, "TeamProjectCollection", DefaultParameterSetName = "Get by collection")]
-    [OutputType(typeof(TfsTeamProjectCollection))]
+    [OutputType("Microsoft.TeamFoundation.Client.TfsTeamProjectCollection")]
     public class GetTeamProjectCollection : CollectionLevelCmdlet
     {
         [Parameter(Position = 0, ParameterSetName = "Get by collection")]

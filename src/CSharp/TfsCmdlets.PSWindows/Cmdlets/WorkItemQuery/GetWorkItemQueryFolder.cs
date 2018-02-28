@@ -1,15 +1,15 @@
 using System.Management.Automation;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
+using TfsCmdlets.Core;
 
 namespace TfsCmdlets.Cmdlets.WorkItemQuery
 {
     [Cmdlet(VerbsCommon.Get, "WorkItemQueryFolder")]
-    [OutputType(typeof(QueryFolder2))]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.QueryFolder2")]
     public class GetWorkItemQueryFolder : WorkItemQueryCmdletBase
     {
         protected override void ProcessRecord()
         {
-            WriteObject(WorkItemQueryService.GetItems<QueryFolder2>(Folder, Scope, Project, Collection, Server, Credential), true);
+            WriteObject(WorkItemQueryService.GetFolders(Folder, Scope, Project, Collection, Server, Credential), true);
         }
 
         [Parameter(Position = 0)]

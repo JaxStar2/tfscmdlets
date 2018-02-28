@@ -1,28 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using Microsoft.TeamFoundation.Client;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Adapters;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets
 {
     public abstract class ServerLevelCmdlet : BaseCmdlet
     {
-        protected TfsConfigurationServer GetServer()
+        protected ITfsConfigurationServerAdapter GetServer(bool ensureAuthenticated = false)
         {
-            return GetServer(Server, Credential);
+            return GetServer(Server, Credential, ensureAuthenticated);
         }
 
-        protected IEnumerable<TfsConfigurationServer> GetServers()
+        protected IEnumerable<ITfsConfigurationServerAdapter> GetServers()
         {
             return GetServers(Server, Credential);
         }
 
-        protected TfsConfigurationServer GetServer(object server, object credential)
+        protected ITfsConfigurationServerAdapter GetServer(object server, object credential, bool ensureAuthenticated = false)
         {
-            return ConfigurationServerService.GetServer(server, credential);
+            return ConfigurationServerService.GetServer(server, credential, ensureAuthenticated);
         }
 
-        protected IEnumerable<TfsConfigurationServer> GetServers(object server, object credential)
+        protected IEnumerable<ITfsConfigurationServerAdapter> GetServers(object server, object credential)
         {
             return ConfigurationServerService.GetServers(server, credential);
         }
@@ -34,5 +34,7 @@ namespace TfsCmdlets.Cmdlets
         [Import(typeof(IConfigurationServerService))]
         private IConfigurationServerService ConfigurationServerService { get; set; }
 
+        [Import(typeof(ICredentialService))]
+        protected ICredentialService CredentialService { get; set; }
     }
 }

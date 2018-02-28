@@ -1,48 +1,27 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.GlobalList
 {
     public abstract class GlobalListCmdletBase: CollectionLevelCmdlet
     {
-        public abstract string GlobalList { get; set; }
+        public abstract string Name { get; set; }
 
-        protected IEnumerable<Models.GlobalList> GetLists()
+        protected Core.Models.GlobalList GetList()
         {
-            return GetLists(GlobalList, Collection, Server, Credential);
+            return GlobalListService.GetGlobalList(Name, Collection, Server, Credential);
         }
 
-        protected IEnumerable<Models.GlobalList> GetLists(string name, object collection, object server, object credential)
+        protected IEnumerable<Core.Models.GlobalList> GetLists()
         {
-            var tpc = GetCollection(collection, server, credential);
-            var store = tpc.GetService<WorkItemStore>();
-            var xml = store.ExportGlobalLists();
-            var listElements = xml.SelectNodes("//GLOBALLIST");
-
-            if (listElements == null)
-            {
-                throw new InvalidOperationException("Error retrieving global lists from TFS. XML is empty or invalid.");
-            }
-
-            foreach (var elem in listElements.OfType<XmlElement>().Where(e => e.GetAttribute("name").IsLike(name)))
-            {
-                yield return new Models.GlobalList
-                {
-                    Name = elem.GetAttribute("name"),
-                    Items = new List<string>(elem.ChildNodes.OfType<XmlElement>().Select(e => e.GetAttribute("value")))
-                };
-            }
+            return GlobalListService.GetGlobalLists(Name, Collection, Server, Credential);
         }
 
-        protected XmlDocument GetListsAsXml()
-        {
-            var tpc = GetCollection();
-            var store = tpc.GetService<WorkItemStore>();
-            var xml = store.ExportGlobalLists();
-            return xml;
-        }
+        [Import(typeof(IGlobalListService))]
+        protected IGlobalListService GlobalListService { get; set; }
     }
 }

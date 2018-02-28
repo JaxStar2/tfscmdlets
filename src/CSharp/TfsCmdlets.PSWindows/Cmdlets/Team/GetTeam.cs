@@ -3,12 +3,18 @@ using System.Management.Automation;
 namespace TfsCmdlets.Cmdlets.Team
 {
     [Cmdlet(VerbsCommon.Get, "Team", DefaultParameterSetName = "Get by name")]
-    [OutputType(typeof(Microsoft.TeamFoundation.Client.TeamFoundationTeam))]
+    [OutputType("Microsoft.TeamFoundation.Client.TeamFoundationTeam")]
     public class GetTeam : TeamLevelCmdlet
     {
         protected override void ProcessRecord()
         {
-            WriteObject(GetTeams(Team, Default, Project, Collection, Server, Credential), true);
+            if (Default)
+            {
+                WriteObject(GetDefaultTeam());
+                return;
+            }
+
+            WriteObject(GetTeams(Team), true);
         }
 
         [Parameter(Position = 0, ParameterSetName = "Get by name")]

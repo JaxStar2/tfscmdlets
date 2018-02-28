@@ -3,7 +3,7 @@ using System.Management.Automation;
 namespace TfsCmdlets.Cmdlets.GlobalList
 {
     [Cmdlet(VerbsCommon.Get, "GlobalList")]
-    [OutputType(typeof(Models.GlobalList))]
+    [OutputType(typeof(Core.Models.GlobalList))]
     public class GetGlobalList : GlobalListCmdletBase
     {
         protected override void ProcessRecord()
@@ -15,8 +15,8 @@ namespace TfsCmdlets.Cmdlets.GlobalList
 
         [Parameter(Position = 0)]
         [SupportsWildcards]
-        [Alias("Name")]
-        public override string GlobalList { get; set; } = "*";
+        [Alias("GlobalList")]
+        public override string Name { get; set; } = "*";
 
         [Parameter(ValueFromPipeline = true)]
         public override object Collection { get; set; }

@@ -3,7 +3,7 @@ using System.Management.Automation;
 namespace TfsCmdlets.Cmdlets.WorkItemType
 {
     [Cmdlet(VerbsCommon.Get, "WorkItemType")]
-    [OutputType(typeof(Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItemType))]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItemType")]
     public class GetWorkItemType : WorkItemTypeCmdletBase
     {
         protected override void ProcessRecord()

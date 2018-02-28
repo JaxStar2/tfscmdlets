@@ -1,5 +1,6 @@
+using System.ComponentModel.Composition;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Framework.Client;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.Team
 {
@@ -8,16 +9,13 @@ namespace TfsCmdlets.Cmdlets.Team
     {
         protected override void ProcessRecord()
         {
-            var teams = GetTeams(Team, false, Project, Collection, Server, Credential);
-            var tp = GetProject();
-            var tpc = tp.Store.TeamProjectCollection;
-            var identityService = tpc.GetService<IIdentityManagementService>();
+            var teams = GetTeams(Team);
 
             foreach (var team in teams)
             {
                 if (!ShouldProcess(team.Name, "Delete team")) continue;
 
-                identityService.DeleteApplicationGroup(team.Identity.Descriptor);
+                IdentityManagementService.DeleteGroup(team.IdentityDescriptor.Descriptor, Collection, Server, Credential);
             }
         }
 
@@ -26,5 +24,8 @@ namespace TfsCmdlets.Cmdlets.Team
 
         [Parameter]
         public override object Project { get; set; }
+
+        [Import(typeof(IIdentityManagementService))]
+        private IIdentityManagementService IdentityManagementService { get; set; }
     }
 }

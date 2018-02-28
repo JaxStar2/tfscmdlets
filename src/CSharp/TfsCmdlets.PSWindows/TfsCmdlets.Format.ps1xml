@@ -509,6 +509,51 @@
     </View>
 
     <View>
+      <Name>Team Foundation Identity</Name>
+      <ViewSelectedBy>
+        <TypeName>Microsoft.TeamFoundation.Framework.Client.TeamFoundationIdentity</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>Display Name</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>10</Width>
+            <Label>Is Active?</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>10</Width>
+            <Label>Is Container?</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>30</Width>
+            <Label>ID</Label>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <Wrap/>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>DisplayName</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>IsActive</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>IsContainer</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>TeamFoundationId</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+
+    <View>
       <Name>Build Agents</Name>
       <ViewSelectedBy>
         <TypeName>Microsoft.TeamFoundation.Build.Client.BuildAgent</TypeName>

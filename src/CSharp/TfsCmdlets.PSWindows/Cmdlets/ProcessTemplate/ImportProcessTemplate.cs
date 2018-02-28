@@ -1,14 +1,15 @@
 using System;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.IO.Compression;
 using System.Management.Automation;
 using System.Xml;
-using Microsoft.TeamFoundation.Server;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.ProcessTemplate
 {
     [Cmdlet(VerbsData.Import, "ProcessTemplate", ConfirmImpact = ConfirmImpact.Medium)]
-    public class ImportProcessTemplate : CollectionLevelCmdlet
+    public class ImportProcessTemplate : ProcessTemplateCmdletBase
     {
         [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]
         [Alias("Path")]
@@ -29,7 +30,6 @@ namespace TfsCmdlets.Cmdlets.ProcessTemplate
             }
 
             var tpc = GetCollection();
-            var processTemplateSvc = tpc.GetService<IProcessTemplates>();
             var tempFile = System.IO.Path.GetTempFileName();
             var zipFile = $"{tempFile}.zip";
 
@@ -44,7 +44,7 @@ namespace TfsCmdlets.Cmdlets.ProcessTemplate
 
             try
             {
-                processTemplateSvc.AddUpdateTemplate(name, description, metadata, State, zipFile);
+                ProcessTemplateService.AddUpdateTemplate(name, description, metadata, State, zipFile);
 
             }
             catch (System.Net.WebException ex)
@@ -66,5 +66,8 @@ namespace TfsCmdlets.Cmdlets.ProcessTemplate
 
         [Parameter]
         public override object Collection { get; set; }
+
+        // Hidden
+        public override object ProcessTemplate { get; set; }
     }
 }

@@ -1,10 +1,9 @@
 using System.Management.Automation;
-using Microsoft.TeamFoundation.SourceControl.WebApi;
 
 namespace TfsCmdlets.Cmdlets.Git
 {
     [Cmdlet(VerbsCommon.Rename, "GitRepository", ConfirmImpact = ConfirmImpact.Medium,SupportsShouldProcess = true)]
-    [OutputType(typeof(GitRepository))]
+    [OutputType("Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository")]
     public class RenameGitRepository : GitCmdletBase
     {
         protected override void ProcessRecord()
@@ -12,15 +11,13 @@ namespace TfsCmdlets.Cmdlets.Git
             var reposToRename = GetRepositories(Repository);
 
             var tp = GetProject();
-            var tpc = tp.Store.TeamProjectCollection;
-            var gitClient = tpc.GetClient<GitHttpClient>();
 
             foreach (var repo in reposToRename)
             {
                 if (!ShouldProcess(repo.Name, $"Rename Git repository in team project {tp.Name} to {NewName}"))
                     continue;
 
-                var result = gitClient.RenameRepositoryAsync(repo, NewName).Result;
+                var result = GitRepositoryService.RenameRepository(repo, NewName, Project, Collection, Server, Credential);
 
                 if (!Passthru) continue;
 

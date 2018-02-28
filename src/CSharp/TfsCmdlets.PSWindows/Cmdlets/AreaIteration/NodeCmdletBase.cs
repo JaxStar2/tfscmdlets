@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Management.Automation;
 using System.Text.RegularExpressions;
 using System.Xml;
-using Microsoft.TeamFoundation.Server;
+using TfsCmdlets.Core;
+using TfsCmdlets.Core.Adapters;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.AreaIteration
 {
@@ -16,33 +19,31 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
             Scope = (NodeScope) Enum.Parse(typeof(NodeScope), name);
         }
 
-        protected IEnumerable<NodeInfo> GetNodes(object node)
+        protected IEnumerable<INodeInfoAdapter> GetNodes(object node)
         {
-            if (node is NodeInfo n)
+            if (node is INodeInfoAdapter n)
             {
                 yield return n; yield break;
             }
 
             var tp = GetProject();
-            var tpc = tp.Store.TeamProjectCollection;
             var projectName = tp.Name;
-            var cssService = tpc.GetService<ICommonStructureService>();
 
             if (node is Uri u)
             {
-                yield return cssService.GetNode(u.AbsoluteUri); yield break;
+                yield return CommonStructureService.GetNode(u.AbsoluteUri, Collection, Server, Credential); yield break;
             }
 
             var rootPath = NormalizePath($@"{projectName}\{Scope}", projectName, Scope.ToString());
             var fullPath = NormalizePath($@"{rootPath}\{node}", projectName, Scope.ToString());
-            var rootNodeUri = cssService.GetNodeFromPath(rootPath).Uri;
-            var rootElement = cssService.GetNodesXml(new[] { rootNodeUri }, true);
+            var rootNodeUri = CommonStructureService.GetNodeFromPath(rootPath, Collection, Server, Credential).Uri;
+            var rootElement = CommonStructureService.GetNodesXml(new[] { rootNodeUri }, true, Collection, Server, Credential);
             var nodePaths = (rootElement.SelectNodes("//@Path") ?? throw new InvalidOperationException())
                 .Cast<XmlNode>().Select(e => e.Value).Where(s => s.IsLike(fullPath));
 
             foreach (var p in nodePaths)
             {
-                yield return cssService.GetNodeFromPath(p);
+                yield return CommonStructureService.GetNodeFromPath(p, Collection, Server, Credential);
             }
         }
 
@@ -73,16 +74,11 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
             return newPath;
         }
 
-        protected ICommonStructureService GetCssService()
-        {
-            var tp = GetProject();
-            var tpc = tp.Store.TeamProjectCollection;
-
-            return tpc.GetService<ICommonStructureService>();
-        }
-
         public abstract object Path { get; set; }
 
         protected NodeScope Scope { get; }
+
+        [Import(typeof(ICommonStructureService))]
+        protected ICommonStructureService CommonStructureService { get; set; }
     }
 }

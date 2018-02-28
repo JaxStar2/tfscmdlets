@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using System.Management.Automation;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.ConfigurationServer
 {
@@ -27,7 +27,7 @@ namespace TfsCmdlets.Cmdlets.ConfigurationServer
     */
 
     [Cmdlet(VerbsCommon.Get, "ConfigurationServer", DefaultParameterSetName = "Get by server")]
-    [OutputType(typeof(Microsoft.TeamFoundation.Client.TfsConfigurationServer))]
+    [OutputType("Microsoft.TeamFoundation.Client.TfsConfigurationServer")]
     public class GetConfigurationServer : ServerLevelCmdlet
     {
         protected override void ProcessRecord()

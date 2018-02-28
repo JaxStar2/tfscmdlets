@@ -1,6 +1,6 @@
 using System.ComponentModel.Composition;
 using System.Management.Automation;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.Connection
 {

@@ -1,6 +1,5 @@
 using System;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Framework.Client;
 
 namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 {
@@ -14,15 +13,19 @@ namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 
             if (!ShouldProcess(tpc.Name, "Detach Project Collection")) return;
 
-            var configServer = tpc.ConfigurationServer;
-            var tpcService = configServer.GetService<ITeamProjectCollectionService>();
-            var collectionInfo = tpcService.GetCollection(tpc.InstanceId);
-            var tpcJob = tpcService.QueueDetachCollection(collectionInfo.Id, null, Reason, out var connectionString);
+            throw new NotImplementedException();
 
-            collectionInfo = tpcService.WaitForCollectionServicingToComplete(tpcJob, Timeout);
-            collectionInfo.Refresh();
+            //tpc.Stop();
 
-            WriteObject(connectionString);
+            //var configServer = tpc.ConfigurationServer;
+            //var tpcService = configServer.GetService<ITeamProjectCollectionService>();
+            //var collectionInfo = tpcService.GetCollection(tpc.InstanceId);
+            //var tpcJob = tpcService.QueueDetachCollection(collectionInfo.Id, null, Reason, out var connectionString);
+
+            //collectionInfo = tpcService.WaitForCollectionServicingToComplete(tpcJob, Timeout);
+            //collectionInfo.Refresh();
+
+            //WriteObject(connectionString);
         }
 
         [Parameter(Mandatory = true, Position = 0)]

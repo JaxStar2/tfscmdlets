@@ -1,26 +1,27 @@
-﻿using Microsoft.VisualStudio.Services.Common;
+﻿using System.ComponentModel.Composition;
 using System.Management.Automation;
 using System.Net;
 using System.Security;
-using Microsoft.VisualStudio.Services.Client;
+using TfsCmdlets.Core.Adapters;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.Connection
 {
-/*
-    <#
-.SYNOPSIS
-    Provides credentials to use when you connect to a Team Foundation Server or Visual Studio Team Services account.
+    /*
+        <#
+    .SYNOPSIS
+        Provides credentials to use when you connect to a Team Foundation Server or Visual Studio Team Services account.
 
-.DESCRIPTION
+    .DESCRIPTION
 
-.NOTES
+    .NOTES
 
-.INPUTS
+    .INPUTS
 
-#>*/
+    #>*/
     [Cmdlet(VerbsCommon.Get, "Credential", DefaultParameterSetName = "Prompt for credential")]
-    [OutputType(typeof(VssCredentials))]
-    public class GetCredential : PSCmdlet
+    [OutputType("Microsoft.VisualStudio.Services.Common.VssCredentials")]
+    public class GetCredential : BaseCmdlet
     {
         [Parameter(ParameterSetName = "Cached Credential", Mandatory = true)]
         public SwitchParameter Cached { get; set; }
@@ -47,99 +48,39 @@ namespace TfsCmdlets.Cmdlets.Connection
 
         protected override void ProcessRecord()
         {
-            var parameterSetName = ParameterSetName;
-            VssCredentials creds;
+            ICredentialAdapter creds;
 
-            switch (parameterSetName)
+            if (Cached)
             {
-                case "Cached Credential":
-                {
-                    creds = Get(false);
-                    break;
-                }
-
-                case "User name and password":
-                {
-                    var netCred = new NetworkCredential(UserName, Password);
-                    creds = Get(netCred);
-                    break;
-                }
-
-                case "Credential object":
-                {
-                    creds = Get(Credential);
-                    break;
-                }
-                case "Personal Access Token":
-                {
-                    var netCred = new NetworkCredential("dummy-pat-user", PersonalAccessToken);
-                    creds = Get(netCred);
-                    break;
-                }
-
-                case "Prompt for credential":
-                {
-                    creds = Get(true);
-                    break;
-                }
-                default:
-                {
-                    throw new PSArgumentException($"Invalid parameter set {ParameterSetName}");
-                }
+                creds = CredentialService.GetCredential(false);
+            }
+            else if (UserName != null && Password != null)
+            {
+                var netCred = new NetworkCredential(UserName, Password);
+                creds = CredentialService.GetCredential(netCred);
+            }
+            else if (Credential != null)
+            {
+                creds = CredentialService.GetCredential(Credential);
+            }
+            else if (PersonalAccessToken != null)
+            {
+                var netCred = new NetworkCredential("dummy-pat-user", PersonalAccessToken);
+                creds = CredentialService.GetCredential(netCred);
+            }
+            else if (Interactive)
+            {
+                creds = CredentialService.GetCredential(true);
+            }
+            else
+            {
+                throw new PSArgumentException($"Invalid parameter combination");
             }
 
             WriteObject(creds);
         }
 
-        internal static VssCredentials Get(object credentials = null)
-        {
-            NetworkCredential netCred;
-            VssCredentials creds;
-
-            switch (credentials)
-            {
-                case bool interactive:
-                {
-                    creds = new VssClientCredentials(new WindowsCredential(!interactive), new VssFederatedCredential(!interactive),
-                        interactive ? CredentialPromptType.PromptIfNeeded : CredentialPromptType.DoNotPrompt);
-                    break;
-                }
-                case PSObject pso:
-                {
-                    creds = Get(pso.BaseObject);
-                    break;
-                }
-                case VssCredentials vssc:
-                {
-                    creds = vssc;
-                    break;
-                }
-                case PSCredential psc:
-                {
-                    netCred = psc.GetNetworkCredential();
-                    creds = new VssCredentials(new WindowsCredential(netCred), new VssBasicCredential(netCred));
-                    break;
-                }
-                case NetworkCredential netc:
-                {
-                    netCred = netc;
-                    creds = new VssCredentials(new WindowsCredential(netCred), new VssBasicCredential(netCred));
-                    break;
-                }
-                case null:
-                {
-                    creds = Get(false);
-                    break;
-                }
-                default:
-                {
-                    throw new PSArgumentException(
-                        "Invalid argument Credential. Supply either a PowerShell credential (PSCredential object) or a System.Net.NetworkCredential object.",
-                        "Credential");
-                }
-            }
-
-            return creds;
-        }
+        [Import(typeof(ICredentialService))]
+        private ICredentialService CredentialService { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using Microsoft.TeamFoundation.Server;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Adapters;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.ProcessTemplate
 {
@@ -10,12 +10,12 @@ namespace TfsCmdlets.Cmdlets.ProcessTemplate
         [Import(typeof(IProcessTemplateService))]
         protected IProcessTemplateService ProcessTemplateService { get; set; }
 
-        protected TemplateHeader GetProcessTemplate()
+        protected ITemplateHeaderAdapter GetProcessTemplate()
         {
             return ProcessTemplateService.GetTemplate(ProcessTemplate, Collection, Server, Credential);
         }
 
-        protected IEnumerable<TemplateHeader> GetProcessTemplates()
+        protected IEnumerable<ITemplateHeaderAdapter> GetProcessTemplates()
         {
             return ProcessTemplateService.GetTemplates(ProcessTemplate, Collection, Server, Credential);
         }

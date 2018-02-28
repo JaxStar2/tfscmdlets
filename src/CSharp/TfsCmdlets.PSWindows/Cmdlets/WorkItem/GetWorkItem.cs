@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.WorkItem
 {
     [Cmdlet(VerbsCommon.Get, "WorkItem", DefaultParameterSetName = "Query by text")]
-    [OutputType(typeof(Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem))]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem")]
     public class GetWorkItem : WorkItemCmdletBase
     {
         protected override void ProcessRecord()

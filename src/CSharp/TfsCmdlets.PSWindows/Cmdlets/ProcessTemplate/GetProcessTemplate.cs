@@ -1,12 +1,11 @@
 using System;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Server;
 
 namespace TfsCmdlets.Cmdlets.ProcessTemplate
 {
     [Cmdlet(VerbsCommon.Get, "ProcessTemplate")]
-    [OutputType(typeof(TemplateHeader))]
+    [OutputType("Microsoft.TeamFoundation.Server.TemplateHeader")]
     public class GetProcessTemplate : ProcessTemplateCmdletBase
     {
         protected override void ProcessRecord()

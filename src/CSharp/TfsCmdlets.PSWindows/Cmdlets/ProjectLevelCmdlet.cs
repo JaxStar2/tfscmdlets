@@ -1,29 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Adapters;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets
 {
     public abstract class ProjectLevelCmdlet : CollectionLevelCmdlet
     {
-        protected Project GetProject()
+        protected IProjectAdapter GetProject()
         {
             return GetProject(Project, Collection, Server, Credential);
         }
 
-        protected IEnumerable<Project> GetProjects()
+        protected IEnumerable<IProjectAdapter> GetProjects()
         {
             return GetProjects(Project, Collection, Server, Credential);
         }
 
-        protected Project GetProject(object project, object collection, object server, object credential)
+        protected IProjectAdapter GetProject(object project, object collection, object server, object credential)
         {
             return ProjectService.GetProject(project, collection, server, credential);
         }
 
-        protected IEnumerable<Project> GetProjects(object project, object collection, object server, object credential)
+        protected IEnumerable<IProjectAdapter> GetProjects(object project, object collection, object server, object credential)
         {
             return ProjectService.GetProjects(project, collection, server, credential);
         }
@@ -34,6 +34,6 @@ namespace TfsCmdlets.Cmdlets
         public override object Collection { get; set; }
 
         [Import(typeof(IProjectService))]
-        private IProjectService ProjectService { get; set; }
+        protected IProjectService ProjectService { get; set; }
     }
 }

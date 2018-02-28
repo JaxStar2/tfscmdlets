@@ -1,5 +1,5 @@
+using System;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Framework.Client;
 
 namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 {
@@ -13,10 +13,12 @@ namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 
             if (!ShouldProcess(tpc.Name, "Delete Team Project Collection")) return;
 
-            var configServer = tpc.ConfigurationServer;
-            var tpcService = configServer.GetService<ITeamProjectCollectionService>();
-            var collectionInfo = tpcService.GetCollection(tpc.InstanceId);
-            collectionInfo.Delete();
+            throw new NotImplementedException();
+
+            //var configServer = tpc.ConfigurationServer;
+            //var tpcService = configServer.GetService<ITeamProjectCollectionService>();
+            //var collectionInfo = tpcService.GetCollection(tpc.InstanceId);
+            //collectionInfo.Delete();
         }
 
         [Parameter(Position =0, Mandatory = true, ValueFromPipeline = true)]

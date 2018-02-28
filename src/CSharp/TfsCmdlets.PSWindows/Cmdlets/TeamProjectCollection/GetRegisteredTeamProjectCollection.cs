@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Client;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 {
@@ -20,7 +19,7 @@ namespace TfsCmdlets.Cmdlets.TeamProjectCollection
     #>
     */
     [Cmdlet(VerbsCommon.Get, "RegisteredTeamProjectCollection")]
-    [OutputType(typeof(RegisteredProjectCollection))]
+    [OutputType("Microsoft.TeamFoundation.Client.RegisteredProjectCollection")]
     public class GetRegisteredTeamProjectCollection : Cmdlet
     {
         [Parameter(Position = 0, ValueFromPipeline = true)]

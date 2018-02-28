@@ -1,20 +1,16 @@
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Client;
 
 namespace TfsCmdlets.Cmdlets.Team
 {
     [Cmdlet(VerbsCommon.New, "Team", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType(typeof(TeamFoundationTeam))]
-    public class NewTeam : ProjectLevelCmdlet
+    [OutputType("Microsoft.TeamFoundation.Client.TeamFoundationTeam")]
+    public class NewTeam : TeamLevelCmdlet
     {
         protected override void ProcessRecord()
         {
             if (!ShouldProcess(Name, "Create team")) return;
 
-            var tp = GetProject();
-            var tpc = tp.Store.TeamProjectCollection;
-            var teamService = tpc.GetService<TfsTeamService>();
-            var team = teamService.CreateTeam(tp.Uri.AbsoluteUri, Name, Description, null);
+            var team = TeamService.CreateTeam(Name, Description, Project, Collection, Server, Credential);
 
             if (Passthru)
                 WriteObject(team);
@@ -32,5 +28,8 @@ namespace TfsCmdlets.Cmdlets.Team
 
         [Parameter]
         public override object Project { get; set; }
+
+        // Hidden
+        public override object Team { get; set; }
     }
 }

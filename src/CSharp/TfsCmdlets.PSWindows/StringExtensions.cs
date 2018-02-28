@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Management.Automation;
-using Microsoft.VisualStudio.Services.Common;
 
 namespace TfsCmdlets
 {
@@ -10,9 +9,12 @@ namespace TfsCmdlets
 
         internal static bool IsLike(this string s, string pattern)
         {
-            var wildcardPattern = CachedPatterns.GetOrAddValue(pattern, () => new WildcardPattern(pattern, WildcardOptions.IgnoreCase));
+            if (!CachedPatterns.ContainsKey(pattern))
+            {
+                CachedPatterns.Add(pattern, new WildcardPattern(pattern, WildcardOptions.IgnoreCase));
+            }
 
-            return wildcardPattern.IsMatch(s);
+            return CachedPatterns[pattern].IsMatch(s);
         }
     }
 }

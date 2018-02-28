@@ -1,12 +1,12 @@
 using System.ComponentModel.Composition;
 using System.Management.Automation;
 using TfsCmdlets.Cmdlets.Connection;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.TeamProject
 {
     [Cmdlet(VerbsCommon.Get, "TeamProject", DefaultParameterSetName = "Get by project")]
-    [OutputType(typeof(Microsoft.TeamFoundation.WorkItemTracking.Client.Project))]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.Project")]
     public class GetTeamProject : ProjectLevelCmdlet
     {
         protected override void ProcessRecord()

@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Client;
+using TfsCmdlets.Core.Adapters;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets
 {
@@ -9,56 +11,24 @@ namespace TfsCmdlets.Cmdlets
     {
         public abstract object Team { get; set; }
 
-        protected TeamFoundationTeam GetTeam(bool defaultTeam = false)
+        protected ITeamFoundationTeamAdapter GetTeam()
         {
-            return GetTeam(Team, defaultTeam, Project, Collection, Server, Credential);
+            return TeamService.GetTeam(Team, Project, Collection, Server, Credential);
         }
 
-        protected TeamFoundationTeam GetTeam(object team, bool defaultTeam, object project, object collection, object server, object credential)
+        protected ITeamFoundationTeamAdapter GetDefaultTeam()
         {
-            var teams = GetTeams(team, defaultTeam, project, collection, server, credential).ToList();
-
-            if (teams.Count == 0)
-                throw new PSArgumentException($"Invalid team name '{Team}'", nameof(Team));
-
-            if (teams.Count == 1)
-                return teams[0];
-
-            var names = string.Join(", ", teams.Select(o => o.Name).ToArray());
-            throw new PSArgumentException($"Ambiguous name '{Team}' matches {teams.Count} teams: {names}. Please choose a more specific value for the {nameof(Team)} argument and try again", nameof(Team));
+            return TeamService.GetDefaultTeam(Project, Collection, Server, Credential);
         }
 
-        protected IEnumerable<TeamFoundationTeam> GetTeams(object team, bool defaultTeam, object project, object collection, object server, object credential)
+        protected IEnumerable<ITeamFoundationTeamAdapter> GetTeams(object team)
         {
-            var tp = GetProject(project, collection, server, credential);
-            var tpc = tp.Store.TeamProjectCollection;
-            var teamService = tpc.GetService<TfsTeamService>();
-
-            switch (team)
-            {
-                case TeamFoundationTeam t:
-                {
-                    yield return t;
-
-                    break;
-                }
-                case string s:
-                {
-                    foreach (var t1 in teamService.QueryTeams(tp.Uri.AbsoluteUri).Where(t => t.Name.IsLike(s)))
-                    {
-                        yield return t1;
-                    }
-
-                    break;
-                }
-                case null when defaultTeam:
-                {
-                    yield return teamService.GetDefaultTeam(tp.Uri.AbsoluteUri, null);
-
-                    break;
-                }
-            }
+            return TeamService.GetTeams(team, Project, Collection, Server, Credential);
         }
+
+        [Import(typeof(ITeamService))]
+        protected ITeamService TeamService { get; set; }
+
         //protected TeamFoundationTeam SetTeam(object team, string newName = null, string description = null, bool? defaultTeam)
         //{
         //    var t = GetTeam(team, false);

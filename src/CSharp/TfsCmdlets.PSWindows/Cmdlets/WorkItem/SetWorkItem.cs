@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
 namespace TfsCmdlets.Cmdlets.WorkItem
 {
     [Cmdlet(VerbsCommon.Set, "WorkItem", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType(typeof(Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem))]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem")]
     public class SetWorkItem : WorkItemCmdletBase
     {
         protected override void ProcessRecord()
@@ -18,10 +17,7 @@ namespace TfsCmdlets.Cmdlets.WorkItem
 
             if (BypassRules)
             {
-                var tp = GetProject();
-                var tpc = tp.Store.TeamProjectCollection;
-                var store = new WorkItemStore(tpc, WorkItemStoreFlags.BypassRules);
-                wi = store.GetWorkItem(wi.Id);
+                wi = WorkItemService.GetWorkItem(wi.Id, true);
             }
 
             if (!string.IsNullOrEmpty(Title)) wi.Title = Title;
@@ -45,12 +41,12 @@ namespace TfsCmdlets.Cmdlets.WorkItem
             {
                 try
                 {
-                    wi.Save();
+                    WorkItemService.Save(wi);
                 }
-                catch (ValidationException ex)
+                catch (Exception ex) when (ex.GetType().Name.Equals("Microsoft.TeamFoundation.WorkItemTracking.Client.ValidationException"))
                 {
-                    var errors = wi.Validate();
-                    var invalidFields = string.Join(", ", errors.Cast<Field>().Select(f => f.ReferenceName));
+                    var errors = WorkItemService.Validate(wi);
+                    var invalidFields = string.Join(", ", errors.Select(f => f.ReferenceName));
 
                     throw new Exception($"Unable to save work item. The following fields have invalid values: {invalidFields}. Check the supplied values and try again", ex);
                 }

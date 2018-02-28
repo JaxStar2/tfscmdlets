@@ -1,23 +1,21 @@
 ﻿using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.Services.WebApi;
 using System.Management.Automation;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.Connection
 {
     [Cmdlet(VerbsCommunications.Connect, "TeamProjectCollection", DefaultParameterSetName = "Explicit credentials")]
-    [OutputType(typeof(VssConnection))]
+    [OutputType("Microsoft.TeamFoundation.Client.TfsTeamProjectCollection")]
     public class ConnectTeamProjectCollection : CollectionLevelCmdlet
     {
         protected override void ProcessRecord()
         {
             if (Interactive.IsPresent)
             {
-                Credential = GetCredential.Get(true);
+                Credential = CredentialService.GetCredential(true);
             }
 
-            var tpc = GetCollection();
-            tpc.EnsureAuthenticated();
+            var tpc = GetCollection(true);
 
             CurrentConnectionService.TeamProjectCollection = tpc;
 

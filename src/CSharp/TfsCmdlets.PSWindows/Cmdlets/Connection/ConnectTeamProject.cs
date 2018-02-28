@@ -1,7 +1,6 @@
 using System.ComponentModel.Composition;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.Connection
 {
@@ -43,14 +42,14 @@ namespace TfsCmdlets.Cmdlets.Connection
     #>
     */
     [Cmdlet(VerbsCommunications.Connect, "TeamProject", DefaultParameterSetName = "Explicit credentials")]
-    [OutputType(typeof(Project))]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.Project")]
     public class ConnectTeamProject : ProjectLevelCmdlet
     {
         protected override void ProcessRecord()
         {
             if (Interactive.IsPresent)
             {
-                Credential = GetCredential.Get(true);
+                Credential = CredentialService.GetCredential(true);
             }
 
             var project = GetProject();

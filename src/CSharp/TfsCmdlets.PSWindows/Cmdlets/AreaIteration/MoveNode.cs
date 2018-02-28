@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Server;
+using TfsCmdlets.Core.Adapters;
 
 namespace TfsCmdlets.Cmdlets.AreaIteration
 {
     [Cmdlet(VerbsCommon.Move, "Area", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType(typeof(NodeInfo))]
+    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo")]
     public class MoveArea : MoveNodeCmdletBase
     {
         [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]
@@ -16,7 +16,7 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
     }
 
     [Cmdlet(VerbsCommon.Move, "Iteration", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType(typeof(NodeInfo))]
+    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo")]
     public class MoveIteration : MoveNodeCmdletBase
     {
         [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]
@@ -43,15 +43,14 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
                 throw new PSArgumentException($"Invalid or non-existent destination {Scope} {Destination}");
             }
 
-            var cssService = GetCssService();
-            var movedNodes = new List<NodeInfo>();
+            var movedNodes = new List<INodeInfoAdapter>();
 
             foreach (var n in originalNodes)
             {
                 if (!ShouldProcess(n.Path, $"Move node to {destinationNode}")) continue;
 
-                cssService.MoveBranch(n.Uri, destinationNode.Uri);
-                movedNodes.Add(cssService.GetNode(n.Uri));
+                CommonStructureService.MoveBranch(n.Uri, destinationNode.Uri, Collection, Server, Credential);
+                movedNodes.Add(CommonStructureService.GetNode(n.Uri, Collection, Server, Credential));
             }
 
             if (!Passthru) return;

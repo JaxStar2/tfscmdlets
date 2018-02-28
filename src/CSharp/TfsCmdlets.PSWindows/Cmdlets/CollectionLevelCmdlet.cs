@@ -1,29 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Client;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Adapters;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets
 {
     public abstract class CollectionLevelCmdlet : ServerLevelCmdlet
     {
-        protected TfsTeamProjectCollection GetCollection()
+        protected ITfsTeamProjectCollectionAdapter GetCollection(bool ensureAuthenticated = false)
         {
-            return GetCollection(Collection, Server, Credential);
+            return GetCollection(Collection, Server, Credential, ensureAuthenticated);
         }
 
-        protected IEnumerable<TfsTeamProjectCollection> GetCollections()
+        protected IEnumerable<ITfsTeamProjectCollectionAdapter> GetCollections()
         {
             return GetCollections(Collection, Server, Credential);
         }
 
-        protected TfsTeamProjectCollection GetCollection(object collection, object server, object credential)
+        protected ITfsTeamProjectCollectionAdapter GetCollection(object collection, object server, object credential,
+            bool ensureAuthenticated = false)
         {
-            return TeamProjectCollectionService.GetCollection(collection, server, credential);
+            return TeamProjectCollectionService.GetCollection(collection, server, credential, ensureAuthenticated);
         }
 
-        protected IEnumerable<TfsTeamProjectCollection> GetCollections(object collection, object server, object credential)
+        protected IEnumerable<ITfsTeamProjectCollectionAdapter> GetCollections(object collection, object server, object credential)
         {
             return TeamProjectCollectionService.GetCollections(collection, server, credential);
         }

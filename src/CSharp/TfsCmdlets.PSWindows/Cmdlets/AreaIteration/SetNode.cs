@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Server;
+using TfsCmdlets.Core.Adapters;
 
 namespace TfsCmdlets.Cmdlets.AreaIteration
 {
     [Cmdlet(VerbsCommon.Set, "Area", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
-    [OutputType(typeof(NodeInfo))]
+    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo")]
     public class SetArea : SetNodeCmdletBase
     {
         [Parameter(Position = 0, Mandatory = true,ValueFromPipeline = true)]
@@ -16,7 +16,7 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
     }
 
     [Cmdlet(VerbsCommon.Set, "Iteration", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
-    [OutputType(typeof(NodeInfo))]
+    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo")]
     public class SetIteration : SetNodeCmdletBase
     {
         [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]
@@ -37,39 +37,37 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
                 throw new PSArgumentException($"Invalid or non-existent {Scope} {Path}");
             }
 
-            var cssService = GetCssService();
-
             if (!string.IsNullOrWhiteSpace(NewName))
             {
-                RenameNodes(nodes, NewName, cssService);
+                RenameNodes(nodes, NewName);
             }
 
             if (MoveBy != 0)
             {
-                MoveNodes(nodes, MoveBy, cssService);
+                MoveNodes(nodes, MoveBy);
             }
         }
 
-        private void RenameNodes(IEnumerable<NodeInfo> nodes, string newName, ICommonStructureService cssService)
+        private void RenameNodes(List<INodeInfoAdapter> nodes, string newName)
         {
             foreach (var node in nodes)
             {
                 if (!ShouldProcess($"{Path}", $"Rename {Scope} to {newName}")) continue;
 
-                cssService.RenameNode(node.Uri, newName);
-                WriteObject(cssService.GetNode(node.Uri));
+                CommonStructureService.RenameNode(node.Uri, newName, Collection, Server, Credential);
+                WriteObject(CommonStructureService.GetNode(node.Uri, Collection, Server, Credential));
             }
         }
 
-        private void MoveNodes(IEnumerable<NodeInfo> nodes, int moveBy, ICommonStructureService cssService)
+        private void MoveNodes(List<INodeInfoAdapter> nodes, int moveBy)
         {
             foreach (var node in nodes)
             {
                 if (!ShouldProcess($"{Path}",
                     $"Reorder {Scope} by moving it {moveBy} positions (negative is up, positive is down)")) continue;
 
-                cssService.ReorderNode(node.Uri, moveBy);
-                WriteObject(cssService.GetNode(node.Uri));
+                CommonStructureService.ReorderNode(node.Uri, moveBy, Collection, Server, Credential);
+                WriteObject(CommonStructureService.GetNode(node.Uri, Collection, Server, Credential));
             }
         }
 

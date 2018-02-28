@@ -1,11 +1,12 @@
 using System;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Server;
+using TfsCmdlets.Core;
+using TfsCmdlets.Core.Adapters;
 
 namespace TfsCmdlets.Cmdlets.AreaIteration
 {
     [Cmdlet(VerbsCommon.New, "Area", SupportsShouldProcess = true)]
-    [OutputType(typeof(NodeInfo))]
+    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo")]
     public class NewArea : NewNodeCmdletBase
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
@@ -14,7 +15,7 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
     }
 
     [Cmdlet(VerbsCommon.New, "Iteration", SupportsShouldProcess = true)]
-    [OutputType(typeof(NodeInfo))]
+    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo")]
     public class NewIteration : NewNodeCmdletBase
     {
         [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
@@ -33,21 +34,19 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
             WriteObject(node);
         }
 
-        private NodeInfo CreateNewNode(string path, NodeScope scope, DateTime? startDate = null, DateTime? finishDate = null)
+        private INodeInfoAdapter CreateNewNode(string path, NodeScope scope, DateTime? startDate = null, DateTime? finishDate = null)
         {
             var tp = GetProject();
-            var tpc = tp.Store.TeamProjectCollection;
             var projectName = tp.Name;
             var fullPath = NormalizePath(path, projectName, scope.ToString());
             var parentPath = System.IO.Path.GetDirectoryName(fullPath);
             var nodeName = System.IO.Path.GetFileName(fullPath);
-            var cssService = tpc.GetService<ICommonStructureService>();
 
-            NodeInfo parentNode;
+            INodeInfoAdapter parentNode;
 
             try
             {
-                parentNode = cssService.GetNodeFromPath(parentPath);
+                parentNode = CommonStructureService.GetNodeFromPath(parentPath, Collection, Server, Credential);
             }
             catch
             {
@@ -60,15 +59,14 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
 
             if (startDate.HasValue || finishDate.HasValue)
             {
-                var cssService4 = tpc.GetService<ICommonStructureService4>();
-                nodeUri = cssService4.CreateNode(nodeName, parentNode.Uri, startDate, finishDate);
+                nodeUri = CommonStructureService.CreateNode(nodeName, parentNode.Uri, startDate, finishDate, Collection, Server, Credential);
             }
             else
             {
-                nodeUri = cssService.CreateNode(nodeName, parentNode.Uri);
+                nodeUri = CommonStructureService.CreateNode(nodeName, parentNode.Uri, Collection, Server, Credential);
             }
-
-            return cssService.GetNode(nodeUri);
+            
+            return CommonStructureService.GetNode(nodeUri, Collection, Server, Credential);
         }
 
         [Parameter]

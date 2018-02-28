@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.SourceControl.WebApi;
+using TfsCmdlets.Core.Adapters;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.Git
 {
     public abstract class GitCmdletBase : ProjectLevelCmdlet
     {
-        protected IEnumerable<GitRepository> GetRepositories(object repository)
+        protected IEnumerable<IGitRepositoryAdapter> GetRepositories(object repository)
         {
             while (true)
             {
@@ -18,7 +20,7 @@ namespace TfsCmdlets.Cmdlets.Git
                         repository = pso.BaseObject;
                         continue;
                     }
-                    case GitRepository r:
+                    case IGitRepositoryAdapter r:
                     {
                         yield return r;
                         break;
@@ -26,10 +28,8 @@ namespace TfsCmdlets.Cmdlets.Git
                     case string s:
                     {
                         var tp = GetProject();
-                        var tpc = tp.Store.TeamProjectCollection;
-                        var gitService = tpc.GetService<Microsoft.TeamFoundation.Git.Client.GitRepositoryService>();
 
-                        foreach (var r in gitService.QueryRepositories(tp.Name).Where(o => o.Name.IsLike(s)))
+                        foreach (var r in GitRepositoryService.GetRepositories(tp.Name, Project, Collection, Server, Credential))
                         {
                             yield return r;
                         }
@@ -43,5 +43,8 @@ namespace TfsCmdlets.Cmdlets.Git
                 break;
             }
         }
+
+        [Import(typeof(IGitRepositoryService))]
+        protected IGitRepositoryService GitRepositoryService { get; set; }
     }
 }

@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel.Composition;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.TeamFoundation.Client;
-using TfsCmdlets.Services;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 {
     [Cmdlet(VerbsCommon.New, "RegisteredTeamProjectCollection", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType(typeof(RegisteredProjectCollection))]
+    [OutputType("Microsoft.TeamFoundation.Client.RegisteredProjectCollection")]
     public class NewRegisteredTeamProjectCollection: CollectionLevelCmdlet
     {
         protected override void ProcessRecord()
@@ -16,7 +15,7 @@ namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 
             if (!ShouldProcess(collection?.Name, "Add server to list of registered servers")) return;
 
-            RegisteredTfsConnections.RegisterProjectCollection(collection);
+            RegisteredConnectionService.RegisterProjectCollection(collection);
 
             if (Passthru)
             {

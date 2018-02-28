@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Management.Automation;
-using TfsWorkItemType = Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItemType;
+using TfsCmdlets.Core.Adapters;
+using TfsCmdlets.Core.Services;
 
 namespace TfsCmdlets.Cmdlets.WorkItemType
 {
@@ -9,17 +11,17 @@ namespace TfsCmdlets.Cmdlets.WorkItemType
     {
         public abstract object Type { get; set; }
 
-        protected TfsWorkItemType GetWit()
+        protected IWorkItemTypeAdapter GetWit()
         {
             return GetWit(Type, Project, Collection, Server, Credential);
         }
 
-        protected IEnumerable<TfsWorkItemType> GetWits()
+        protected IEnumerable<IWorkItemTypeAdapter> GetWits()
         {
             return GetWits(Type, Project, Collection, Server, Credential);
         }
 
-        protected TfsWorkItemType GetWit(object wit, object project, object collection, object server, object credential)
+        protected IWorkItemTypeAdapter GetWit(object wit, object project, object collection, object server, object credential)
         {
             var collections = GetWits(wit, project, collection, server, credential).ToList();
 
@@ -33,11 +35,11 @@ namespace TfsCmdlets.Cmdlets.WorkItemType
             throw new PSArgumentException($"Ambiguous name '{collection}' matches {collections.Count} team project collections: {names}. Please choose a more specific value for the {nameof(Collection)} argument and try again", nameof(Collection));
         }
 
-        protected IEnumerable<TfsWorkItemType> GetWits(object wit, object project, object collection, object server, object credential)
+        protected IEnumerable<IWorkItemTypeAdapter> GetWits(object wit, object project, object collection, object server, object credential)
         {
             switch (wit)
             {
-                case TfsWorkItemType w:
+                case IWorkItemTypeAdapter w:
                     {
                         yield return w;
 
@@ -47,9 +49,9 @@ namespace TfsCmdlets.Cmdlets.WorkItemType
                     {
                         var tp = GetProject(project, collection, server, credential);
 
-                        foreach (var w in tp.WorkItemTypes.Cast<Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItemType>().Where(o => o.Name.IsLike(s)))
+                        foreach (var w in tp.WorkItemTypes.Where(o => o.Key.IsLike(s)))
                         {
-                            yield return w;
+                            yield return w.Value;
                         }
 
                         break;
@@ -59,6 +61,11 @@ namespace TfsCmdlets.Cmdlets.WorkItemType
                         throw new PSArgumentException($"Invalid work item type '{wit}'");
                     }
             }
+
         }
+
+        [Import(typeof(IWorkItemTypeService))]
+        protected IWorkItemTypeService WorkItemTypeService { get; set; }
+
     }
 }

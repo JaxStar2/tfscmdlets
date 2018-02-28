@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Management.Automation;
 using System.Xml;
@@ -5,55 +6,58 @@ using System.Xml;
 namespace TfsCmdlets.Cmdlets.GlobalList
 {
     [Cmdlet(VerbsData.Import, "GlobalList", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType(typeof(Models.GlobalList))]
+    [OutputType(typeof(Core.Models.GlobalList))]
     public class ImportGlobalList : GlobalListCmdletBase
     {
         protected override void ProcessRecord()
         {
             var tpc = GetCollection();
-            var store = tpc.GetService<Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItemStore>();
             string rawDocument;
 
-            while (InputObject is PSObject pso)
+            while (true)
             {
-                InputObject = pso.BaseObject;
-            }
-
-            switch (InputObject)
-            {
-                case XmlDocument x:
+                switch (InputObject)
+                {
+                    case PSObject pso:
+                    {
+                        InputObject = pso.BaseObject;
+                        continue;
+                    }
+                    case XmlDocument x:
                     {
                         rawDocument = x.OuterXml;
                         break;
                     }
-                case string s:
+                    case string s:
                     {
                         rawDocument = s;
                         break;
                     }
-                case Models.GlobalList gl:
+                    case Core.Models.GlobalList gl:
                     {
                         rawDocument = gl.ToXml().OuterXml;
                         break;
                     }
-                default:
+                    default:
                     {
-                        throw new PSArgumentException("Invalid global list definition");
+                        throw new ArgumentException("Invalid global list definition");
                     }
+                }
+                break;
             }
 
             var xml = new XmlDocument();
             xml.LoadXml(rawDocument);
 
             var listsToAdd = xml.SelectNodes("//GLOBALLIST/@name")?.OfType<XmlAttribute>().Select(o => o.Value);
-            var existingLists = GetLists("*", Collection, Server, Credential).ToList();
+            var existingLists = GlobalListService.GetGlobalLists("*", Collection, Server, Credential).ToList();
 
             if (listsToAdd != null)
             {
                 foreach (var name in listsToAdd)
                 {
                     if (existingLists.Any(o => o.Name.Equals(name)) &&
-                        (ShouldProcess(name, "Overwrite global list") || Force.IsPresent)) continue;
+                        (Force.IsPresent || ShouldProcess(name, "Overwrite global list"))) continue;
 
                     var listElement = xml.SelectSingleNode($"//GLOBALLIST[@name='{name}']");
 
@@ -62,7 +66,7 @@ namespace TfsCmdlets.Cmdlets.GlobalList
                 }
             }
 
-            store.ImportGlobalLists(xml.DocumentElement);
+            GlobalListService.ImportGlobalLists(xml.DocumentElement, Collection, Server, Credential);
         }
 
         [Parameter(Mandatory = true, ValueFromPipeline = true)]
@@ -75,6 +79,7 @@ namespace TfsCmdlets.Cmdlets.GlobalList
         [Parameter]
         public override object Collection { get; set; }
 
-        public override string GlobalList { get; set; }
+        // Hidden 
+        public override string Name { get; set; }
     }
 }
