@@ -5,7 +5,7 @@ using TfsCmdlets.Core.Adapters;
 
 namespace TfsCmdlets.Core.Services
 {
-    public interface IBuildService
+    public interface IBuildDefinitionService
     {
         IBuildDefinitionAdapter GetBuildDefinition(object build, object project, object collection, object server,
             object credential);

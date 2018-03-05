@@ -13,62 +13,9 @@ using TfsCmdlets.PSWindows.TfsApi.Adapters;
 namespace TfsCmdlets.PSWindows.TfsApi.Services
 {
     [Export(typeof(IGitRepositoryService))]
-    public class GitRepositoryService : IGitRepositoryService
+    public class GitRepositoryService : ServiceBase<GitRepository, IGitRepositoryAdapter>, IGitRepositoryService
     {
-        public IGitRepositoryAdapter GetRepository(object repository, object project, object collection, object server,
-            object credential)
-        {
-            var repositories = GetRepositories(repository, project, collection, server, credential).ToList();
-
-            if (repositories.Count == 0)
-                throw new Exception($"Invalid repository name '{repository}'");
-
-            if (repositories.Count == 1)
-                return repositories[0];
-
-            var names = string.Join(", ", repositories.Select(o => o.Name).ToArray());
-            throw new Exception($"Ambiguous name '{repository}' matches {repositories.Count} repositories: {names}. Please choose a more specific value for the -Repository argument and try again");
-        }
-
-        public IEnumerable<IGitRepositoryAdapter> GetRepositories(object repository, object project, object collection, object server, object credential)
-        {
-            while (true)
-            {
-                switch (repository)
-                {
-                    case PSObject pso:
-                        {
-                            repository = pso.BaseObject;
-                            continue;
-                        }
-                    case IGitRepositoryAdapter r:
-                        {
-                            yield return r;
-                            break;
-                        }
-                    case string s:
-                        {
-                            var tp = (Project)ProjectService.GetProject(project, collection, server, credential).Instance;
-                            var tpc = tp.Store.TeamProjectCollection;
-                            var gitService = tpc.GetService<Microsoft.TeamFoundation.Git.Client.GitRepositoryService>();
-
-                            foreach (var r in gitService.QueryRepositories(tp.Name).Where(o => o.Name.IsLike(s)))
-                            {
-                                yield return new GitRepositoryAdapter(r);
-                            }
-                            break;
-                        }
-                    default:
-                        {
-                            throw new ArgumentException($"Invalid git repository name {repository}");
-                        }
-                }
-                break;
-            }
-        }
-
-        public IGitRepositoryAdapter CreateRepository(string repository, object project, object collection, object server,
-            object credential)
+        public IGitRepositoryAdapter CreateRepository(string repository, object project, object collection, object server, object credential)
         {
             var tp = (Project)ProjectService.GetProject(project, collection, server, credential).Instance;
             var tpc = tp.Store.TeamProjectCollection;
@@ -82,8 +29,9 @@ namespace TfsCmdlets.PSWindows.TfsApi.Services
                     Name = tp.Name
                 }
             };
+            var repo = gitClient.CreateRepositoryAsync(repoToCreate, tp.Name).Result;
 
-            return new GitRepositoryAdapter(gitClient.CreateRepositoryAsync(repoToCreate, tp.Name).Result);
+            return new GitRepositoryAdapter(repo);
         }
 
         public void DeleteRepository(object repository, object project, object collection, object server, object credential)
@@ -96,8 +44,7 @@ namespace TfsCmdlets.PSWindows.TfsApi.Services
             gitClient.DeleteRepositoryAsync(tp.Guid, repo.Id).Wait();
         }
 
-        public IGitRepositoryAdapter RenameRepository(object repository, string newName, object project, object collection,
-            object server, object credential)
+        public IGitRepositoryAdapter RenameRepository(object repository, string newName, object project, object collection, object server, object credential)
         {
             var repo = (GitRepository)GetRepository(repository, project, collection, server, credential).Instance;
             var tp = (Project)ProjectService.GetProject(project, collection, server, credential).Instance;
@@ -107,7 +54,38 @@ namespace TfsCmdlets.PSWindows.TfsApi.Services
             return new GitRepositoryAdapter(gitClient.RenameRepositoryAsync(repo, newName).Result);
         }
 
+        #region Get Items
+
+        protected override string ItemName => "repository";
+        protected override Func<GitRepository, string> ItemDescriptor => (r => r.Name);
+
+        public IGitRepositoryAdapter GetRepository(object repository, object project, object collection, object server, object credential)
+        {
+            return new GitRepositoryAdapter(GetItem(repository, project, collection, server, credential));
+        }
+
+        public IEnumerable<IGitRepositoryAdapter> GetRepositories(object repository, object project, object collection, object server, object credential)
+        {
+            return GetItems(repository, project, collection, server, credential).Select(item => new GitRepositoryAdapter(item));
+        }
+
+        protected override IEnumerable<GitRepository> GetAllItems(object item, ScopeObjects so)
+        {
+            var tp = (Project)ProjectService.GetProject(so.Project, so.Collection, so.Server, so.Credential).Instance;
+            var tpc = tp.Store.TeamProjectCollection;
+            var gitService = tpc.GetService<Microsoft.TeamFoundation.Git.Client.GitRepositoryService>();
+            var repos = gitService.QueryRepositories(tp.Name).ToList();
+
+            return repos;
+        }
+
+        #endregion
+
+        #region Imports
+
         [Import(typeof(IProjectService))]
         private IProjectService ProjectService { get; set; }
+
+        #endregion
     }
 }

@@ -33,55 +33,57 @@ namespace TfsCmdlets.PSWindows.TfsApi.Services
         {
             while (true)
             {
-                var cred = (VssCredentials) CredentialService.GetCredential(credential).Instance;
+                var cred = (VssCredentials)CredentialService.GetCredential(credential).Instance;
 
                 switch (server)
                 {
                     case PSObject pso:
-                    {
-                        server = pso.BaseObject;
-                        continue;
-                    }
-                    case TfsConfigurationServer s:
-                    {
-                        yield return new TfsConfigurationServerAdapter(s);
-                        break;
-                    }
-                    case Uri u:
-                    {
-                        yield return new TfsConfigurationServerAdapter(new TfsConfigurationServer(u, cred));
-                        break;
-                    }
-                    case string s when Uri.IsWellFormedUriString(s, UriKind.Absolute):
-                    {
-                        yield return new TfsConfigurationServerAdapter(new TfsConfigurationServer(new Uri(s), cred));
-                        break;
-                    }
-                    case string s when !string.IsNullOrWhiteSpace(s):
-                    {
-                        var servers = RegisteredConnectionService.GetRegisteredConfigurationServers(s);
-
-                        foreach (var svr in servers)
                         {
-                            yield return new TfsConfigurationServerAdapter(new TfsConfigurationServer(svr.Uri, cred));
+                            server = pso.BaseObject;
+                            continue;
                         }
-                        break;
-                    }
+                    case TfsConfigurationServer s:
+                        {
+                            yield return new TfsConfigurationServerAdapter(s);
+                            break;
+                        }
+                    case Uri u:
+                        {
+                            yield return new TfsConfigurationServerAdapter(new TfsConfigurationServer(u, cred));
+                            break;
+                        }
+                    case string s when Uri.IsWellFormedUriString(s, UriKind.Absolute):
+                        {
+                            yield return new TfsConfigurationServerAdapter(new TfsConfigurationServer(new Uri(s), cred));
+                            break;
+                        }
+                    case string s when !string.IsNullOrWhiteSpace(s):
+                        {
+                            var servers = RegisteredConnectionService.GetRegisteredConfigurationServers(s);
+
+                            foreach (var svr in servers)
+                            {
+                                yield return new TfsConfigurationServerAdapter(new TfsConfigurationServer(svr.Uri, cred));
+                            }
+                            break;
+                        }
                     case null when CurrentConnectionService.ConfigurationServer != null:
-                    {
-                        yield return CurrentConnectionService.ConfigurationServer;
-                        break;
-                    }
+                        {
+                            yield return CurrentConnectionService.ConfigurationServer;
+                            break;
+                        }
                     default:
-                    {
-                        throw new Exception("No connection information available. " +
-                            "Either supply a valid -Server argument or use Connect-TfsConfigurationServer " +
-                            "prior to invoking this cmdlet.");
-                    }
+                        {
+                            throw new Exception("No connection information available. " +
+                                "Either supply a valid -Server argument or use Connect-TfsConfigurationServer " +
+                                "prior to invoking this cmdlet.");
+                        }
                 }
                 break;
             }
         }
+
+        #region Imports
 
         [Import(typeof(IRegisteredConnectionService))]
         private IRegisteredConnectionService RegisteredConnectionService { get; set; }
@@ -91,5 +93,7 @@ namespace TfsCmdlets.PSWindows.TfsApi.Services
 
         [Import(typeof(ICredentialService))]
         private ICredentialService CredentialService { get; set; }
+
+        #endregion
     }
 }

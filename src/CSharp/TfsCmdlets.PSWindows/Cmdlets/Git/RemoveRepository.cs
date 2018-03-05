@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Management.Automation;
+using TfsCmdlets.Core.Adapters;
 
 namespace TfsCmdlets.Cmdlets.Git
 {
@@ -9,7 +11,7 @@ namespace TfsCmdlets.Cmdlets.Git
     {
         protected override void ProcessRecord()
         {
-            var reposToDelete = GetRepositories(Repository);
+            var reposToDelete = GitRepositoryService.GetRepositories(Repository, Project, Collection, Server, Credential);
 
             var tp = GetProject();
 

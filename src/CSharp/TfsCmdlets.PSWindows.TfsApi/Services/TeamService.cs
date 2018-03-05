@@ -11,51 +11,8 @@ using TfsCmdlets.PSWindows.TfsApi.Adapters;
 namespace TfsCmdlets.PSWindows.TfsApi.Services
 {
     [Export(typeof(ITeamService))]
-    public class TeamService: ITeamService
+    public class TeamService : ServiceBase<TeamFoundationTeam, TeamFoundationTeamAdapter>, ITeamService
     {
-        public ITeamFoundationTeamAdapter GetTeam(object team, object project, object collection, object server, object credential)
-        {
-            var lists = GetTeams(team, project, collection, server, credential).ToList();
-
-            if (lists.Count == 0)
-                throw new Exception($"Invalid team '{team}'");
-
-            if (lists.Count == 1)
-                return lists[0];
-
-            var names = string.Join(", ", lists.Select(o => o.Name).ToArray());
-            throw new Exception($"Ambiguous name '{team}' matches {lists.Count} teams: {names}. " +
-                                "Please choose a more specific value for the -Team argument and try again");
-        }
-
-        public IEnumerable<ITeamFoundationTeamAdapter> GetTeams(object team, object project, object collection, object server, object credential)
-        {
-            var teamSvc = GetTeamService(project, collection, server, credential, out var projectId);
-
-            switch (team)
-            {
-                case ITeamFoundationTeamAdapter t:
-                {
-                    yield return t;
-
-                    break;
-                }
-                case string s:
-                {
-                    foreach (var t1 in teamSvc.QueryTeams(projectId).Where(t => t.Name.IsLike(s)))
-                    {
-                        yield return new TeamFoundationTeamAdapter(t1);
-                    }
-
-                    break;
-                }
-                default:
-                {
-                    throw new ArgumentException($"Invalid team name {team}");
-                }
-            }
-        }
-
         public ITeamFoundationTeamAdapter GetDefaultTeam(object project, object collection, object server, object credential)
         {
             var teamSvc = GetTeamService(project, collection, server, credential, out var projectId);
@@ -89,7 +46,7 @@ namespace TfsCmdlets.PSWindows.TfsApi.Services
         public ITeamFoundationTeamAdapter SetTeam(object team, string newName, string description, object project, object collection,
             object server, object credential)
         {
-            var t = (TeamFoundationTeam) GetTeam(team, project, collection, server, credential).Instance;
+            var t = (TeamFoundationTeam)GetTeam(team, project, collection, server, credential).Instance;
 
             var teamSvc = GetTeamService(project, collection, server, credential, out var _);
 
@@ -112,17 +69,40 @@ namespace TfsCmdlets.PSWindows.TfsApi.Services
         private TfsTeamService GetTeamService(object project, object collection, object server, object credential,
             out string projectId)
         {
-            var tp = (Project) ProjectService.GetProject(project, collection, server, credential).Instance;
+            var tp = (Project)ProjectService.GetProject(project, collection, server, credential).Instance;
             var tpc = tp.Store.TeamProjectCollection;
             var teamSvc = tpc.GetService<TfsTeamService>();
             projectId = tp.Uri.AbsoluteUri;
             return teamSvc;
         }
 
+        #region Get Items
+
+        protected override string ItemName => "team";
+        protected override Func<TeamFoundationTeam, string> ItemDescriptor => (t => t.Name);
+
+        public ITeamFoundationTeamAdapter GetTeam(object team, object project, object collection, object server, object credential)
+            => new TeamFoundationTeamAdapter(GetItem(team, project, collection, server, credential));
+
+        public IEnumerable<ITeamFoundationTeamAdapter> GetTeams(object team, object project, object collection, object server, object credential)
+            => GetItems(team, project, collection, server, credential).Select(t => new TeamFoundationTeamAdapter(t));
+
+        protected override IEnumerable<TeamFoundationTeam> GetAllItems(object item, ScopeObjects so)
+        {
+            var teamSvc = GetTeamService(so.Project, so.Collection, so.Server, so.Credential, out var projectId);
+            return teamSvc.QueryTeams(projectId);
+        }
+
+        #endregion
+
+        #region Imports
+
         [Import(typeof(IProjectService))]
         private IProjectService ProjectService { get; set; }
 
         [Import(typeof(IIdentityManagementService))]
         private IIdentityManagementService IdentityManagementService { get; set; }
+
+        #endregion
     }
 }

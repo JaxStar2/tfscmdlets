@@ -13,17 +13,17 @@ namespace TfsCmdlets.Cmdlets.Build
     {
         protected IBuildDefinitionAdapter GetBuildDefinition()
         {
-            return BuildService.GetBuildDefinition(Definition, Project, Collection, Server, Credential);
+            return BuildDefinitionService.GetBuildDefinition(Definition, Project, Collection, Server, Credential);
         }
 
         protected IEnumerable<IBuildDefinitionAdapter> GetBuildDefinitions()
         {
-            return BuildService.GetBuildDefinitions(Definition, Project, Collection, Server, Credential);
+            return BuildDefinitionService.GetBuildDefinitions(Definition, Project, Collection, Server, Credential);
         }
 
         public abstract object Definition { get; set; }
 
-        [Import(typeof(IBuildService))]
-        protected IBuildService BuildService { get; set; }
+        [Import(typeof(IBuildDefinitionService))]
+        protected IBuildDefinitionService BuildDefinitionService { get; set; }
     }
 }
