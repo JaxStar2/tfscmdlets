@@ -10,8 +10,8 @@
     PowerShellVersion = '5.0'
     TypesToProcess = "TfsCmdlets.Types.ps1xml"
     FormatsToProcess = "TfsCmdlets.Format.ps1xml"
-    #ScriptsToProcess = 'Startup.ps1'
-    #FileList = @(${FileList})
+    #DscResourcesToExport = 'TfsCollection'
+    #NestedModules = 'DscResources\TfsCollection\TfsCollection.psd1'
 
     PrivateData = @{ 
         Tags = @('TfsCmdlets', 'TFS', 'VSTS', 'PowerShell')

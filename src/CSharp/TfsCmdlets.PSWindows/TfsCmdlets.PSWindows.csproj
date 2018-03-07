@@ -23,8 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>bin\Debug\TfsCmdlets.PSWindows.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -68,121 +67,67 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyResolver.cs" />
-    <Compile Include="Cmdlets\AreaIteration\NodeCmdletBase.cs" />
-    <Compile Include="Cmdlets\BaseCmdlet.cs" />
-    <Compile Include="Cmdlets\Build\BuildCmdletBase.cs" />
-    <Compile Include="Cmdlets\Build\GetBuildDefinition.cs" />
-    <Compile Include="Cmdlets\CollectionLevelCmdlet.cs" />
-    <Compile Include="Cmdlets\ConfigurationServer\GetConfigurationServer.cs" />
-    <Compile Include="Cmdlets\ConfigurationServer\GetRegisteredConfigurationServer.cs" />
-    <Compile Include="Cmdlets\ConfigurationServer\NewRegisteredConfigurationServer.cs" />
-    <Compile Include="Cmdlets\ConfigurationServer\RemoveRegisteredConfigurationServer.cs" />
-    <Compile Include="Cmdlets\Connection\ConnectConfigurationServer.cs" />
-    <Compile Include="Cmdlets\Connection\ConnectTeamProjectCollection.cs" />
-    <Compile Include="Cmdlets\Connection\GetCredential.cs" />
-    <Compile Include="Cmdlets\Git\GitCmdletBase.cs" />
-    <Compile Include="Cmdlets\GlobalList\GlobalListCmdletBase.cs" />
-    <Compile Include="Cmdlets\ProcessConfiguration\GetProcessConfiguration.cs" />
-    <Compile Include="Cmdlets\ProcessTemplate\ExportProcessTemplate.cs" />
-    <Compile Include="Cmdlets\ProcessTemplate\ProcessTemplateCmdletBase.cs" />
-    <Compile Include="Cmdlets\ProcessTemplate\RemoveProcessTemplate.cs" />
-    <Compile Include="Cmdlets\ProjectLevelCmdlet.cs" />
-    <Compile Include="Cmdlets\Security\AddGroupMember.cs" />
-    <Compile Include="Cmdlets\Security\GetGroup.cs" />
-    <Compile Include="Cmdlets\Security\NewGroup.cs" />
-    <Compile Include="Cmdlets\ServerLevelCmdlet.cs" />
-    <Compile Include="Cmdlets\TeamProjectCollection\GetTeamProjectCollection.cs" />
-    <Compile Include="Cmdlets\TeamProjectCollection\NewRegisteredTeamProjectCollection.cs" />
-    <Compile Include="Cmdlets\TeamProjectCollection\RemoveRegisteredTeamProjectCollection.cs" />
-    <Compile Include="Cmdlets\TeamProject\RemoveTeamProject.cs" />
-    <Compile Include="Cmdlets\Team\GetTeam.cs" />
-    <Compile Include="Cmdlets\Team\NewTeam.cs" />
-    <Compile Include="Cmdlets\Team\RemoveTeam.cs" />
-    <Compile Include="Cmdlets\Team\SetTeam.cs" />
-    <Compile Include="Cmdlets\Team\RenameTeam.cs" />
-    <Compile Include="Cmdlets\TeamLevelCmdlet.cs" />
-    <Compile Include="Cmdlets\WorkItemLink\GetWorkItemLink.cs" />
-    <Compile Include="Cmdlets\WorkItemQuery\GetWorkItemQueryFolder.cs" />
-    <Compile Include="Cmdlets\WorkItemQuery\WorkItemQueryCmdletBase.cs" />
-    <Compile Include="Cmdlets\WorkItemTag\GetWorkItemTag.cs" />
-    <Compile Include="Cmdlets\WorkItemType\ImportWorkItemType.cs" />
-    <Compile Include="Cmdlets\WorkItemType\WorkItemTypeCmdletBase.cs" />
-    <Compile Include="Cmdlets\WorkItem\CopyWorkItem.cs" />
-    <Compile Include="Cmdlets\WorkItem\GetWorkItem.cs" />
-    <Compile Include="Cmdlets\WorkItem\WorkItemCmdletBase.cs" />
-    <Compile Include="DscResources\TfsTeamProjectCollection.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceLocator.cs" />
-    <Compile Include="StringExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <Compile Include="Cmdlets\AreaIteration\GetNode.cs" />
-    <Compile Include="Cmdlets\AreaIteration\MoveNode.cs" />
-    <Compile Include="Cmdlets\AreaIteration\NewNode.cs" />
-    <Compile Include="Cmdlets\AreaIteration\RemoveNode.cs" />
-    <Compile Include="Cmdlets\AreaIteration\RenameNode.cs" />
-    <Compile Include="Cmdlets\AreaIteration\SetNode.cs" />
-    <Compile Include="Cmdlets\Connection\ConnectTeamProject.cs" />
-    <Compile Include="Cmdlets\Connection\DisconnectConfigurationServer.cs" />
-    <Compile Include="Cmdlets\Connection\DisconnectTeamProject.cs" />
-    <Compile Include="Cmdlets\Connection\DisconnectTeamProjectCollection.cs" />
-    <Compile Include="Cmdlets\Git\GetGitRepository.cs" />
-    <Compile Include="Cmdlets\Git\NewGitRepository.cs" />
-    <Compile Include="Cmdlets\Git\RemoveRepository.cs" />
-    <Compile Include="Cmdlets\Git\RenameGitRepository.cs" />
-    <Compile Include="Cmdlets\GlobalList\ExportGlobalList.cs" />
-    <Compile Include="Cmdlets\GlobalList\GetGlobalList.cs" />
-    <Compile Include="Cmdlets\GlobalList\ImportGlobalList.cs" />
-    <Compile Include="Cmdlets\GlobalList\NewGlobalList.cs" />
-    <Compile Include="Cmdlets\GlobalList\RemoveGlobalList.cs" />
-    <None Include="Cmdlets\GlobalList\Set-TfsGlobalList.ps1" />
-    <Compile Include="Cmdlets\ProcessTemplate\GetProcessTemplate.cs" />
-    <Compile Include="Cmdlets\ProcessTemplate\ImportProcessTemplate.cs" />
-    <Compile Include="Cmdlets\TeamProjectCollection\DismountTeamProjectCollection.cs" />
-    <Compile Include="Cmdlets\TeamProjectCollection\GetRegisteredTeamProjectCollection.cs" />
-    <Compile Include="Cmdlets\TeamProjectCollection\MountTeamProjectCollection.cs" />
-    <Compile Include="Cmdlets\TeamProjectCollection\NewTeamProjectCollection.cs" />
-    <Compile Include="Cmdlets\TeamProjectCollection\RemoveTeamProjectCollection.cs" />
-    <Compile Include="Cmdlets\TeamProjectCollection\StartTeamProjectCollection.cs" />
-    <Compile Include="Cmdlets\TeamProjectCollection\StopTeamProjectCollection.cs" />
-    <Compile Include="Cmdlets\TeamProject\GetTeamProject.cs" />
-    <Compile Include="Cmdlets\TeamProject\NewTeamProject.cs" />
-    <None Include="Cmdlets\WorkItemQuery\Export-TfsWorkItemQuery.ps1" />
-    <Compile Include="Cmdlets\WorkItemQuery\GetWorkItemQuery.cs" />
-    <None Include="Cmdlets\WorkItemQuery\New-TfsWorkItemQuery.ps1" />
-    <None Include="Cmdlets\WorkItemQuery\New-TfsWorkItemQueryFolder.ps1" />
-    <None Include="Cmdlets\WorkItemQuery\Remove-TfsWorkItemQuery.ps1" />
-    <None Include="Cmdlets\WorkItemQuery\Remove-TfsWorkItemQueryFolder.ps1" />
-    <None Include="Cmdlets\WorkItemQuery\Rename-TfsWorkItemQuery.ps1" />
-    <None Include="Cmdlets\WorkItemQuery\Set-TfsWorkItemQuery.ps1" />
-    <None Include="Cmdlets\WorkItemQuery\WorkItemQuery.psd1" />
-    <None Include="Cmdlets\WorkItemLink\Add-TfsWorkItemLink.ps1" />
-    <Compile Include="Cmdlets\WorkItemType\ExportWorkItemType.cs" />
-    <Compile Include="Cmdlets\WorkItem\GetWorkItemHistory.cs" />
-    <None Include="Cmdlets\WorkItemLink\Get-TfsWorkItemLink.ps1" />
-    <None Include="Cmdlets\WorkItemLink\Get-TfsWorkItemLinkEndType.ps1" />
-    <Compile Include="Cmdlets\WorkItemType\GetWorkItemType.cs" />
-    <None Include="Cmdlets\WorkItemType\Import-TfsWorkItemType.ps1" />
-    <Compile Include="Cmdlets\WorkItem\NewWorkItem.cs" />
-    <Compile Include="Cmdlets\WorkItem\RemoveWorkItem.cs" />
-    <Compile Include="Cmdlets\WorkItem\SetWorkItem.cs" />
-    <None Include="packages.config" />
-    <None Include="Startup.ps1" />
-    <None Include="TfsCmdlets.Format.ps1xml">
+    <Compile Include="**\*.cs" Exclude="obj\**\*;bin\**\*" />
+    <None Include="*.config" />
+    <None Include="Build.props" />
+    <None Include="Build.targets" />
+    <None Include="Cmdlets\GlobalList\Set-TfsGlobalList.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Cmdlets\WorkItemLink\Add-TfsWorkItemLink.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Cmdlets\WorkItemLink\Get-TfsWorkItemLink.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Cmdlets\WorkItemLink\Get-TfsWorkItemLinkEndType.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Cmdlets\WorkItemQuery\Export-TfsWorkItemQuery.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Cmdlets\WorkItemQuery\New-TfsWorkItemQuery.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Cmdlets\WorkItemQuery\New-TfsWorkItemQueryFolder.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Cmdlets\WorkItemQuery\Remove-TfsWorkItemQuery.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Cmdlets\WorkItemQuery\Remove-TfsWorkItemQueryFolder.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Cmdlets\WorkItemQuery\Rename-TfsWorkItemQuery.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Cmdlets\WorkItemQuery\Set-TfsWorkItemQuery.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Cmdlets\WorkItemType\Import-TfsWorkItemType.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ReplaceTokensInFile.Task.targets">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Startup.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Cmdlets\WorkItemQuery\WorkItemQuery.psd1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TfsCmdlets.psd1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="TfsCmdlets.Format.ps1xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TfsCmdlets.Types.ps1xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Cmdlets\ReleaseManagement\" />
-    <Folder Include="Cmdlets\ServiceHook\" />
+    <None Include="Tokens.targets">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TfsCmdlets.Core\TfsCmdlets.Core.csproj">
@@ -194,5 +139,17 @@
       <Name>TfsCmdlets.PSWindows.TfsApi</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Cmdlets\ReleaseManagement\" />
+    <Folder Include="Cmdlets\ServiceHook\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\XmlDoc2CmdletDoc.0.2.10\build\XmlDoc2CmdletDoc.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\XmlDoc2CmdletDoc.0.2.10\build\XmlDoc2CmdletDoc.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\XmlDoc2CmdletDoc.0.2.10\build\XmlDoc2CmdletDoc.targets'))" />
+  </Target>
+  <Import Project="Build.targets" />
 </Project>
