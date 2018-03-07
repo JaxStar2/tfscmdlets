@@ -5,7 +5,7 @@ namespace TfsCmdlets.Cmdlets.Git
 {
     [Cmdlet(VerbsCommon.New, "GitRepository", ConfirmImpact = ConfirmImpact.Medium,
         SupportsShouldProcess = true)]
-    [OutputType("Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository")]
+    [OutputType("Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository,Microsoft.TeamFoundation.SourceControl.WebApi")]
     public class NewGitRepository : GitCmdletBase
     {
         protected override void ProcessRecord()

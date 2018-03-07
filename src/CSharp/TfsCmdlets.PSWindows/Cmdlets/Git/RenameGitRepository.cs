@@ -5,7 +5,7 @@ using TfsCmdlets.Core.Adapters;
 namespace TfsCmdlets.Cmdlets.Git
 {
     [Cmdlet(VerbsCommon.Rename, "GitRepository", ConfirmImpact = ConfirmImpact.Medium,SupportsShouldProcess = true)]
-    [OutputType("Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository")]
+    [OutputType("Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository,Microsoft.TeamFoundation.SourceControl.WebApi")]
     public class RenameGitRepository : GitCmdletBase
     {
         protected override void ProcessRecord()

@@ -19,7 +19,7 @@ namespace TfsCmdlets.Cmdlets.TeamProjectCollection
     #>
     */
     [Cmdlet(VerbsCommon.Get, "RegisteredTeamProjectCollection")]
-    [OutputType("Microsoft.TeamFoundation.Client.RegisteredProjectCollection")]
+    [OutputType("Microsoft.TeamFoundation.Client.RegisteredProjectCollection,Microsoft.TeamFoundation.Client")]
     public class GetRegisteredTeamProjectCollection : Cmdlet
     {
         [Parameter(Position = 0, ValueFromPipeline = true)]

@@ -11,7 +11,7 @@ using TfsCmdlets.Core.Services;
 namespace TfsCmdlets.Cmdlets.Security
 {
     [Cmdlet(VerbsCommon.New, "Group", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType("Microsoft.TeamFoundation.Framework.Client.TeamFoundationIdentity")]
+    [OutputType("Microsoft.TeamFoundation.Framework.Client.TeamFoundationIdentity,Microsoft.TeamFoundation.Client")]
     public class NewGroup: ProjectLevelCmdlet
     {
         protected override void ProcessRecord()

@@ -20,7 +20,7 @@ namespace TfsCmdlets.Cmdlets.Connection
 
     #>*/
     [Cmdlet(VerbsCommon.Get, "Credential", DefaultParameterSetName = "Prompt for credential")]
-    [OutputType("Microsoft.VisualStudio.Services.Common.VssCredentials")]
+    [OutputType("Microsoft.VisualStudio.Services.Common.VssCredentials,Microsoft.VisualStudio.Services.Common")]
     public class GetCredential : BaseCmdlet
     {
         [Parameter(ParameterSetName = "Cached Credential", Mandatory = true)]

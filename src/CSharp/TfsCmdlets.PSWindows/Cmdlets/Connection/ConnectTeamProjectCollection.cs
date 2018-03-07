@@ -5,7 +5,7 @@ using TfsCmdlets.Core.Services;
 namespace TfsCmdlets.Cmdlets.Connection
 {
     [Cmdlet(VerbsCommunications.Connect, "TeamProjectCollection", DefaultParameterSetName = "Explicit credentials")]
-    [OutputType("Microsoft.TeamFoundation.Client.TfsTeamProjectCollection")]
+    [OutputType("Microsoft.TeamFoundation.Client.TfsTeamProjectCollection,Microsoft.TeamFoundation.Client")]
     public class ConnectTeamProjectCollection : CollectionLevelCmdlet
     {
         protected override void ProcessRecord()

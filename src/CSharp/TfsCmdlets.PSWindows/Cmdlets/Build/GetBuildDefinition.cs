@@ -6,7 +6,7 @@ using TfsCmdlets.Core.Services;
 namespace TfsCmdlets.Cmdlets.Build
 {
     [Cmdlet(VerbsCommon.Get, "BuildDefinition")]
-    [OutputType("Microsoft.TeamFoundation.Build.WebApi.BuildDefinition")]
+    [OutputType("Microsoft.TeamFoundation.Build.WebApi.BuildDefinition,Microsoft.TeamFoundation.Build2.WebApi")]
     public class GetBuildDefinition : BuildCmdletBase
     {
         protected override void ProcessRecord()

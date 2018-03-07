@@ -3,7 +3,7 @@ using System.Management.Automation;
 namespace TfsCmdlets.Cmdlets.AreaIteration
 {
     [Cmdlet(VerbsCommon.Get, "Area")]
-    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo")]
+    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo,Microsoft.TeamFoundation.Client")]
     public class GetArea : GetNodeCmdletBase
     {
         [Parameter(Position = 0)]
@@ -13,7 +13,7 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
     }
 
     [Cmdlet(VerbsCommon.Get, "Iteration")]
-    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo")]
+    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo,Microsoft.TeamFoundation.Client")]
     public class GetIteration : GetNodeCmdletBase
     {
         [Parameter(Position = 0)]

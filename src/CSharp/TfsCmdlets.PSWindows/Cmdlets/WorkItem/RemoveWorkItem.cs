@@ -4,7 +4,7 @@ using System.Management.Automation;
 namespace TfsCmdlets.Cmdlets.WorkItem
 {
     [Cmdlet(VerbsCommon.Remove, "WorkItem", ConfirmImpact = ConfirmImpact.High, SupportsShouldProcess = true)]
-    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem")]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem,Microsoft.TeamFoundation.WorkItemTracking.Client")]
     public class RemoveWorkItem : WorkItemCmdletBase
     {
         protected override void ProcessRecord()

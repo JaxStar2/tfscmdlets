@@ -5,7 +5,7 @@ using System.Management.Automation;
 namespace TfsCmdlets.Cmdlets.ProcessTemplate
 {
     [Cmdlet(VerbsCommon.Get, "ProcessTemplate")]
-    [OutputType("Microsoft.TeamFoundation.Server.TemplateHeader")]
+    [OutputType("Microsoft.TeamFoundation.Server.TemplateHeader,Microsoft.TeamFoundation.Client")]
     public class GetProcessTemplate : ProcessTemplateCmdletBase
     {
         protected override void ProcessRecord()

@@ -27,7 +27,7 @@ namespace TfsCmdlets.Cmdlets.ConfigurationServer
     */
 
     [Cmdlet(VerbsCommon.Get, "ConfigurationServer", DefaultParameterSetName = "Get by server")]
-    [OutputType("Microsoft.TeamFoundation.Client.TfsConfigurationServer")]
+    [OutputType("Microsoft.TeamFoundation.Client.TfsConfigurationServer,Microsoft.TeamFoundation.Client")]
     public class GetConfigurationServer : ServerLevelCmdlet
     {
         protected override void ProcessRecord()

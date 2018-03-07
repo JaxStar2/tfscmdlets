@@ -3,7 +3,7 @@ using System.Management.Automation;
 namespace TfsCmdlets.Cmdlets.Git
 {
     [Cmdlet(VerbsCommon.Get, "GitRepository")]
-    [OutputType("Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository")]
+    [OutputType("Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository,Microsoft.TeamFoundation.SourceControl.WebApi")]
     public class GetGitRepository : GitCmdletBase
     {
         [Parameter(Position = 0)]

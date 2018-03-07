@@ -3,7 +3,7 @@ using System.Management.Automation;
 namespace TfsCmdlets.Cmdlets.Team
 {
     [Cmdlet(VerbsCommon.Get, "Team", DefaultParameterSetName = "Get by name")]
-    [OutputType("Microsoft.TeamFoundation.Client.TeamFoundationTeam")]
+    [OutputType("Microsoft.TeamFoundation.Client.TeamFoundationTeam,Microsoft.TeamFoundation.Client")]
     public class GetTeam : TeamLevelCmdlet
     {
         protected override void ProcessRecord()

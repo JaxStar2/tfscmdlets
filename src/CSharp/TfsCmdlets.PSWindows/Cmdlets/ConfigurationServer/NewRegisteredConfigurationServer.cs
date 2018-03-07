@@ -6,7 +6,7 @@ using TfsCmdlets.Core.Services;
 namespace TfsCmdlets.Cmdlets.ConfigurationServer
 {
     [Cmdlet(VerbsCommon.New, "RegisteredConfigurationServer", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType("Microsoft.TeamFoundation.Client.RegisteredConfigurationServer")]
+    [OutputType("Microsoft.TeamFoundation.Client.RegisteredConfigurationServer,Microsoft.TeamFoundation.Client")]
     public class NewRegisteredConfigurationServer : ServerLevelCmdlet
     {
         protected override void ProcessRecord()

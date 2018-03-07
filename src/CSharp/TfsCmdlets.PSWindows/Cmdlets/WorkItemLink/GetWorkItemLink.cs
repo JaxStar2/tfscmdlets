@@ -4,7 +4,7 @@ using TfsCmdlets.Cmdlets.WorkItem;
 namespace TfsCmdlets.Cmdlets.WorkItemLink
 {
     [Cmdlet(VerbsCommon.Get, "WorkItemLink")]
-    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.Link")]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.Link,Microsoft.TeamFoundation.WorkItemTracking.Client")]
     public class GetWorkItemLink : WorkItemCmdletBase
     {
         protected override void ProcessRecord()

@@ -4,7 +4,7 @@ using System.Management.Automation;
 namespace TfsCmdlets.Cmdlets.Team
 {
     [Cmdlet(VerbsCommon.Rename, "Team", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType("Microsoft.TeamFoundation.Client.TeamFoundationTeam")]
+    [OutputType("Microsoft.TeamFoundation.Client.TeamFoundationTeam,Microsoft.TeamFoundation.Client")]
     public class RenameTeam : TeamLevelCmdlet
     {
         protected override void ProcessRecord()

@@ -6,7 +6,7 @@ using TfsCmdlets.Core.Adapters;
 namespace TfsCmdlets.Cmdlets.AreaIteration
 {
     [Cmdlet(VerbsCommon.Set, "Area", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
-    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo")]
+    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo,Microsoft.TeamFoundation.Client")]
     public class SetArea : SetNodeCmdletBase
     {
         [Parameter(Position = 0, Mandatory = true,ValueFromPipeline = true)]
@@ -16,7 +16,7 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
     }
 
     [Cmdlet(VerbsCommon.Set, "Iteration", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
-    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo")]
+    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo,Microsoft.TeamFoundation.Client")]
     public class SetIteration : SetNodeCmdletBase
     {
         [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]

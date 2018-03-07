@@ -3,7 +3,7 @@ using System.Management.Automation;
 namespace TfsCmdlets.Cmdlets.Team
 {
     [Cmdlet(VerbsCommon.New, "Team", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType("Microsoft.TeamFoundation.Client.TeamFoundationTeam")]
+    [OutputType("Microsoft.TeamFoundation.Client.TeamFoundationTeam,Microsoft.TeamFoundation.Client")]
     public class NewTeam : TeamLevelCmdlet
     {
         protected override void ProcessRecord()

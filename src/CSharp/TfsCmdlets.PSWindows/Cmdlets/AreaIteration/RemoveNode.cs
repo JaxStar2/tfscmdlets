@@ -4,7 +4,7 @@ using System.Management.Automation;
 namespace TfsCmdlets.Cmdlets.AreaIteration
 {
     [Cmdlet(VerbsCommon.Remove, "Area", ConfirmImpact = ConfirmImpact.High, SupportsShouldProcess = true)]
-    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo")]
+    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo,Microsoft.TeamFoundation.Client")]
     public class RemoveArea : RemoveNodeCmdletBase
     {
         [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]
@@ -14,7 +14,7 @@ namespace TfsCmdlets.Cmdlets.AreaIteration
     }
 
     [Cmdlet(VerbsCommon.Remove, "Iteration", ConfirmImpact = ConfirmImpact.High, SupportsShouldProcess = true)]
-    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo")]
+    [OutputType("Microsoft.TeamFoundation.Server.NodeInfo,Microsoft.TeamFoundation.Client")]
     public class RemoveIteration : RemoveNodeCmdletBase
     {
         [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]

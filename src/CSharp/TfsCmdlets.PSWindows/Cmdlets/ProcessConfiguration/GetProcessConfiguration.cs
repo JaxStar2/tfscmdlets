@@ -5,7 +5,7 @@ using TfsCmdlets.Core.Services;
 namespace TfsCmdlets.Cmdlets.ProcessConfiguration
 {
     [Cmdlet(VerbsCommon.Get, "ProcessConfiguration")]
-    [OutputType("Microsoft.TeamFoundation.ProcessConfiguration.Client.ProjectProcessConfiguration")]
+    [OutputType("Microsoft.TeamFoundation.ProcessConfiguration.Client.ProjectProcessConfiguration,Microsoft.TeamFoundation.ProjectManagement")]
     public class GetProcessConfiguration: ProjectLevelCmdlet
     {
         protected override void ProcessRecord()

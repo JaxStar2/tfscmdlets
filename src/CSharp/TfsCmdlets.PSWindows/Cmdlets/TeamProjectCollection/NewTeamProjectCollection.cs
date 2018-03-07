@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Management.Automation;
 using TfsCmdlets.Core;
-using TfsCmdlets.DscResources;
 
 namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 {
     [Cmdlet(VerbsCommon.New, "TeamProjectCollection", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType(typeof(TfsTeamProjectCollection))]
+    [OutputType("Microsoft.TeamFoundation.Client.TfsTeamProjectCollection,Microsoft.TeamFoundation.Client")]
     public class NewTeamProjectCollection : CollectionLevelCmdlet
     {
         protected override void ProcessRecord()

@@ -8,7 +8,7 @@ namespace TfsCmdlets.Cmdlets.TeamProject
 {
     [Cmdlet(VerbsCommon.New, "TeamProject", ConfirmImpact = ConfirmImpact.Medium,
         SupportsShouldProcess = true)]
-    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.Project")]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.Project,Microsoft.TeamFoundation.WorkItemTracking.Client")]
     public class NewTeamProject : ProjectLevelCmdlet
     {
         protected override void ProcessRecord()

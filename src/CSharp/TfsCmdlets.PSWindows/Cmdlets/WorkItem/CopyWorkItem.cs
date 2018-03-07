@@ -6,7 +6,7 @@ using TfsCmdlets.Core.Adapters;
 namespace TfsCmdlets.Cmdlets.WorkItem
 {
     [Cmdlet(VerbsCommon.Copy, "WorkItem")]
-    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem")]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem,Microsoft.TeamFoundation.WorkItemTracking.Client")]
     public class CopyWorkItem : WorkItemCmdletBase
     {
         protected override void ProcessRecord()

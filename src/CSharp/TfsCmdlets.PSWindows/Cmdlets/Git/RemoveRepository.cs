@@ -6,7 +6,7 @@ namespace TfsCmdlets.Cmdlets.Git
 {
     [Cmdlet(VerbsCommon.Remove, "GitRepository", SupportsShouldProcess = true,
         ConfirmImpact = ConfirmImpact.High)]
-    [OutputType("Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository")]
+    [OutputType("Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository,Microsoft.TeamFoundation.SourceControl.WebApi")]
     public class RemoveGitRepository : GitCmdletBase
     {
         protected override void ProcessRecord()

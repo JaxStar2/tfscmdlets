@@ -10,7 +10,7 @@ using TfsCmdlets.Core.Services;
 namespace TfsCmdlets.Cmdlets.WorkItemTag
 {
     [Cmdlet(VerbsCommon.Get, "WorkItemTag")]
-    [OutputType("Microsoft.TeamFoundation.Core.WebApi.WebApiTagDefinition")]
+    [OutputType("Microsoft.TeamFoundation.Core.WebApi.WebApiTagDefinition,Microsoft.TeamFoundation.Core.WebApi")]
     public class GetWorkItemTag: ProjectLevelCmdlet
     {
         protected override void ProcessRecord()

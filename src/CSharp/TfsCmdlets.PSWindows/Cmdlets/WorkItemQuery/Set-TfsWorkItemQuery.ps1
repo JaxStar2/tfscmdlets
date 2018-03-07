@@ -22,7 +22,7 @@
 Function Set-TfsWorkItemQuery
 {
     [CmdletBinding(ConfirmImpact='Medium', SupportsShouldProcess=$true)]
-    [OutputType([Microsoft.TeamFoundation.WorkItemTracking.Client.QueryDefinition])]
+    [OutputType('Microsoft.TeamFoundation.WorkItemTracking.Client.QueryDefinition,Microsoft.TeamFoundation.WorkItemTracking.Client')]
     Param
     (
         [Parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true)]

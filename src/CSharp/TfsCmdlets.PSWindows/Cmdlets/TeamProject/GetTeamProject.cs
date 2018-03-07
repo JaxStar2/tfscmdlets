@@ -6,7 +6,7 @@ using TfsCmdlets.Core.Services;
 namespace TfsCmdlets.Cmdlets.TeamProject
 {
     [Cmdlet(VerbsCommon.Get, "TeamProject", DefaultParameterSetName = "Get by project")]
-    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.Project")]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.Project,Microsoft.TeamFoundation.WorkItemTracking.Client")]
     public class GetTeamProject : ProjectLevelCmdlet
     {
         protected override void ProcessRecord()

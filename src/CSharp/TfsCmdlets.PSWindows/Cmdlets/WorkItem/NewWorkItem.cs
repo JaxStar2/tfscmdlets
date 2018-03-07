@@ -8,7 +8,7 @@ using TfsCmdlets.Core.Services;
 namespace TfsCmdlets.Cmdlets.WorkItem
 {
     [Cmdlet(VerbsCommon.New, "WorkItem", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem")]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem,Microsoft.TeamFoundation.WorkItemTracking.Client")]
     public class NewWorkItem : WorkItemCmdletBase
     {
         protected override void ProcessRecord()

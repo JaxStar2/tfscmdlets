@@ -6,7 +6,7 @@ using TfsCmdlets.Core.Services;
 namespace TfsCmdlets.Cmdlets.TeamProjectCollection
 {
     [Cmdlet(VerbsCommon.New, "RegisteredTeamProjectCollection", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType("Microsoft.TeamFoundation.Client.RegisteredProjectCollection")]
+    [OutputType("Microsoft.TeamFoundation.Client.RegisteredProjectCollection,Microsoft.TeamFoundation.Client")]
     public class NewRegisteredTeamProjectCollection: CollectionLevelCmdlet
     {
         protected override void ProcessRecord()

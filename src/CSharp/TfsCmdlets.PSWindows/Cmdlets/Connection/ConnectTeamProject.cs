@@ -42,7 +42,7 @@ namespace TfsCmdlets.Cmdlets.Connection
     #>
     */
     [Cmdlet(VerbsCommunications.Connect, "TeamProject", DefaultParameterSetName = "Explicit credentials")]
-    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.Project")]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.Project,Microsoft.TeamFoundation.WorkItemTracking.Client")]
     public class ConnectTeamProject : ProjectLevelCmdlet
     {
         protected override void ProcessRecord()

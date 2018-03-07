@@ -4,7 +4,7 @@ using TfsCmdlets.Core;
 namespace TfsCmdlets.Cmdlets.WorkItemQuery
 {
     [Cmdlet(VerbsCommon.Get, "WorkItemQuery")]
-    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.QueryDefinition2")]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.QueryDefinition2,Microsoft.TeamFoundation.WorkItemTracking.Client")]
     public class GetWorkItemQuery : WorkItemQueryCmdletBase
     {
         protected override void ProcessRecord()

@@ -6,7 +6,7 @@ using System.Management.Automation;
 namespace TfsCmdlets.Cmdlets.WorkItem
 {
     [Cmdlet(VerbsCommon.Set, "WorkItem", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem")]
+    [OutputType("Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem,Microsoft.TeamFoundation.WorkItemTracking.Client")]
     public class SetWorkItem : WorkItemCmdletBase
     {
         protected override void ProcessRecord()
