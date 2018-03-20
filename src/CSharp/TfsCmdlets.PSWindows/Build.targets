@@ -8,6 +8,9 @@
     <ReplaceTokensInFile Inputs="$(OutDir)TfsCmdlets.PSWindows.xml" Destination="$(OutDir)TfsCmdlets.PSWindows.xml" Tokens="@(Token)"/>
   </Target>
 
+  <Target Name="CopyFilesToModuleDir">
+    <Copy SourceFiles="$(OutDir)" DestinationFolder="$(SourceDir)" />
+  </Target>
 <!--
   <ItemGroup>
     <ScriptFragment Include="@(Compile->'$(SourceDir)\%(Identity)')">

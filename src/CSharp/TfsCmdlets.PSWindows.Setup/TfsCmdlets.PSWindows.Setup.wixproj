@@ -56,8 +56,9 @@
       <Name>TfsCmdlets.PSWindows</Name>
       <Project>{bdc27dcc-ef3b-410f-9f1f-86110d3276d7}</Project>
       <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <DoNotHarvest>
+      </DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
   </ItemGroup>

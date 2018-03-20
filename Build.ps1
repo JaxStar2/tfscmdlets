@@ -1,7 +1,7 @@
 [CmdletBinding()]
 Param
 (
-    $SolutionDir = (Join-Path $PSScriptRoot 'src'),
+    $SolutionDir = (Join-Path $PSScriptRoot 'src\CSharp'),
     $Configuration = 'Release',
     $EnableFusionLog = $false,
     $ModuleName = 'TfsCmdlets',
@@ -37,8 +37,12 @@ try
 
     if (-not (Test-Path $NugetExePath -PathType Leaf))
     {
-        Write-Verbose "Nuget.exe not found. Downloading from https://dist.nuget.org"
+        Write-Verbose "Nuget.exe not found in $NugetExePath. Downloading from https://dist.nuget.org"
         Invoke-WebRequest -Uri https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -OutFile $NugetExePath | Write-Verbose
+    }
+    else
+    {
+        Write-Verbose "FOUND! Skipping..."    
     }
 
     # Restore/install GitVersion
@@ -49,8 +53,9 @@ try
 
     if (-not (Test-Path $GitVersionPath -PathType Leaf))
     {
-        Write-Verbose "GitVersion.exe not found. Downloading from Nuget.org"
-        & $NugetExePath Install GitVersion.CommandLine -ExcludeVersion -OutputDirectory Packages *>&1 | Write-Verbose
+        Write-Verbose "GitVersion.exe not found in $GitVersionPath. Downloading from Nuget.org"
+        "$NugetExePath Install GitVersion.CommandLine -ExcludeVersion -OutputDirectory Packages -NoCache -DirectDownload -Verbosity Detailed"
+        & $NugetExePath Install GitVersion.CommandLine -ExcludeVersion -OutputDirectory Packages -NoCache -DirectDownload -Verbosity Detailed *>&1 | Write-Verbose
     }
     else
     {
@@ -70,25 +75,6 @@ try
     {
         Write-Output "##vso[build.updatebuildnumber]$BuildName"
     }
-
-    # Restore/install Psake
-
-    Write-Verbose "Restoring Psake (if needed)"
-
-    $psakeModulePath = Join-Path $SolutionDir 'packages\psake\tools\psake.psm1'
-
-    if (-not (Test-Path $psakeModulePath -PathType Leaf))
-    {
-        Write-Verbose "psake.psm1 not found. Downloading from Nuget.org"
-        & $NugetExePath Install psake -ExcludeVersion -OutputDirectory packages *>&1 | Write-Verbose
-    }
-    else
-    {
-        Write-Verbose "FOUND! Skipping..."    
-    }
-
-    Get-Module psake | Remove-Module
-    Import-Module $psakeModulePath
 
     # Restore/install vswhere
 
@@ -116,7 +102,7 @@ try
 
     Write-Verbose "Found Visual Studio $vsVersion"
 
-    # Run Psake
+    # Run build
 
     $IsVerbose = [bool] ($PSBoundParameters['Verbose'].IsPresent)
 
