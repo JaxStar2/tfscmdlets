@@ -711,6 +711,10 @@
             <Label>Computer</Label>
           </TableColumnHeader>
           <TableColumnHeader>
+            <Width>20</Width>
+            <Label>Last Access</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
             <Label>Comment</Label>
           </TableColumnHeader>
         </TableHeaders>
@@ -726,6 +730,9 @@
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Computer</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>LastAccessDate</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Comment</PropertyName>

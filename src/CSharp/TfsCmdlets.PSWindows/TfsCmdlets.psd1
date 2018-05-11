@@ -10,6 +10,7 @@
     PowerShellVersion = '5.0'
     TypesToProcess = "TfsCmdlets.Types.ps1xml"
     FormatsToProcess = "TfsCmdlets.Format.ps1xml"
+    ScriptsToProcess = 'Startup.ps1'
     DefaultCommandPrefix = 'Tfs'
     #DscResourcesToExport = 'TfsCollection'
     #NestedModules = 'DscResources\TfsCollection\TfsCollection.psd1'

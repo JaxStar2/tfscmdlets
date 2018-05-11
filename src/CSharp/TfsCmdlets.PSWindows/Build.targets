@@ -5,13 +5,16 @@
   <Import Project="Tokens.targets" />
 
   <Target Name="ApplyTokens" BeforeTargets="XmlDoc2CmdletDoc">
-    <ReplaceTokensInFile Inputs="$(OutDir)TfsCmdlets.PSWindows.xml" Destination="$(OutDir)TfsCmdlets.PSWindows.xml" Tokens="@(Token)"/>
+    <ItemGroup>
+      <TokenizedFile Include="$(OutDir)TfsCmdlets.PSWindows.xml"/>
+      <TokenizedFile Include="$(OutDir)TfsCmdlets.*.ps1xml"/>
+      <TokenizedFile Include="$(OutDir)TfsCmdlets.*.psd1"/>
+      <TokenizedFile Include="$(OutDir)TfsCmdlets.*.ps1"/>
+    </ItemGroup>
+    <!--<ReplaceTokensInFile Inputs="@(TokenizedFile)" Destination="@(TokenizedFile->'%(Identity)')" Tokens="@(Token)"/>-->
   </Target>
 
-  <Target Name="CopyFilesToModuleDir">
-    <Copy SourceFiles="$(OutDir)" DestinationFolder="$(SourceDir)" />
-  </Target>
-<!--
+  <!--
   <ItemGroup>
     <ScriptFragment Include="@(Compile->'$(SourceDir)\%(Identity)')">
       <ModuleName>$([System.Text.RegularExpressions.Regex]::Match(%(RelativeDir), '(?&lt;name&gt;[^\\]*)\\$').Groups['name'].Value)</ModuleName>
@@ -36,10 +39,6 @@
       </Token>
     </ItemGroup>
     <ReplaceTokensInFile Inputs="$(SourceDir)\%(Content.Identity)" Destination="$(OutDir)TfsCmdlets\%(Content.Identity)" Tokens="@(Token)"/>
-  </Target>
-
-  <Target Name="CopyResources" Inputs="@(Resource)" Outputs="@(Resource->'$(OutDir)TfsCmdlets\%(Identity)')">
-    <Copy SourceFiles="@(Resource->'$(SourceDir)\%(Identity)')" DestinationFiles="@(Resource->'$(OutDir)TfsCmdlets\%(Identity)')" />
   </Target>
 
   <Target Name="CopyBinaries" DependsOnTargets="RestoreNugetPackages">

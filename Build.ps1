@@ -76,6 +76,25 @@ try
         Write-Output "##vso[build.updatebuildnumber]$BuildName"
     }
 
+    # Restore/install Psake
+
+    Write-Verbose "Restoring Psake (if needed)"
+
+    $psakeModulePath = Join-Path $SolutionDir 'packages\psake\tools\psake\psake.psd1'
+
+    if (-not (Test-Path $psakeModulePath -PathType Leaf))
+    {
+        Write-Verbose "psake.psm1 not found in $psakeModulePath. Downloading from Nuget.org"
+        & $NugetExePath Install psake -ExcludeVersion -OutputDirectory packages *>&1 | Write-Verbose
+    }
+    else
+    {
+        Write-Verbose "FOUND! Skipping..."    
+    }
+
+    Get-Module psake | Remove-Module
+    Import-Module $psakeModulePath
+
     # Restore/install vswhere
 
     Write-Verbose "Restoring vswhere (if needed)"
@@ -91,6 +110,8 @@ try
         Write-Verbose "FOUND! Skipping..."    
     }
 
+    Install-Module vssetup -Scope CurrentUser -Confirm
+
     # Detect installed Visual Studio version
 
     $vsVersion = & $vswherePath -latest -legacy -property installationVersion -format value -version [12.0
@@ -102,7 +123,7 @@ try
 
     Write-Verbose "Found Visual Studio $vsVersion"
 
-    # Run build
+    # Run Psake
 
     $IsVerbose = [bool] ($PSBoundParameters['Verbose'].IsPresent)
 
