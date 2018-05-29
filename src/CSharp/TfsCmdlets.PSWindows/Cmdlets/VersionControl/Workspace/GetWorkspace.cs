@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Management.Automation;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Management.Automation;
 
 namespace TfsCmdlets.Cmdlets.VersionControl.Workspace
 {
     [Cmdlet(VerbsCommon.Get, "Workspace")]
+    [OutputType("Microsoft.TeamFoundation.VersionControl.Client.Workspace,Microsoft.TeamFoundation.VersionControl.Client")]
     public class GetWorkspace: WorkspaceCmdletBase
     {
         [Parameter(Position = 0)]

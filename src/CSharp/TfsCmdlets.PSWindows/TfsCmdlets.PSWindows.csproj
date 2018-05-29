@@ -142,7 +142,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Cmdlets\ReleaseManagement\" />
     <Folder Include="Cmdlets\ServiceHook\" />
     <Folder Include="PS\" />
   </ItemGroup>
