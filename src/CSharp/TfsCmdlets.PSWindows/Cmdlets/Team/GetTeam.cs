@@ -25,6 +25,7 @@ namespace TfsCmdlets.Cmdlets.Team
         [Parameter(Position = 0, ParameterSetName = "Get default team", Mandatory = true)]
         public SwitchParameter Default { get; set; }
 
+        [Parameter(ValueFromPipeline = true, ParameterSetName = "Get by name")]
         public override object Project { get; set; }
     }
 }
