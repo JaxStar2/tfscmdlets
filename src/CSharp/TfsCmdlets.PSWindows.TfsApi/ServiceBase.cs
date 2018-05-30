@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using TfsCmdlets.Core.Adapters;
@@ -30,7 +31,7 @@ namespace TfsCmdlets.PSWindows.TfsApi
 
         protected IEnumerable<T> GetItems(object item, params object[] scopeObjects)
         {
-            ScopeObjects so = new ScopeObjects(scopeObjects);
+            var so = new ScopeObjects(scopeObjects);
 
             while (true)
             {
@@ -51,7 +52,7 @@ namespace TfsCmdlets.PSWindows.TfsApi
                         yield return t;
                         break;
                     }
-                    case string s when PatternSearch:
+                    case string s when SupportsPatternSearch:
                     {
                         foreach (var t in GetAllItems(item, so).Where(o => ItemDescriptor(o).IsLike(s)))
                         {
@@ -59,9 +60,25 @@ namespace TfsCmdlets.PSWindows.TfsApi
                         }
                         break;
                     }
-                    case object o:
+                    case object o when !SupportsCustomSearch:
+                    {
+                        foreach (var t in GetAllItems(item, so))
+                        {
+                            yield return t;
+                        }
+                        break;
+                    }
+                    case object o when SupportsCustomSearch:
                     {
                         foreach (var t in GetAllItems(item, so).Where<T>(CustomSearch))
+                        {
+                            yield return t;
+                        }
+                        break;
+                    }
+                    case null when SupportsEmptySearch:
+                    {
+                        foreach (var t in GetAllItems(null, so))
                         {
                             yield return t;
                         }
@@ -76,15 +93,33 @@ namespace TfsCmdlets.PSWindows.TfsApi
             }
         }
 
-        protected abstract string ItemName { get; }
+        private string GetItemNameFromTypeName()
+        {
+            var typeName = GetType().Name;
 
-        protected abstract Func<T, string> ItemDescriptor { get; }
+            if (typeName.EndsWith("Service"))
+            {
+                typeName = typeName.Substring(0, typeName.Length - 7);
+            }
+
+            return Regex.Replace(typeName, "(\\B[A-Z])", " \\l$1").TrimStart();
+        }
+
+        protected virtual string ItemName => GetItemNameFromTypeName();
+
+        protected virtual Func<T, string> ItemDescriptor => (o => o.ToString());
 
         protected abstract IEnumerable<T> GetAllItems(object item, ScopeObjects so);
 
-        protected virtual bool PatternSearch => true;
+        protected virtual bool SupportsPatternSearch => true;
+
+        protected virtual bool SupportsCustomSearch => false;
+
+        protected virtual bool SupportsEmptySearch => false;
 
         protected virtual Func<object,bool> CustomSearch => (_ => true);
+
+
     }
 
     public class ScopeObjects

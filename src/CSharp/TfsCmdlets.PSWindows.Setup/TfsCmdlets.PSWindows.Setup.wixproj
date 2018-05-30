@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\WiX.3.11.1\build\wix.props" Condition="Exists('..\packages\WiX.3.11.1\build\wix.props')" />
+  <Import Project="..\packages\WiX.3.11.0\build\wix.props" Condition="Exists('..\packages\WiX.3.11.0\build\wix.props')" />
   <PropertyGroup>
     <DefineSolutionProperties>false</DefineSolutionProperties>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
@@ -63,9 +63,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <HarvestDirectory Include="$(SourceDir)">
       <ComponentGroupName>ModuleComponent</ComponentGroupName>
       <DirectoryRefId>ModuleFolder</DirectoryRefId>
@@ -76,12 +73,21 @@
       <SuppressRegistry>true</SuppressRegistry>
     </HarvestDirectory>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="..\" />
+    <Folder Include="..\TfsCmdlets.PSWindows\" />
+    <Folder Include="..\TfsCmdlets.PSWindows\bin\" />
+    <Folder Include="..\TfsCmdlets.PSWindows\bin\Release\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
-    <!--<Exec Command='"$(WixToolPath)\Heat.exe" dir @(HeatDir) -cg %(HeatDir.ComponentGroupName) -dr %(HarvestDirectory.DirectoryRefId) -scom -sreg -srd -var %(HarvestDirectory.PreprocessorVariable) -ag -out $(IntermediateOutputPath)_ModuleComponent_dir' />-->
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\WiX.3.11.1\build\wix.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WiX.3.11.1\build\wix.props'))" />
+    <Error Condition="!Exists('..\packages\WiX.3.11.0\build\wix.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WiX.3.11.0\build\wix.props'))" />
   </Target>
+  <!--<Exec Command='"$(WixToolPath)\Heat.exe" dir @(HeatDir) -cg %(HeatDir.ComponentGroupName) -dr %(HarvestDirectory.DirectoryRefId) -scom -sreg -srd -var %(HarvestDirectory.PreprocessorVariable) -ag -out $(IntermediateOutputPath)_ModuleComponent_dir' />-->
 </Project>
