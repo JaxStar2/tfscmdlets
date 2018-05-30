@@ -153,6 +153,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <Target Name="CopyBinaries" AfterTargets="Build">
+    <ItemGroup>
+      <Binary Include="..\TfsCmdlets.PSWindows.TfsApi\Bin\$(Configuration)\*.*"/>
+    </ItemGroup>
+    <Copy SourceFiles="@(Binary)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true"/>
+  </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="Build.targets" />
 </Project>
