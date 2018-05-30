@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Management.Automation;
 using System.Net;
 using Microsoft.VisualStudio.Services.Client;
@@ -10,62 +12,59 @@ using TfsCmdlets.PSWindows.TfsApi.Adapters;
 namespace TfsCmdlets.PSWindows.TfsApi.Services
 {
     [Export(typeof(ICredentialService))]
-    public class CredentialService: ICredentialService
+    public class CredentialService : ServiceBase<VssCredentials, ICredentialAdapter>, ICredentialService
     {
-        public ICredentialAdapter GetCredential(object credential)
+        protected override IEnumerable<VssCredentials> GetAllItems(object item, ScopeObjects so)
         {
-            NetworkCredential netCred;
-            object creds;
-
             while (true)
             {
-                switch (credential)
+                switch (item)
                 {
                     case bool interactive:
-                    {
-                        creds = new VssClientCredentials(new WindowsCredential(!interactive),
-                            new VssFederatedCredential(!interactive),
-                            interactive ? CredentialPromptType.PromptIfNeeded : CredentialPromptType.DoNotPrompt);
-                        break;
-                    }
-                    case PSObject pso:
-                    {
-                        credential = pso.BaseObject;
-                        continue;
-                    }
-                    case VssCredentials vssc:
-                    {
-                        creds = vssc;
-                        break;
-                    }
+                        {
+                            item = new VssClientCredentials(new WindowsCredential(!interactive),
+                                new VssFederatedCredential(!interactive),
+                                interactive ? CredentialPromptType.PromptIfNeeded : CredentialPromptType.DoNotPrompt);
+                            continue;
+                        }
                     case PSCredential psc:
-                    {
-                        netCred = psc.GetNetworkCredential();
-                        creds = new VssClientCredentials(new WindowsCredential(netCred), new VssBasicCredential(netCred));
-                        break;
-                    }
+                        {
+                            var netCred = psc.GetNetworkCredential();
+                            item = new VssClientCredentials(new WindowsCredential(netCred), new VssBasicCredential(netCred));
+                            continue;
+                        }
                     case NetworkCredential netc:
-                    {
-                        netCred = netc;
-                        creds = new VssClientCredentials(new WindowsCredential(netCred), new VssBasicCredential(netCred));
-                        break;
-                    }
+                        {
+                            var netCred = netc;
+                            item = new VssClientCredentials(new WindowsCredential(netCred), new VssBasicCredential(netCred));
+                            continue;
+                        }
                     case null:
-                    {
-                        credential = false;
-                        continue;
-                    }
+                        {
+                            item = false;
+                            continue;
+                        }
+                    case VssCredentials vssc:
+                        {
+                            yield return vssc;
+                            break;
+                        }
                     default:
-                    {
-                        throw new PSArgumentException(
-                            "Invalid argument Credential. Supply either a PowerShell credential (PSCredential object) or a System.Net.NetworkCredential object.",
-                            "Credential");
-                    }
+                        {
+                            throw new PSArgumentException(
+                                "Invalid argument Credential. Supply either a PowerShell credential (PSCredential object) or a System.Net.NetworkCredential object.",
+                                "Credential");
+                        }
                 }
                 break;
             }
-
-            return new CredentialAdapter((VssClientCredentials) creds);
         }
+
+        public ICredentialAdapter GetCredential(object credential)
+        {
+            return new CredentialAdapter(GetItem(credential));
+        }
+
+        protected override bool SupportsEmptySearch => true;
     }
 }
