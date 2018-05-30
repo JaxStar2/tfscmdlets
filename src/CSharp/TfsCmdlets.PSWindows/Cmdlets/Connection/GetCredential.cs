@@ -65,7 +65,7 @@ namespace TfsCmdlets.Cmdlets.Connection
             }
             else if (PersonalAccessToken != null)
             {
-                var netCred = new NetworkCredential("dummy-pat-user", PersonalAccessToken);
+                var netCred = new NetworkCredential(string.Empty, PersonalAccessToken);
                 creds = CredentialService.GetCredential(netCred);
             }
             else if (Interactive)
